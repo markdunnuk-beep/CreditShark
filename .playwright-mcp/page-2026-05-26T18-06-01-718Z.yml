@@ -1,0 +1,314 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - link "Creditsafe" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Creditsafe" [ref=e9]
+        - generic [ref=e10]:
+          - link "My Account" [ref=e11] [cursor=pointer]:
+            - /url: /account
+            - img [ref=e12]
+            - generic [ref=e14]:
+              - text: My Account
+              - generic [ref=e15]:
+                - strong [ref=e16]: "ID:"
+                - text: "101725369"
+          - button "Change language" [ref=e18] [cursor=pointer]:
+            - img [ref=e19]
+            - generic [ref=e21]: English (UK)
+          - button "Log Out" [ref=e22] [cursor=pointer]:
+            - img [ref=e23]
+            - text: Log Out
+    - main [ref=e25]:
+      - complementary [ref=e26]:
+        - generic [ref=e27]:
+          - navigation [ref=e28]:
+            - generic "Home" [ref=e29]:
+              - generic [ref=e30]:
+                - generic [ref=e32]: 
+                - heading "Home" [level=3] [ref=e34]
+            - generic "Credit & Risk" [ref=e35]:
+              - generic [ref=e36]:
+                - generic [ref=e38]: 
+                - heading "Credit & Risk" [level=3] [ref=e40]
+                - img [ref=e42]: 
+              - generic:
+                - generic "Company Search" [ref=e44]:
+                  - generic [ref=e45]:
+                    - generic [ref=e47]: 
+                    - heading "Company Search" [level=3] [ref=e49]
+                - generic "Director Search" [ref=e50]:
+                  - generic [ref=e51]:
+                    - generic [ref=e53]: 
+                    - heading "Director Search" [level=3] [ref=e55]
+                - generic "Consumer Search" [ref=e56]:
+                  - generic [ref=e57]:
+                    - generic [ref=e59]: 
+                    - heading "Consumer Search" [level=3] [ref=e61]
+                - generic "Verify Search" [ref=e62]:
+                  - generic [ref=e63]:
+                    - generic [ref=e65]: 
+                    - heading "Verify Search" [level=3] [ref=e67]
+                - generic "Monitoring" [ref=e68]:
+                  - generic [ref=e69]:
+                    - generic [ref=e71]: 
+                    - heading "Monitoring" [level=3] [ref=e73]
+                - generic "Fresh Investigation" [ref=e74]:
+                  - generic [ref=e75]:
+                    - generic [ref=e77]: 
+                    - heading "Fresh Investigation" [level=3] [ref=e79]
+                - generic "Check & Decide" [ref=e80]:
+                  - generic [ref=e81]:
+                    - generic [ref=e83]: 
+                    - heading "Check & Decide" [level=3] [ref=e85]
+                    - img [ref=e87]: 
+                  - generic:
+                    - generic "Run Decision" [ref=e89]:
+                      - generic [ref=e90]:
+                        - generic [ref=e92]: 
+                        - heading "Run Decision" [level=3] [ref=e94]
+                    - generic "Decision History" [ref=e95]:
+                      - generic [ref=e96]:
+                        - generic [ref=e98]: 
+                        - heading "Decision History" [level=3] [ref=e100]
+                    - generic "Configuration" [ref=e101]:
+                      - generic [ref=e102]:
+                        - generic [ref=e104]: 
+                        - heading "Configuration" [level=3] [ref=e106]
+                        - img [ref=e108]: 
+                      - generic:
+                        - generic "Model Configuration" [ref=e110]:
+                          - generic [ref=e111]:
+                            - generic [ref=e113]: 
+                            - heading "Model Configuration" [level=3] [ref=e115]
+                        - generic "Model Configuration Logs" [ref=e116]:
+                          - generic [ref=e117]:
+                            - generic [ref=e119]: 
+                            - heading "Model Configuration Logs" [level=3] [ref=e121]
+                    - generic "Preferences" [ref=e122]:
+                      - generic [ref=e123]:
+                        - generic [ref=e125]: 
+                        - heading "Preferences" [level=3] [ref=e127]
+                - generic "News" [ref=e128]:
+                  - generic [ref=e129]:
+                    - generic [ref=e131]: 
+                    - heading "News" [level=3] [ref=e133]
+            - generic "Payments & Collections" [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e137]: 
+                - heading "Payments & Collections" [level=3] [ref=e139]
+                - img [ref=e141]: 
+              - generic:
+                - generic "Debt Collection" [ref=e143]:
+                  - generic [ref=e144]:
+                    - generic [ref=e146]: 
+                    - heading "Debt Collection" [level=3] [ref=e148]
+                - generic "Debt Chaser" [ref=e149]:
+                  - generic [ref=e150]:
+                    - generic [ref=e152]: 
+                    - heading "Debt Chaser" [level=3] [ref=e154]
+                - generic "Ledger Insights" [ref=e155]:
+                  - generic [ref=e156]:
+                    - generic [ref=e158]: 
+                    - heading "Ledger Insights" [level=3] [ref=e160]
+            - generic "Compliance" [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e164]: 
+                - heading "Compliance" [level=3] [ref=e166]
+                - img [ref=e168]: 
+              - generic:
+                - generic "ID Verification Plus" [ref=e170]:
+                  - generic [ref=e171]:
+                    - generic [ref=e173]: 
+                    - heading "ID Verification Plus" [level=3] [ref=e175]
+                - generic "AML Check" [ref=e176]:
+                  - generic [ref=e177]:
+                    - generic [ref=e179]: 
+                    - heading "AML Check" [level=3] [ref=e181]
+                - generic "ID Check" [ref=e182]:
+                  - generic [ref=e183]:
+                    - generic [ref=e185]: 
+                    - heading "ID Check" [level=3] [ref=e187]
+                - generic "Trace" [ref=e188]:
+                  - generic [ref=e189]:
+                    - generic [ref=e191]: 
+                    - heading "Trace" [level=3] [ref=e193]
+            - generic "KYC Protect" [ref=e194]:
+              - generic [ref=e195]:
+                - img [ref=e197]
+                - heading "KYC Protect" [level=3] [ref=e200]
+                - img [ref=e202]: 
+              - generic:
+                - generic "Profiles" [ref=e204]:
+                  - generic [ref=e205]:
+                    - generic [ref=e207]: 
+                    - heading "Profiles" [level=3] [ref=e209]
+                - generic "Screen" [ref=e210]:
+                  - generic [ref=e211]:
+                    - generic [ref=e213]: 
+                    - heading "Screen" [level=3] [ref=e215]
+                - generic "Alerts" [ref=e216]:
+                  - generic [ref=e217]:
+                    - generic [ref=e219]: 
+                    - heading "Alerts" [level=3] [ref=e221]
+                - generic "Audits" [ref=e222]:
+                  - generic [ref=e223]:
+                    - generic [ref=e225]: 
+                    - heading "Audits" [level=3] [ref=e227]
+                - generic "Reports" [ref=e228]:
+                  - generic [ref=e229]:
+                    - generic [ref=e231]: 
+                    - heading "Reports" [level=3] [ref=e233]
+                - generic "Uploads" [ref=e234]:
+                  - generic [ref=e235]:
+                    - generic [ref=e237]: 
+                    - heading "Uploads" [level=3] [ref=e239]
+                - generic "Settings" [ref=e240]:
+                  - generic [ref=e241]:
+                    - generic [ref=e243]: 
+                    - heading "Settings" [level=3] [ref=e245]
+            - generic "Sales & Marketing" [ref=e246]:
+              - generic [ref=e247]:
+                - generic [ref=e249]: 
+                - heading "Sales & Marketing" [level=3] [ref=e251]
+                - img [ref=e253]: 
+              - generic:
+                - generic "Data Cleaning" [ref=e255]:
+                  - generic [ref=e256]:
+                    - generic [ref=e258]: 
+                    - heading "Data Cleaning" [level=3] [ref=e260]
+                - generic "Prospects" [ref=e261]:
+                  - generic [ref=e262]:
+                    - generic [ref=e264]: 
+                    - heading "Prospects" [level=3] [ref=e266]
+            - generic "Bank Verification" [ref=e267]:
+              - generic [ref=e268]:
+                - generic [ref=e270]: 
+                - heading "Bank Verification" [level=3] [ref=e272]
+                - img [ref=e274]: 
+              - generic:
+                - generic "Consumer Bank Match" [ref=e276]:
+                  - generic [ref=e277]:
+                    - generic [ref=e279]: 
+                    - heading "Consumer Bank Match" [level=3] [ref=e281]
+                - generic "Bank Verification" [ref=e282]:
+                  - generic [ref=e283]:
+                    - generic [ref=e285]: 
+                    - heading "Bank Verification" [level=3] [ref=e287]
+            - generic "What's New" [ref=e288]:
+              - generic [ref=e289]:
+                - generic [ref=e291]: 
+                - heading "What's New" [level=3] [ref=e293]
+          - img [ref=e297]: 
+      - article [ref=e300]:
+        - generic [ref=e301]:
+          - generic [ref=e483]:
+            - heading "Company Search" [level=1] [ref=e484]
+            - generic [ref=e485]:
+              - generic [ref=e486]:
+                - combobox [ref=e487]:
+                  - button "GB United Kingdom" [ref=e488] [cursor=pointer]:
+                    - img "GB" [ref=e489]
+                    - generic [ref=e490]: United Kingdom
+                  - text: 
+                - combobox [ref=e491]:
+                  - textbox "Company Name / Safe Number / Company Number" [ref=e492]: "00445790"
+                - button [ref=e493] [cursor=pointer]:
+                  - img [ref=e494]
+              - generic [ref=e497]:
+                - generic [ref=e498]:
+                  - generic [ref=e499]: VAT Number
+                  - textbox "VAT Number" [ref=e500]:
+                    - /placeholder: VAT Number...
+                - generic [ref=e501]:
+                  - generic [ref=e502]: Telephone Number
+                  - textbox "Telephone Number" [ref=e503]:
+                    - /placeholder: Telephone Number...
+                - generic [ref=e504]:
+                  - generic [ref=e505]: House Name/Number
+                  - textbox "House Name/Number" [ref=e506]:
+                    - /placeholder: House Name/Number...
+                - generic [ref=e507]:
+                  - generic [ref=e508]: Street
+                  - textbox "Street" [ref=e509]:
+                    - /placeholder: Street...
+                - generic [ref=e510]:
+                  - generic [ref=e511]: City / Town
+                  - textbox "City / Town" [ref=e512]:
+                    - /placeholder: City / Town...
+                - generic [ref=e513]:
+                  - generic [ref=e514]: Post Code
+                  - textbox "Post Code" [ref=e515]:
+                    - /placeholder: Post Code...
+                - generic [ref=e516]:
+                  - generic [ref=e517]: Company Status
+                  - combobox "Company Status" [ref=e518]:
+                    - option "All" [selected]
+                    - option "Active"
+                    - option "Non-active"
+                - generic [ref=e519]:
+                  - generic [ref=e520]: Previous Company Names
+                  - combobox "Previous Company Names" [ref=e521]:
+                    - option "Include"
+                    - option "Exclude"
+              - generic [ref=e522]:
+                - button "Reset" [ref=e523] [cursor=pointer]
+                - button "Search" [ref=e524] [cursor=pointer]
+          - generic [ref=e525]:
+            - generic [ref=e527]:
+              - button "List view" [pressed] [ref=e528] [cursor=pointer]:
+                - img [ref=e529]: 
+              - button "Grid view" [ref=e531] [cursor=pointer]:
+                - img [ref=e532]: 
+            - generic [ref=e534]:
+              - heading "United Kingdom" [level=2] [ref=e535]
+              - heading "1 Company" [level=2] [ref=e536]
+              - table [ref=e540]:
+                - rowgroup [ref=e541]:
+                  - row "Company Name Company Number Safe Number Address Date of Latest Accounts Company Status" [ref=e542]:
+                    - columnheader "Company Name" [ref=e543]:
+                      - heading "Company Name" [level=6] [ref=e544]
+                    - columnheader "Company Number" [ref=e545]:
+                      - heading "Company Number" [level=6] [ref=e546]
+                    - columnheader "Safe Number" [ref=e547]:
+                      - heading "Safe Number" [level=6] [ref=e548]
+                    - columnheader "Address" [ref=e549]:
+                      - heading "Address" [level=6] [ref=e550]
+                    - columnheader "Date of Latest Accounts" [ref=e551]:
+                      - heading "Date of Latest Accounts" [level=6] [ref=e552]
+                    - columnheader "Company Status" [ref=e553]:
+                      - heading "Company Status" [level=6] [ref=e554]
+                - rowgroup [ref=e555]:
+                  - row "TESCO PLC 00445790 UK00148845 KESTREL WAY, WELWYN GARDEN CITY, HERTFORDSHIRE, AL7 1GA 22/02/2025 Active - Accounts Filed" [ref=e556]:
+                    - cell "TESCO PLC" [ref=e557]:
+                      - link "TESCO PLC" [ref=e558] [cursor=pointer]:
+                        - /url: /companies/GB-0-00445790
+                    - cell "00445790" [ref=e559]:
+                      - link "00445790" [ref=e560] [cursor=pointer]:
+                        - /url: /companies/GB-0-00445790
+                    - cell "UK00148845" [ref=e561]:
+                      - link "UK00148845" [ref=e562] [cursor=pointer]:
+                        - /url: /companies/GB-0-00445790
+                    - cell "KESTREL WAY, WELWYN GARDEN CITY, HERTFORDSHIRE, AL7 1GA" [ref=e563]
+                    - cell "22/02/2025" [ref=e564]
+                    - cell "Active - Accounts Filed" [ref=e565]:
+                      - generic [ref=e566]: Active - Accounts Filed
+        - generic [ref=e473]:
+          - text: © Creditsafe Business Solutions Limited | 02920 886500 |
+          - generic [ref=e474] [cursor=pointer]:
+            - generic [ref=e475]: 
+            - text: Cookie Settings
+          - text: "|"
+          - link "Contact Us" [ref=e476] [cursor=pointer]:
+            - /url: https://www.creditsafe.com/gb/en/more/help/contact-us.html
+  - generic:
+    - generic:
+      - banner
+      - main
+      - contentinfo
+  - iframe [ref=e477]:
+    - generic [ref=f11e1] [cursor=pointer]:
+      - img "Help" [ref=f11e2]
+      - generic [ref=f11e4]: Help
+  - status [ref=e478]

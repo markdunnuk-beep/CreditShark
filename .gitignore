@@ -1,0 +1,4 @@
+.audit/
+node_modules/
+.env
+.env.*

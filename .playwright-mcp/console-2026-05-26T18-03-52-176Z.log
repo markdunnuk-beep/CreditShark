@@ -1,0 +1,9 @@
+[   45419ms] [WARNING] Unsatisfied version 5.3.11 from checkanddecide of shared singleton module styled-components (required ^4.4.1) @ https://app.creditsafe.com/static/js/main.784ddf29.js:1
+[   45636ms] [LOG] 3 @ https://app.creditsafe.com/static/js/36345.5e16cf1e.chunk.js:1
+[   46075ms] [WARNING] Unsatisfied version 5.3.11 from checkanddecide of shared singleton module styled-components (required ^4.4.1) @ https://app.creditsafe.com/static/js/main.784ddf29.js:1
+[   46125ms] [LOG] 3 @ https://app.creditsafe.com/static/js/36345.5e16cf1e.chunk.js:1
+[   46230ms] [WARNING] [Auth] signinRedirectCallback SUCCESS @ https://app.creditsafe.com/static/js/36345.5e16cf1e.chunk.js:1
+[   46230ms] [LOG] [Auth] calculateDifferenceInMinutes: {lastActivityString: 1779818677874, currentTime: 1779818678405, type: string} @ https://app.creditsafe.com/static/js/36345.5e16cf1e.chunk.js:1
+[   46230ms] [WARNING] [Auth] /callback CHECK: tokenAgeInMinutes= 0.023416666666666665 differenceInMinutes= 0.00885 AUTO_LOGOUT_MINUTES= 240 @ https://app.creditsafe.com/static/js/36345.5e16cf1e.chunk.js:1
+[  154341ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://api.app.creditsafe.com/ubo/users/101725369/services/3120/check?amount=1:0
+[  154507ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://api.entity-services.creditsafe.com/grp/linkagesService/csUsGroupstructure/companiesInGroupCount/GB-0-00445790:0

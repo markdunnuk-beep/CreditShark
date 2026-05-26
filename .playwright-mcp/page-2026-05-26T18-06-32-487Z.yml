@@ -1,0 +1,644 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - link "Creditsafe" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img "Creditsafe" [ref=e9]
+        - generic [ref=e569]:
+          - combobox [ref=e570]:
+            - button "GB United Kingdom" [ref=e571] [cursor=pointer]:
+              - img "GB" [ref=e572]
+              - generic [ref=e573]: United Kingdom
+            - text: 
+          - combobox [ref=e574]:
+            - textbox "Company Name / Safe Number / Company Number" [ref=e575]
+          - button "Search" [ref=e576] [cursor=pointer]
+        - generic [ref=e10]:
+          - link "My Account" [ref=e11] [cursor=pointer]:
+            - /url: /account
+            - img [ref=e12]
+            - generic [ref=e14]:
+              - text: My Account
+              - generic [ref=e15]:
+                - strong [ref=e16]: "ID:"
+                - text: "101725369"
+          - button "Change language" [ref=e18] [cursor=pointer]:
+            - img [ref=e19]
+            - generic [ref=e21]: English (UK)
+          - button "Log Out" [ref=e22] [cursor=pointer]:
+            - img [ref=e23]
+            - text: Log Out
+    - main [ref=e25]:
+      - complementary [ref=e26]:
+        - generic [ref=e27]:
+          - navigation [ref=e28]:
+            - generic "Home" [ref=e29]:
+              - generic [ref=e30]:
+                - generic [ref=e32]: 
+                - heading "Home" [level=3] [ref=e34]
+            - generic "Credit & Risk" [ref=e35]:
+              - generic [ref=e36]:
+                - generic [ref=e38]: 
+                - heading "Credit & Risk" [level=3] [ref=e40]
+                - img [ref=e42]: 
+              - generic:
+                - generic "Company Search" [ref=e44]:
+                  - generic [ref=e45]:
+                    - generic [ref=e47]: 
+                    - heading "Company Search" [level=3] [ref=e49]
+                - generic "Director Search" [ref=e50]:
+                  - generic [ref=e51]:
+                    - generic [ref=e53]: 
+                    - heading "Director Search" [level=3] [ref=e55]
+                - generic "Consumer Search" [ref=e56]:
+                  - generic [ref=e57]:
+                    - generic [ref=e59]: 
+                    - heading "Consumer Search" [level=3] [ref=e61]
+                - generic "Verify Search" [ref=e62]:
+                  - generic [ref=e63]:
+                    - generic [ref=e65]: 
+                    - heading "Verify Search" [level=3] [ref=e67]
+                - generic "Monitoring" [ref=e68]:
+                  - generic [ref=e69]:
+                    - generic [ref=e71]: 
+                    - heading "Monitoring" [level=3] [ref=e73]
+                - generic "Fresh Investigation" [ref=e74]:
+                  - generic [ref=e75]:
+                    - generic [ref=e77]: 
+                    - heading "Fresh Investigation" [level=3] [ref=e79]
+                - generic "Check & Decide" [ref=e80]:
+                  - generic [ref=e81]:
+                    - generic [ref=e83]: 
+                    - heading "Check & Decide" [level=3] [ref=e85]
+                    - img [ref=e87]: 
+                  - generic:
+                    - generic "Run Decision" [ref=e89]:
+                      - generic [ref=e90]:
+                        - generic [ref=e92]: 
+                        - heading "Run Decision" [level=3] [ref=e94]
+                    - generic "Decision History" [ref=e95]:
+                      - generic [ref=e96]:
+                        - generic [ref=e98]: 
+                        - heading "Decision History" [level=3] [ref=e100]
+                    - generic "Configuration" [ref=e101]:
+                      - generic [ref=e102]:
+                        - generic [ref=e104]: 
+                        - heading "Configuration" [level=3] [ref=e106]
+                        - img [ref=e108]: 
+                      - generic:
+                        - generic "Model Configuration" [ref=e110]:
+                          - generic [ref=e111]:
+                            - generic [ref=e113]: 
+                            - heading "Model Configuration" [level=3] [ref=e115]
+                        - generic "Model Configuration Logs" [ref=e116]:
+                          - generic [ref=e117]:
+                            - generic [ref=e119]: 
+                            - heading "Model Configuration Logs" [level=3] [ref=e121]
+                    - generic "Preferences" [ref=e122]:
+                      - generic [ref=e123]:
+                        - generic [ref=e125]: 
+                        - heading "Preferences" [level=3] [ref=e127]
+                - generic "News" [ref=e128]:
+                  - generic [ref=e129]:
+                    - generic [ref=e131]: 
+                    - heading "News" [level=3] [ref=e133]
+            - generic "Payments & Collections" [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e137]: 
+                - heading "Payments & Collections" [level=3] [ref=e139]
+                - img [ref=e141]: 
+              - generic:
+                - generic "Debt Collection" [ref=e143]:
+                  - generic [ref=e144]:
+                    - generic [ref=e146]: 
+                    - heading "Debt Collection" [level=3] [ref=e148]
+                - generic "Debt Chaser" [ref=e149]:
+                  - generic [ref=e150]:
+                    - generic [ref=e152]: 
+                    - heading "Debt Chaser" [level=3] [ref=e154]
+                - generic "Ledger Insights" [ref=e155]:
+                  - generic [ref=e156]:
+                    - generic [ref=e158]: 
+                    - heading "Ledger Insights" [level=3] [ref=e160]
+            - generic "Compliance" [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e164]: 
+                - heading "Compliance" [level=3] [ref=e166]
+                - img [ref=e168]: 
+              - generic:
+                - generic "ID Verification Plus" [ref=e170]:
+                  - generic [ref=e171]:
+                    - generic [ref=e173]: 
+                    - heading "ID Verification Plus" [level=3] [ref=e175]
+                - generic "AML Check" [ref=e176]:
+                  - generic [ref=e177]:
+                    - generic [ref=e179]: 
+                    - heading "AML Check" [level=3] [ref=e181]
+                - generic "ID Check" [ref=e182]:
+                  - generic [ref=e183]:
+                    - generic [ref=e185]: 
+                    - heading "ID Check" [level=3] [ref=e187]
+                - generic "Trace" [ref=e188]:
+                  - generic [ref=e189]:
+                    - generic [ref=e191]: 
+                    - heading "Trace" [level=3] [ref=e193]
+            - generic "KYC Protect" [ref=e194]:
+              - generic [ref=e195]:
+                - img [ref=e197]
+                - heading "KYC Protect" [level=3] [ref=e200]
+                - img [ref=e202]: 
+              - generic:
+                - generic "Profiles" [ref=e204]:
+                  - generic [ref=e205]:
+                    - generic [ref=e207]: 
+                    - heading "Profiles" [level=3] [ref=e209]
+                - generic "Screen" [ref=e210]:
+                  - generic [ref=e211]:
+                    - generic [ref=e213]: 
+                    - heading "Screen" [level=3] [ref=e215]
+                - generic "Alerts" [ref=e216]:
+                  - generic [ref=e217]:
+                    - generic [ref=e219]: 
+                    - heading "Alerts" [level=3] [ref=e221]
+                - generic "Audits" [ref=e222]:
+                  - generic [ref=e223]:
+                    - generic [ref=e225]: 
+                    - heading "Audits" [level=3] [ref=e227]
+                - generic "Reports" [ref=e228]:
+                  - generic [ref=e229]:
+                    - generic [ref=e231]: 
+                    - heading "Reports" [level=3] [ref=e233]
+                - generic "Uploads" [ref=e234]:
+                  - generic [ref=e235]:
+                    - generic [ref=e237]: 
+                    - heading "Uploads" [level=3] [ref=e239]
+                - generic "Settings" [ref=e240]:
+                  - generic [ref=e241]:
+                    - generic [ref=e243]: 
+                    - heading "Settings" [level=3] [ref=e245]
+            - generic "Sales & Marketing" [ref=e246]:
+              - generic [ref=e247]:
+                - generic [ref=e249]: 
+                - heading "Sales & Marketing" [level=3] [ref=e251]
+                - img [ref=e253]: 
+              - generic:
+                - generic "Data Cleaning" [ref=e255]:
+                  - generic [ref=e256]:
+                    - generic [ref=e258]: 
+                    - heading "Data Cleaning" [level=3] [ref=e260]
+                - generic "Prospects" [ref=e261]:
+                  - generic [ref=e262]:
+                    - generic [ref=e264]: 
+                    - heading "Prospects" [level=3] [ref=e266]
+            - generic "Bank Verification" [ref=e267]:
+              - generic [ref=e268]:
+                - generic [ref=e270]: 
+                - heading "Bank Verification" [level=3] [ref=e272]
+                - img [ref=e274]: 
+              - generic:
+                - generic "Consumer Bank Match" [ref=e276]:
+                  - generic [ref=e277]:
+                    - generic [ref=e279]: 
+                    - heading "Consumer Bank Match" [level=3] [ref=e281]
+                - generic "Bank Verification" [ref=e282]:
+                  - generic [ref=e283]:
+                    - generic [ref=e285]: 
+                    - heading "Bank Verification" [level=3] [ref=e287]
+            - generic "What's New" [ref=e288]:
+              - generic [ref=e289]:
+                - generic [ref=e291]: 
+                - heading "What's New" [level=3] [ref=e293]
+          - img [ref=e297]: 
+      - article [ref=e300]:
+        - generic [ref=e577]:
+          - generic [ref=e578]:
+            - button "Back to Results" [ref=e580] [cursor=pointer]:
+              - img [ref=e581]
+              - text: Back to Results
+            - generic [ref=e584]:
+              - generic [ref=e585]:
+                - img "GB" [ref=e586]
+                - heading "TESCO PLC" [level=1] [ref=e587]:
+                  - generic "TESCO PLC" [ref=e588]
+                - generic [ref=e589]:
+                  - generic [ref=e590]: UK00148845
+                  - generic [ref=e593]:
+                    - generic [ref=e594]: "Company Number:"
+                    - generic [ref=e595]: "00445790"
+              - generic [ref=e596]:
+                - generic [ref=e597]:
+                  - heading "Risk Score" [level=3] [ref=e598]
+                  - generic "gb-score-tooltip" [ref=e600]: "86"
+                - generic [ref=e601]:
+                  - heading "International Score" [level=3] [ref=e602]
+                  - generic [ref=e604]: A
+                - generic [ref=e605]:
+                  - heading "Credit Limit" [level=3] [ref=e606]
+                  - generic "The Creditsafe recommended credit limit is calculated using a formula that analyses information from a company's financial accounts and payment record. The ltd company credit limit is our recommendation of the total amount of credit that should be outstanding at any one time." [ref=e608]: £100,000,000
+                - generic [ref=e609]:
+                  - heading "Contract Limit" [level=3] [ref=e610]
+                  - generic "A contract limit is a numerical value given as a yardstick for the maximum contract capacity on a single contract over a 12-month period. The contract limits are calculated as a percentage of Turnover. The latest disclosed Turnover reflects the level of successful contracts completed, hence gives an indication of future capacity. Where Turnover is not disclosed (Abridged Accounts), an estimated figure is used based on asset values and appropriate industry data." [ref=e612]: £500,000,000
+                - generic [ref=e613]:
+                  - heading "Status" [level=3] [ref=e614]
+                  - term [ref=e616]: Active
+                - generic [ref=e617]:
+                  - heading "DBT" [level=3] [ref=e618]
+                  - term [ref=e620]: "16.16"
+                - generic [ref=e621]:
+                  - heading "Industry DBT" [level=3] [ref=e622]
+                  - generic "Days Beyond Terms - The number of days an average invoice is overdue." [ref=e624]: "11"
+              - generic [ref=e626]:
+                - button "Run Decision" [ref=e627] [cursor=pointer]
+                - button "Monitor" [ref=e628] [cursor=pointer]
+                - combobox [ref=e629]:
+                  - button "More Actions" [ref=e630] [cursor=pointer]:
+                    - generic [ref=e631]:
+                      - generic [ref=e632]: More Actions
+                      - img [ref=e633]
+          - generic [ref=e635]:
+            - generic [ref=e636]:
+              - tablist [ref=e639]:
+                - tab "Summary" [selected] [ref=e640] [cursor=pointer]: Summary
+                - tab "Scores & Indicators" [ref=e641] [cursor=pointer]: Scores & Indicators
+                - tab "Finance Agreements" [ref=e642] [cursor=pointer]: Finance Agreements
+                - tab "Directors/Shareholders" [ref=e643] [cursor=pointer]: Directors/Shareholders
+                - tab "Financials" [ref=e644] [cursor=pointer]: Financials
+                - tab "Event History" [ref=e645] [cursor=pointer]: Event History
+                - tab "Group Structure" [ref=e646] [cursor=pointer]: Group Structure
+                - tab "Negative Information" [ref=e647] [cursor=pointer]: Negative Information
+                - tab "Image Documents" [ref=e648] [cursor=pointer]: Image Documents
+                - tab "Payment Analysis" [ref=e649] [cursor=pointer]: Payment Analysis
+                - tab "General Information" [ref=e650] [cursor=pointer]: General Information
+              - img [ref=e653] [cursor=pointer]
+            - generic [ref=e655]:
+              - tablist [ref=e660]:
+                - tab "Company Information" [selected] [ref=e661] [cursor=pointer]: Company Information
+                - tab "Trading Address" [ref=e662] [cursor=pointer]: Trading Address
+                - tab "SIC07/SIC03" [ref=e663] [cursor=pointer]: SIC07/SIC03
+              - generic [ref=e665]:
+                - generic [ref=e668]:
+                  - generic [ref=e670]: Verify - Additional information may be available on one or more directors of this business, which may assist in preventing impersonation fraud and making better-informed credit decisions.
+                  - link "View Full Verify Report" [ref=e671] [cursor=pointer]:
+                    - /url: https://www.creditsafe.com/gb/en/product/assets/nis/not-in-subscription/verify.html
+                    - button "View Full Verify Report" [ref=e672]
+                - generic [ref=e674]:
+                  - heading "Key Information" [level=3] [ref=e675]
+                  - generic [ref=e677]:
+                    - generic [ref=e678]:
+                      - term [ref=e679]: Company Number
+                      - definition [ref=e680]: "00445790"
+                    - generic [ref=e681]:
+                      - term [ref=e682]: Company Name
+                      - definition [ref=e683]: TESCO PLC
+                    - generic [ref=e684]:
+                      - term [ref=e685]: Company Status
+                      - definition [ref=e686]:
+                        - generic [ref=e689]: Active - Accounts Filed
+                    - generic [ref=e690]:
+                      - term [ref=e691]: Incorporation Date
+                      - definition [ref=e692]: 27/11/1947
+                    - generic [ref=e693]:
+                      - term [ref=e694]: Company Type
+                      - definition [ref=e695]: Public limited with Share Capital
+                    - generic [ref=e696]:
+                      - term [ref=e697]: FCA Reference Number
+                      - definition [ref=e698]:
+                        - generic [ref=e700]: "-"
+                    - generic [ref=e701]:
+                      - term [ref=e702]: FCA Firm Status
+                      - definition [ref=e703]: "-"
+                    - generic [ref=e704]:
+                      - term [ref=e705]: VAT Number
+                      - definition [ref=e706]:
+                        - link "GB220430231" [ref=e707] [cursor=pointer]:
+                          - /url: /companies/GB-0-00445790/companyInformation/vatDetails
+                    - generic [ref=e708]:
+                      - term [ref=e709]: LEI Number
+                      - definition [ref=e710]: "-"
+                    - generic [ref=e711]:
+                      - term [ref=e712]: SIC07 Code
+                      - definition [ref=e713]: "47110"
+                    - generic [ref=e714]:
+                      - term [ref=e715]: SIC07 Description
+                      - definition [ref=e716]: Retail sale in non-specialised stores with food, beverages or tobacco predominating
+                - generic [ref=e718]:
+                  - heading "Contact Information" [level=3] [ref=e719]
+                  - generic [ref=e720]:
+                    - generic [ref=e721]:
+                      - heading "Address:" [level=3] [ref=e723]
+                      - term [ref=e725]:
+                        - generic [ref=e726]:
+                          - text: TESCO HOUSE SHIRE PARK, KESTREL WAY, WELWYN GARDEN CITY, AL7 1GA
+                          - generic [ref=e727]:
+                            - img [ref=e728]
+                            - link "view on map" [ref=e730] [cursor=pointer]:
+                              - /url: http://maps.google.com/?q=TESCO%20HOUSE%20SHIRE%20PARK%2C%20KESTREL%20WAY%2C%20WELWYN%20GARDEN%20CITY%2C%20AL7%201GA
+                    - generic [ref=e731]:
+                      - heading "Website:" [level=3] [ref=e733]
+                      - term [ref=e735]:
+                        - term [ref=e736]:
+                          - generic [ref=e738]:
+                            - img [ref=e739]
+                            - link "www.tescoplc.com" [ref=e741] [cursor=pointer]:
+                              - /url: http://www.tescoplc.com
+                    - generic [ref=e742]:
+                      - heading "Telephone Number:" [level=3] [ref=e744]
+                      - term [ref=e746]:
+                        - term [ref=e747]: "03453014455"
+                      - heading "TPS:" [level=3] [ref=e749]
+                      - term [ref=e751]:
+                        - term [ref=e752]: "N"
+                    - generic [ref=e753]:
+                      - heading "Trading Address:" [level=3] [ref=e755]
+                      - generic [ref=e756]:
+                        - term [ref=e757]:
+                          - term [ref=e758]: Tesco House Shire Park, Kestrel Way, Welwyn Garden City, AL7 1GA
+                        - generic [ref=e759]:
+                          - img [ref=e760]
+                          - term [ref=e762]:
+                            - link "View More" [ref=e763] [cursor=pointer]:
+                              - /url: /companies/GB-0-00445790/summary/tradingAddress
+                - generic [ref=e765]:
+                  - heading "Additional Information" [level=3] [ref=e766]
+                  - generic [ref=e767]:
+                    - generic [ref=e768]:
+                      - heading "FTSE Index" [level=6] [ref=e769]
+                      - generic [ref=e770]: FTSE 100 company
+                    - generic [ref=e771]:
+                      - heading "Filing Date Of Accounts" [level=6] [ref=e772]
+                      - generic [ref=e773]: 11/07/2025
+                    - generic [ref=e774]:
+                      - heading "Share Capital" [level=6] [ref=e775]
+                      - generic "£408,708,024" [ref=e777]
+                    - generic [ref=e778]:
+                      - heading "Charity Number" [level=6] [ref=e779]
+                      - generic [ref=e780]: "-"
+                    - generic [ref=e781]:
+                      - heading "Currency" [level=6] [ref=e782]
+                      - generic [ref=e783]: GBP
+                    - generic [ref=e784]:
+                      - heading "Safe Number" [level=6] [ref=e785]
+                      - generic [ref=e786]: UK00148845
+                    - generic [ref=e787]:
+                      - heading "Principal Activity" [level=6] [ref=e788]
+                      - generic [ref=e789]: A group engaged in the retail sale in non-specialised stores with food, beverages or tobacco predominating.
+                    - generic [ref=e790]:
+                      - heading "Accountant" [level=6] [ref=e791]
+                      - generic [ref=e792]: "-"
+                    - generic [ref=e793]:
+                      - heading "Accounts Due Date" [level=6] [ref=e794]
+                      - generic [ref=e795]: 26/08/2026
+                    - generic [ref=e796]:
+                      - heading "Charges" [level=6] [ref=e797]
+                      - generic [ref=e799]:
+                        - generic [ref=e800]: "9"
+                        - link "Show more" [ref=e802] [cursor=pointer]:
+                          - /url: /companies/GB-0-00445790/companyInformation/charges
+                    - generic [ref=e803]:
+                      - heading "Trade Debtors" [level=6] [ref=e804]
+                      - generic [ref=e806]:
+                        - generic [ref=e807]: "Yes"
+                        - link "Show more" [ref=e809] [cursor=pointer]:
+                          - /url: /companies/GB-0-00445790/companyInformation/tradeDebtors
+                    - generic [ref=e810]:
+                      - heading "Land Registry" [level=6] [ref=e811]
+                      - generic [ref=e813]:
+                        - generic [ref=e814]: "3"
+                        - link "Show more" [ref=e816] [cursor=pointer]:
+                          - /url: /companies/GB-0-00445790/companyInformation/landRegistry
+                    - generic [ref=e817]:
+                      - heading "Trade Creditors" [level=6] [ref=e818]
+                      - generic [ref=e821]: "No"
+                - generic [ref=e823]:
+                  - heading "CCJ Summary" [level=3] [ref=e824]
+                  - generic [ref=e825]:
+                    - generic [ref=e826]:
+                      - generic [ref=e827]:
+                        - generic [ref=e828]:
+                          - heading "Number of CCJs" [level=3] [ref=e829]
+                          - generic [ref=e831]: "11"
+                        - generic [ref=e833]:
+                          - heading "Value of CCJs" [level=3] [ref=e834]
+                          - generic "gb-score-tooltip" [ref=e837]: 77,100
+                      - generic [ref=e838]:
+                        - heading "Most Recent CCJs" [level=1] [ref=e839]
+                        - table [ref=e840]:
+                          - rowgroup [ref=e841]:
+                            - row "12/05/2026 THE COUNTY COURT ONLINE £1,094 Judgment" [ref=e842]:
+                              - cell "12/05/2026" [ref=e843]
+                              - cell "THE COUNTY COURT ONLINE" [ref=e844]
+                              - cell "£1,094" [ref=e845]
+                              - cell "Judgment" [ref=e846]
+                            - row "27/10/2025 CIVIL NATIONAL BUSINESS CENTRE £50,940 Judgment" [ref=e847]:
+                              - cell "27/10/2025" [ref=e848]
+                              - cell "CIVIL NATIONAL BUSINESS CENTRE" [ref=e849]
+                              - cell "£50,940" [ref=e850]
+                              - cell "Judgment" [ref=e851]
+                            - row "04/10/2025 THE COUNTY COURT ONLINE £289 Judgment" [ref=e852]:
+                              - cell "04/10/2025" [ref=e853]
+                              - cell "THE COUNTY COURT ONLINE" [ref=e854]
+                              - cell "£289" [ref=e855]
+                              - cell "Judgment" [ref=e856]
+                    - link "View More" [ref=e858] [cursor=pointer]:
+                      - /url: /companies/GB-0-00445790/negativeInformation/ccjs
+                - generic [ref=e860]:
+                  - heading "Ultimate Holding Company" [level=3] [ref=e861]
+                  - generic [ref=e862]:
+                    - table [ref=e864]:
+                      - rowgroup [ref=e865]:
+                        - row "Company Name Country Safe Number Company Number Latest Key Financials Score Limit Turnover" [ref=e866]:
+                          - columnheader "Company Name" [ref=e867]:
+                            - heading "Company Name" [level=6] [ref=e868]
+                          - columnheader "Country" [ref=e869]:
+                            - heading "Country" [level=6] [ref=e870]
+                          - columnheader "Safe Number" [ref=e871]:
+                            - heading "Safe Number" [level=6] [ref=e872]
+                          - columnheader "Company Number" [ref=e873]:
+                            - heading "Company Number" [level=6] [ref=e874]
+                          - columnheader "Latest Key Financials" [ref=e875]:
+                            - heading "Latest Key Financials" [level=6] [ref=e876]
+                          - columnheader "Score" [ref=e877]:
+                            - heading "Score" [level=6] [ref=e878]
+                          - columnheader "Limit" [ref=e879]:
+                            - heading "Limit" [level=6] [ref=e880]
+                          - columnheader "Turnover" [ref=e881]:
+                            - heading "Turnover" [level=6] [ref=e882]
+                      - rowgroup [ref=e883]:
+                        - row "TESCO PLC GB UK00148845 00445790 22/02/2025 86 £100,000,000 £69,916,000,000" [ref=e884]:
+                          - cell "TESCO PLC" [ref=e885]:
+                            - link "TESCO PLC" [ref=e886] [cursor=pointer]:
+                              - /url: /companies/GB-0-00445790
+                          - cell "GB" [ref=e887]:
+                            - img "GB" [ref=e888]
+                          - cell "UK00148845" [ref=e889]:
+                            - link "UK00148845" [ref=e890] [cursor=pointer]:
+                              - /url: /companies/GB-0-00445790
+                          - cell "00445790" [ref=e891]
+                          - cell "22/02/2025" [ref=e892]
+                          - cell "86" [ref=e893]:
+                            - generic [ref=e894]: "86"
+                          - cell "£100,000,000" [ref=e896]
+                          - cell "£69,916,000,000" [ref=e897]
+                    - generic [ref=e898]:
+                      - generic [ref=e899]: We've discovered companies in this company's Creditsafe Linkages Data across countries.
+                      - generic [ref=e900]:
+                        - link "View Linkages" [ref=e901] [cursor=pointer]:
+                          - /url: /companies/GB-0-00445790/ownership/linkages
+                        - link "View Group" [ref=e902] [cursor=pointer]:
+                          - /url: /companies/GB-0-00445790/ownership
+                - generic [ref=e904]:
+                  - heading "Key Financials" [level=3] [ref=e905]
+                  - generic [ref=e906]:
+                    - table [ref=e909]:
+                      - rowgroup [ref=e910]:
+                        - row "2025 2024 2023" [ref=e911]:
+                          - columnheader [ref=e912]
+                          - columnheader "2025" [ref=e913]
+                          - columnheader [ref=e914]
+                          - columnheader "2024" [ref=e915]
+                          - columnheader [ref=e916]
+                          - columnheader "2023" [ref=e917]
+                      - rowgroup [ref=e918]:
+                        - row "Turnover £69,916,000,000 2.5%  £68,187,000,000 4.4%  £65,322,000,000" [ref=e919]:
+                          - rowheader "Turnover" [ref=e920]
+                          - cell "£69,916,000,000" [ref=e921]
+                          - cell "2.5% " [ref=e922]:
+                            - generic [ref=e923]:
+                              - text: 2.5%
+                              - generic [ref=e924]: 
+                          - cell "£68,187,000,000" [ref=e925]
+                          - cell "4.4% " [ref=e926]:
+                            - generic [ref=e927]:
+                              - text: 4.4%
+                              - generic [ref=e928]: 
+                          - cell "£65,322,000,000" [ref=e929]
+                        - row "Pre Tax Profit £2,215,000,000 3.2%  £2,289,000,000 159.5%  £882,000,000" [ref=e930]:
+                          - rowheader "Pre Tax Profit" [ref=e931]
+                          - cell "£2,215,000,000" [ref=e932]
+                          - cell "3.2% " [ref=e933]:
+                            - generic [ref=e934]:
+                              - text: 3.2%
+                              - generic [ref=e935]: 
+                          - cell "£2,289,000,000" [ref=e936]
+                          - cell "159.5% " [ref=e937]:
+                            - generic [ref=e938]:
+                              - text: 159.5%
+                              - generic [ref=e939]: 
+                          - cell "£882,000,000" [ref=e940]
+                        - row "Shareholder's Funds £11,666,000,000 0.0%  £11,671,000,000 4.6%  £12,236,000,000" [ref=e941]:
+                          - rowheader "Shareholder's Funds" [ref=e942]
+                          - cell "£11,666,000,000" [ref=e943]
+                          - cell "0.0% " [ref=e944]:
+                            - generic [ref=e945]:
+                              - text: 0.0%
+                              - generic [ref=e946]: 
+                          - cell "£11,671,000,000" [ref=e947]
+                          - cell "4.6% " [ref=e948]:
+                            - generic [ref=e949]:
+                              - text: 4.6%
+                              - generic [ref=e950]: 
+                          - cell "£12,236,000,000" [ref=e951]
+                        - row "Number of Employees 229140 - 223636 - 222306" [ref=e952]:
+                          - rowheader "Number of Employees" [ref=e953]
+                          - cell "229140" [ref=e954]
+                          - cell "-" [ref=e955]
+                          - cell "223636" [ref=e956]
+                          - cell "-" [ref=e957]
+                          - cell "222306" [ref=e958]
+                    - link "View More" [ref=e962] [cursor=pointer]:
+                      - /url: /companies/GB-0-00445790/companyFinancials
+                - generic [ref=e964]:
+                  - heading "Payment Information Summary" [level=3] [ref=e965]
+                  - generic [ref=e969]:
+                    - generic [ref=e971]:
+                      - heading "Invoice Data" [level=1] [ref=e972]
+                      - table [ref=e973]:
+                        - rowgroup [ref=e974]:
+                          - row [ref=e975]:
+                            - columnheader [ref=e976]:
+                              - heading [level=6]
+                            - columnheader [ref=e977]:
+                              - heading [level=6]
+                        - rowgroup [ref=e978]:
+                          - row "Average Invoice Value £2,447.2" [ref=e979]:
+                            - cell "Average Invoice Value" [ref=e980]
+                            - cell "£2,447.2" [ref=e981]
+                          - row "Invoices Available 544" [ref=e982]:
+                            - cell "Invoices Available" [ref=e983]
+                            - cell "544" [ref=e984]
+                          - row "Paid 523" [ref=e985]:
+                            - cell "Paid" [ref=e986]
+                            - cell "523" [ref=e987]
+                          - row "Outstanding 21" [ref=e988]:
+                            - cell "Outstanding" [ref=e989]
+                            - cell "21" [ref=e990]
+                    - generic [ref=e991]:
+                      - generic [ref=e992]: Trade Payment Data is real life payment experiences gathered from selected third party partners big and small who send us trade payment information on their complete sales ledger.
+                      - text: The Age of Debt Graph highlights the current Age of Debt of a given company. The graph is separated into 5 categories. Generally, Within Terms and 0-30 days are a reasonable time for a company to pay their invoices and showcases good invoice payment whereas anything beyond that is indicative of poor invoice payment.
+                - generic [ref=e998]:
+                  - generic [ref=e1000]: Share your risk intelligence with over 13,000 Creditsafe contributors and create your Trade Payment story
+                  - link "Share More" [ref=e1002] [cursor=pointer]:
+                    - /url: /companies/GB-0-00445790/paymentData
+                - generic [ref=e1005]:
+                  - generic [ref=e1006]:
+                    - generic [ref=e1007]: 
+                    - heading "Does this company owe you money?" [level=6] [ref=e1008]
+                  - button "Debt Collection" [ref=e1009] [cursor=pointer]
+                - generic [ref=e1011]:
+                  - heading "Commentary" [level=3] [ref=e1012]
+                  - generic [ref=e1013]:
+                    - generic [ref=e1014]:
+                      - generic [ref=e1015]: 
+                      - paragraph [ref=e1016]: This company has been treated as a PLC company in terms of the score/limit that has been generated
+                    - generic [ref=e1017]:
+                      - generic [ref=e1018]: 
+                      - paragraph [ref=e1019]: This is a very large company with Total Assets in excess of £5 billion and Equity greater than £50 million.
+                    - generic [ref=e1020]:
+                      - generic [ref=e1021]: 
+                      - paragraph [ref=e1022]: This company's Asset Ratio shows a moderate amount of cover on outstanding obligations.
+                    - generic [ref=e1023]:
+                      - generic [ref=e1024]: 
+                      - paragraph [ref=e1025]: The latest accounts show an increase in Revenue in comparison to the previous year.
+                    - generic [ref=e1026]:
+                      - generic [ref=e1027]: 
+                      - paragraph [ref=e1028]: This company's auditors have reported no adverse information.
+                - generic [ref=e1030]:
+                  - heading "Enquiries Summary" [level=3] [ref=e1031]
+                  - generic [ref=e1034]:
+                    - generic [ref=e1035]:
+                      - heading "Latest Enquiry Date" [level=3] [ref=e1036]
+                      - generic [ref=e1037]: 25/05/26
+                    - generic [ref=e1038]:
+                      - heading "Avg Reports per Month" [level=3] [ref=e1039]
+                      - generic [ref=e1040]: "858"
+                    - generic [ref=e1041]:
+                      - heading "Enquiries (Past 3 Months)" [level=3] [ref=e1042]
+                      - generic [ref=e1043]: 3,986
+                    - generic [ref=e1044]:
+                      - heading "Enquiries (Past 6 Months)" [level=3] [ref=e1045]
+                      - generic [ref=e1046]: 4,779
+                    - generic [ref=e1047]:
+                      - heading "Enquiries (Past 9 Months)" [level=3] [ref=e1048]
+                      - generic [ref=e1049]: 6,847
+                    - generic [ref=e1050]:
+                      - heading "Enquiries (Past 12 Months)" [level=3] [ref=e1051]
+                      - generic [ref=e1052]: 10,296
+        - generic [ref=e473]:
+          - text: © Creditsafe Business Solutions Limited | 02920 886500 |
+          - generic [ref=e474] [cursor=pointer]:
+            - generic [ref=e475]: 
+            - text: Cookie Settings
+          - text: "|"
+          - link "Contact Us" [ref=e476] [cursor=pointer]:
+            - /url: https://www.creditsafe.com/gb/en/more/help/contact-us.html
+  - generic:
+    - generic:
+      - banner
+      - main
+      - contentinfo
+  - iframe [ref=e477]:
+    - generic [ref=f11e1] [cursor=pointer]:
+      - img "Help" [ref=f11e2]
+      - generic [ref=f11e4]: Help
+  - status [ref=e478]
