@@ -71,9 +71,9 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
             <Link className="button-secondary" href={`/companies/${data.company.company_number}/adverse`}>
               Review manual adverse events
             </Link>
-            <span aria-disabled="true" className="button-secondary disabled-button">
-              Export report coming later
-            </span>
+            <Link className="button-primary" href={`/companies/${data.company.company_number}/report`}>
+              Preview report
+            </Link>
           </div>
         </aside>
       </div>

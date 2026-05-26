@@ -136,7 +136,7 @@ function CompanyProfile({
               </Link>
             ) : null}
             <span aria-disabled="true" className="button-secondary disabled-button">
-              Export report coming later
+              Report preview below
             </span>
           </div>
         </aside>
@@ -161,6 +161,19 @@ function CompanyProfile({
         </div>
         <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
           Review manual data
+        </Link>
+      </section>
+
+      <section className="card score-section manual-profile-card">
+        <div>
+          <div className="section-heading">
+            <h2>Advisory report</h2>
+            <span className="badge">Latest snapshot and score</span>
+          </div>
+          <p className="note">Preview a print-friendly trade-risk report using the latest persisted snapshot, score run, source timestamps and data limitations.</p>
+        </div>
+        <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
+          Preview report
         </Link>
       </section>
 

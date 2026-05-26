@@ -11,7 +11,8 @@
     "smoke:companies-house": "tsx scripts/smoke-companies-house.ts",
     "smoke:company-snapshot": "tsx scripts/smoke-company-snapshot.ts",
     "smoke:score-run": "tsx scripts/smoke-score-run.ts",
-    "smoke:manual-adverse": "tsx scripts/smoke-manual-adverse-event.ts"
+    "smoke:manual-adverse": "tsx scripts/smoke-manual-adverse-event.ts",
+    "smoke:report-export": "tsx scripts/smoke-report-export.ts"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
