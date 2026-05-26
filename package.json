@@ -9,7 +9,8 @@
     "test": "tsx --test tests/**/*.test.ts",
     "build": "next build",
     "smoke:companies-house": "tsx scripts/smoke-companies-house.ts",
-    "smoke:company-snapshot": "tsx scripts/smoke-company-snapshot.ts"
+    "smoke:company-snapshot": "tsx scripts/smoke-company-snapshot.ts",
+    "smoke:score-run": "tsx scripts/smoke-score-run.ts"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

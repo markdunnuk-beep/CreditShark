@@ -147,3 +147,11 @@ export interface ScoreRun {
   runAt?: string;
 }
 
+export interface CreditRecommendation {
+  companyId: string;
+  scoreRunId: string;
+  recommendedLimit: number;
+  currency: string;
+  basis: string;
+  limitCapReason?: string;
+}

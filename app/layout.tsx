@@ -7,7 +7,10 @@ export const metadata: Metadata = {
     default: "CreditShark",
     template: "%s | CreditShark"
   },
-  description: "Advisory UK limited-company trade-risk screening using source-linked evidence and transparent scoring."
+  description: "Advisory UK limited-company trade-risk screening using source-linked evidence and transparent scoring.",
+  icons: {
+    icon: "/favicon.svg"
+  }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
