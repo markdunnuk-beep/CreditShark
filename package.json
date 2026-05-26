@@ -8,7 +8,8 @@
     "lint": "tsc --noEmit",
     "test": "tsx --test tests/**/*.test.ts",
     "build": "next build",
-    "smoke:companies-house": "tsx scripts/smoke-companies-house.ts"
+    "smoke:companies-house": "tsx scripts/smoke-companies-house.ts",
+    "smoke:company-snapshot": "tsx scripts/smoke-company-snapshot.ts"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

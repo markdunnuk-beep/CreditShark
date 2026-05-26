@@ -121,6 +121,9 @@ function SearchResults({ query, items }: { query: string; items: CompaniesHouseS
               <ResultField label="Type" value={formatValue(item.company_type)} />
               <ResultField label="Created" value={formatValue(item.date_of_creation)} />
               <ResultField label="Location" value={formatAddress(item)} />
+              <Link className="button-secondary result-action" href={`/companies/${item.company_number}`}>
+                Open profile
+              </Link>
             </article>
           );
         })}
