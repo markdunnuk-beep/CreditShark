@@ -51,6 +51,7 @@ function CompanyProfile({
   const snapshot = data.snapshot;
   const topPositiveReasons = scoreResult?.reasonCodes.filter((reason) => reason.direction === "positive").slice(0, 2) ?? [];
   const topNegativeReasons = scoreResult?.reasonCodes.filter((reason) => reason.direction === "negative" || reason.direction === "missing").slice(0, 3) ?? [];
+  const hasMissingData = (scoreResult?.missingDataFlags.length ?? 0) > 0;
 
   return (
     <section className="page-shell">
@@ -72,15 +73,80 @@ function CompanyProfile({
         </div>
       </div>
 
-      <div className="status-note">
-        Each refresh creates a new point-in-time snapshot. Creates a new source-timestamped Companies House snapshot.
+      <div className="status-note status-note--compact">
+        Latest Companies House snapshot captured {formatDateTime(data.sourceFetchedAt)}. Refreshing creates a new point-in-time snapshot.
       </div>
 
-      <div className="profile-grid">
+      <div className="decision-layout">
+        <section className="card ocean-card decision-summary-panel">
+          <p className="eyebrow">Decision summary</p>
+          {scoreResult ? (
+            <>
+              <div className="decision-summary-grid">
+                <div>
+                  <span className={`risk-badge risk-badge--${scoreResult.scoreRun.riskBand}`}>
+                    {formatRiskBand(scoreResult.scoreRun.riskBand)}
+                  </span>
+                  <h2>Advisory score</h2>
+                  <div className="score-value score-value--large">{scoreResult.scoreRun.score ?? "NS"}</div>
+                </div>
+                <div className="limit-card">
+                  <span className="preview-label">Recommended limit</span>
+                  <strong>{formatMoney(scoreResult.scoreRun.recommendedLimit, scoreResult.scoreRun.currency)}</strong>
+                  <p>
+                    Based on the current advisory score, model version {scoreResult.modelVersion.version}, available Companies House evidence
+                    and active manual data.
+                  </p>
+                </div>
+              </div>
+              <div className="confidence-strip">
+                <strong>Confidence: {formatValue(scoreResult.scoreRun.confidenceLevel)}</strong>
+                <span>{confidenceExplanation(scoreResult.scoreRun.confidenceLevel, hasMissingData)}</span>
+              </div>
+              <div className="driver-columns" aria-label="Top score reasons">
+                <ReasonDriverGroup title="What helps" reasons={topPositiveReasons} emptyText="No positive drivers were emitted for this score." />
+                <ReasonDriverGroup title="What needs review" reasons={topNegativeReasons} emptyText="No review factors were emitted for this score." />
+              </div>
+              {hasMissingData ? <div className="missing-data-warning">Data limitations: {scoreResult.missingDataFlags.join(", ")}.</div> : null}
+            </>
+          ) : (
+            <>
+              <h2>Score could not be run</h2>
+              <div className="error-note" role="alert">{scoreError ?? "A scoring configuration error occurred."}</div>
+            </>
+          )}
+          <div className="action-bar">
+            {scoreResult ? (
+              <Link className="button-primary" href={`/companies/${company.company_number}/score`}>
+                Review evidence
+              </Link>
+            ) : null}
+            <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
+              Manual adverse events
+            </Link>
+            <Link className="button-secondary" href={`/companies/${company.company_number}/report`}>
+              Preview report
+            </Link>
+          </div>
+          {scoreResult ? (
+            <details className="audit-details">
+              <summary>Audit metadata</summary>
+              <dl className="detail-grid detail-grid--compact">
+                <Detail label="Snapshot id" value={snapshot.id} />
+                <Detail label="Score run" value={formatDateTime(scoreResult.scoreRun.runAt)} />
+                <Detail label="Model version" value={scoreResult.modelVersion.version} />
+                <Detail label="Snapshot status" value={formatValue(snapshot.snapshot_status)} />
+              </dl>
+            </details>
+          ) : null}
+        </section>
+      </div>
+
+      <div className="profile-grid profile-grid--evidence">
         <section className="card profile-summary-card">
           <div className="section-heading">
             <h2>Company identity</h2>
-            <span className="badge">Companies House evidence</span>
+            <span className="source-chip source-chip--companies-house">Companies House evidence</span>
           </div>
           <dl className="detail-grid">
             <Detail label="Company number" value={company.company_number} />
@@ -93,52 +159,26 @@ function CompanyProfile({
             <Detail label="Latest accounts" value={formatDate(snapshot.latest_accounts_date)} />
             <Detail label="Latest confirmation statement" value={formatDate(snapshot.latest_confirmation_statement_date)} />
             <Detail label="Source fetched" value={formatDateTime(data.sourceFetchedAt)} />
-            <Detail label="Snapshot status" value={formatValue(snapshot.snapshot_status)} />
-            <Detail label="Snapshot id" value={snapshot.id} />
           </dl>
         </section>
 
-        <aside className="card ocean-card decision-placeholder">
-          <p className="eyebrow">Decision summary</p>
-          {scoreResult ? (
-            <>
-              <div className="score-hero">
-                <div>
-                  <span className={`risk-badge risk-badge--${scoreResult.scoreRun.riskBand}`}>{formatRiskBand(scoreResult.scoreRun.riskBand)}</span>
-                  <h2>Advisory score</h2>
-                </div>
-                <div className="score-value">{scoreResult.scoreRun.score ?? "NS"}</div>
-              </div>
-              <dl className="decision-list">
-                <Detail label="Recommended limit" value={formatMoney(scoreResult.scoreRun.recommendedLimit, scoreResult.scoreRun.currency)} />
-                <Detail label="Confidence" value={formatValue(scoreResult.scoreRun.confidenceLevel)} />
-                <Detail label="Model version" value={scoreResult.modelVersion.version} />
-                <Detail label="Score run" value={formatDateTime(scoreResult.scoreRun.runAt)} />
-              </dl>
-              <div className="reason-preview" aria-label="Top score reasons">
-                {topPositiveReasons.map((reason) => <ReasonPreview key={reason.code} reason={reason} />)}
-                {topNegativeReasons.map((reason) => <ReasonPreview key={reason.code} reason={reason} />)}
-              </div>
-              {scoreResult.missingDataFlags.length > 0 ? (
-                <div className="warning-note">Missing data is visible in this score: {scoreResult.missingDataFlags.join(", ")}.</div>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <h2>Score could not be run</h2>
-              <div className="error-note" role="alert">{scoreError ?? "A scoring configuration error occurred."}</div>
-            </>
-          )}
-          <div className="disabled-actions">
-            {scoreResult ? (
-              <Link className="button-primary" href={`/companies/${company.company_number}/score`}>
-                Review evidence
-              </Link>
-            ) : null}
-            <span aria-disabled="true" className="button-secondary disabled-button">
-              Report preview below
-            </span>
+        <aside className="card workflow-side-card">
+          <div className="section-heading">
+            <h2>Next actions</h2>
+            <span className="badge">Advisory review</span>
           </div>
+          <div className="secondary-action-list">
+            <Link className="button-secondary" href={`/companies/${company.company_number}/score`}>
+              Review score explanation
+            </Link>
+            <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
+              Review manual data
+            </Link>
+            <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
+              Preview report
+            </Link>
+          </div>
+          <p className="note">Actions use the latest persisted snapshot and score context. Manual data is labelled separately.</p>
         </aside>
       </div>
 
@@ -234,6 +274,27 @@ function ReasonPreview({ reason }: { reason: ScoreReasonCode }) {
       <strong>{formatSignedNumber(reason.weight)}</strong>
     </div>
   );
+}
+
+function ReasonDriverGroup({ title, reasons, emptyText }: { title: string; reasons: ScoreReasonCode[]; emptyText: string }) {
+  return (
+    <div className="driver-group">
+      <h3>{title}</h3>
+      {reasons.length > 0 ? (
+        <div className="reason-preview">
+          {reasons.map((reason) => <ReasonPreview key={reason.code} reason={reason} />)}
+        </div>
+      ) : (
+        <p className="note">{emptyText}</p>
+      )}
+    </div>
+  );
+}
+
+function confidenceExplanation(value: string | null | undefined, hasMissingData: boolean): string {
+  const confidence = formatValue(value).toLowerCase();
+  if (hasMissingData) return `The ${confidence} confidence level reflects visible missing or limited data in the current evidence set.`;
+  return `The ${confidence} confidence level reflects the evidence available in this snapshot and scoring model.`;
 }
 
 function formatValue(value: string | null | undefined): string {

@@ -60,13 +60,16 @@ export default async function ManualAdversePage({
 
       <Notice notices={notices} />
 
-      <div className="status-note">{CREDITSHARK_PRODUCT_GUARDRAIL}</div>
+      <div className="manual-data-warning">
+        <strong>Manual data is user-entered.</strong>
+        <span>Companies House charges are separate from manual adverse records. Active manual events are included in the next advisory score run.</span>
+      </div>
 
       <div className="adverse-grid">
-        <section className="card">
+        <section className="card evidence-card evidence-card--companies-house">
           <div className="section-heading">
             <h2>Companies House charges</h2>
-            <span className="badge">Public source snapshot</span>
+            <span className="source-chip source-chip--companies-house">Public source snapshot</span>
           </div>
           <dl className="detail-grid">
             <Detail label="Active charges" value={String(result.data.chargesSummary.active)} />
@@ -79,7 +82,7 @@ export default async function ManualAdversePage({
           </p>
         </section>
 
-        <section className="card ocean-card">
+        <section className="card ocean-card evidence-card evidence-card--manual">
           <div className="section-heading">
             <h2>Manual data</h2>
             <span className="badge manual-badge">User-entered</span>
@@ -122,18 +125,20 @@ export default async function ManualAdversePage({
       </section>
 
       {result.data.inactiveEvents.length > 0 ? (
-        <section className="card score-section">
-          <div className="section-heading">
-            <h2>Superseded and inactive history</h2>
+        <details className="card score-section inactive-history">
+          <summary>
+            <span>Superseded and inactive history</span>
             <span className="badge">{result.data.inactiveEvents.length} records</span>
-          </div>
-          <div className="manual-event-list">
+          </summary>
+          <div className="manual-event-list manual-event-list--inactive">
             {result.data.inactiveEvents.map((event) => (
               <ManualEventCard key={event.id} event={event} companyNumber={result.data.company.company_number} />
             ))}
           </div>
-        </section>
+        </details>
       ) : null}
+
+      <div className="status-note status-note--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</div>
     </section>
   );
 }
@@ -144,10 +149,10 @@ function ManualEventCard({ event, companyNumber, active = false }: { event: Manu
   const material = active && event.status === "unsatisfied" && Number(event.amount ?? 0) >= 10000;
 
   return (
-    <article className={`manual-event-card ${material ? "manual-event-card--material" : ""}`}>
+    <article className={`manual-event-card ${active ? "manual-event-card--active" : "manual-event-card--inactive"} ${material ? "manual-event-card--material" : ""}`}>
       <div className="manual-event-card__header">
         <div>
-          <span className="badge manual-badge">Manual data</span>
+          <span className="badge manual-badge">{active ? "Active manual data" : "Inactive manual data"}</span>
           <h3>{formatEventType(event.event_type)}</h3>
         </div>
         <span className={`risk-badge ${material ? "risk-badge--high" : "risk-badge--moderate"}`}>{formatValue(event.status)}</span>
@@ -158,7 +163,7 @@ function ManualEventCard({ event, companyNumber, active = false }: { event: Manu
         <Detail label="Evidence reference" value={event.evidence_reference || "Not provided"} />
         <Detail label="Entered" value={formatDateTime(event.entered_at)} />
       </dl>
-      <p className="manual-source-note">{event.source_note}</p>
+      <p className="manual-source-note"><strong>Source note:</strong> {event.source_note}</p>
       {active ? (
         <div className="manual-event-actions">
           <details>
@@ -189,38 +194,48 @@ function ManualEventForm({
 }) {
   return (
     <form action={action} className="manual-event-form">
-      <label>
-        <span className="form-label">Event type</span>
-        <select name="event_type" required defaultValue={event?.event_type ?? "adverse_note"}>
-          {MANUAL_ADVERSE_EVENT_TYPES.map((type) => <option key={type} value={type}>{formatEventType(type)}</option>)}
-        </select>
-      </label>
-      <label>
-        <span className="form-label">Status</span>
-        <select name="status" required defaultValue={event?.status ?? "note_only"}>
-          {MANUAL_ADVERSE_EVENT_STATUSES.map((status) => <option key={status} value={status}>{formatValue(status)}</option>)}
-        </select>
-      </label>
-      <label>
-        <span className="form-label">Event date</span>
-        <input name="event_date" type="date" defaultValue={event?.event_date ?? ""} />
-      </label>
-      <label>
-        <span className="form-label">Amount</span>
-        <input name="amount" inputMode="decimal" placeholder="Optional" defaultValue={event?.amount == null ? "" : String(event.amount)} />
-      </label>
-      <label>
-        <span className="form-label">Currency</span>
-        <input name="currency" maxLength={3} defaultValue={event?.currency ?? "GBP"} />
-      </label>
-      <label>
-        <span className="form-label">Evidence reference</span>
-        <input name="evidence_reference" placeholder="Optional internal reference" defaultValue={event?.evidence_reference ?? ""} />
-      </label>
-      <label className="form-span-2">
-        <span className="form-label">Source note</span>
-        <textarea name="source_note" required minLength={8} rows={4} placeholder="Briefly explain where this manual information came from." defaultValue={event?.source_note ?? ""} />
-      </label>
+      <fieldset className="form-fieldset">
+        <legend>Event details</legend>
+        <label>
+          <span className="form-label">Event type</span>
+          <select name="event_type" required defaultValue={event?.event_type ?? "adverse_note"}>
+            {MANUAL_ADVERSE_EVENT_TYPES.map((type) => <option key={type} value={type}>{formatEventType(type)}</option>)}
+          </select>
+        </label>
+        <label>
+          <span className="form-label">Event date</span>
+          <input name="event_date" type="date" defaultValue={event?.event_date ?? ""} />
+        </label>
+      </fieldset>
+      <fieldset className="form-fieldset">
+        <legend>Value and status</legend>
+        <label>
+          <span className="form-label">Status</span>
+          <select name="status" required defaultValue={event?.status ?? "note_only"}>
+            {MANUAL_ADVERSE_EVENT_STATUSES.map((status) => <option key={status} value={status}>{formatValue(status)}</option>)}
+          </select>
+        </label>
+        <label>
+          <span className="form-label">Amount</span>
+          <input name="amount" inputMode="decimal" placeholder="Optional" defaultValue={event?.amount == null ? "" : String(event.amount)} />
+        </label>
+        <label>
+          <span className="form-label">Currency</span>
+          <input name="currency" maxLength={3} defaultValue={event?.currency ?? "GBP"} />
+        </label>
+      </fieldset>
+      <fieldset className="form-fieldset form-span-2">
+        <legend>Source note and evidence</legend>
+        <label>
+          <span className="form-label">Evidence reference</span>
+          <input name="evidence_reference" placeholder="Optional internal reference" defaultValue={event?.evidence_reference ?? ""} />
+        </label>
+        <label>
+          <span className="form-label">Source note</span>
+          <textarea name="source_note" required minLength={8} rows={4} placeholder="Briefly explain where this manual information came from and who supplied it." defaultValue={event?.source_note ?? ""} />
+        </label>
+        <p className="form-help">Use concise, factual source notes. Manual records are not verified registry data and should be reviewed before a decision.</p>
+      </fieldset>
       <button className="button-primary" type="submit">{submitLabel}</button>
     </form>
   );

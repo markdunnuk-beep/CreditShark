@@ -46,7 +46,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
       <div className="report-controls">
         <div>
           <p className="eyebrow">Report preview</p>
-          <h1 className="page-title">CreditShark trade-risk report</h1>
+          <h1 className="page-title">Trade-risk report preview</h1>
           <p className="lede">Print-optimised advisory report based on the latest persisted snapshot and score run.</p>
         </div>
         <div className="profile-actions">
@@ -67,10 +67,19 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
 
       <article className="report-document">
         <section className="report-cover report-section">
-          <div>
-            <div className="wordmark report-wordmark">CreditShark</div>
-            <h2>CreditShark trade-risk report</h2>
-            <p>{data.company.company_name}</p>
+          <div className="report-cover__top">
+            <div>
+              <div className="report-wordmark">CreditShark</div>
+              <p className="eyebrow">Advisory company screening</p>
+              <h2>Trade-risk report</h2>
+              <p>{data.company.company_name}</p>
+            </div>
+            <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
+          </div>
+          <div className="report-cover__summary">
+            <ReportMetric label="Advisory score" value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
+            <ReportMetric label="Recommended limit" value={formatMoney(Number(data.scoreRun.recommended_limit), data.scoreRun.currency)} />
+            <ReportMetric label="Confidence" value={formatValue(data.scoreRun.confidence_level)} />
           </div>
           <dl className="report-kv-grid">
             <ReportDetail label="Company number" value={data.company.company_number} />
@@ -80,7 +89,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Score run timestamp" value={formatDateTime(data.scoreRun.run_at)} />
             <ReportDetail label="Report export id" value={data.exportRecord?.id ?? "Not recorded yet"} />
           </dl>
-          <p className="report-disclaimer">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
+          <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
         </section>
 
         <section className="report-section">
@@ -89,10 +98,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
           </div>
           <div className="report-summary-grid">
-            <ReportMetric label="Advisory score" value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
-            <ReportMetric label="Confidence" value={formatValue(data.scoreRun.confidence_level)} />
-            <ReportMetric label="Recommended limit" value={formatMoney(Number(data.scoreRun.recommended_limit), data.scoreRun.currency)} />
             <ReportMetric label="Model version" value={data.modelVersion.version} />
+            <ReportMetric label="Snapshot timestamp" value={formatDateTime(data.snapshot.source_fetched_at)} />
+            <ReportMetric label="Score run timestamp" value={formatDateTime(data.scoreRun.run_at)} />
           </div>
           {data.summaries.hasManualData ? (
             <p className="report-warning">Manual data is active for this company and has been labelled separately in this report.</p>
@@ -118,7 +126,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Latest accounts" value={formatDate(data.snapshot.latest_accounts_date)} />
             <ReportDetail label="Latest confirmation statement" value={formatDate(data.snapshot.latest_confirmation_statement_date)} />
           </dl>
-          <span className="source-chip">Companies House evidence</span>
+          <span className="source-chip source-chip--companies-house">Companies House evidence</span>
         </section>
 
         <section className="report-section">
@@ -142,7 +150,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Active manual events" value={String(data.activeManualEvents.length)} />
             <ReportDetail label="Inactive/superseded manual events" value={String(data.inactiveManualEventCount)} />
           </dl>
-          <p className="note">Manual adverse data is user-entered and is not verified registry data unless a verified source is later integrated.</p>
+          <p className="report-warning">Manual adverse data is user-entered and is not verified registry data unless a verified source is later integrated.</p>
           <MiniChargeTable charges={data.charges.slice(0, 5)} />
           <ManualEvents events={data.activeManualEvents} />
         </section>
@@ -180,7 +188,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Source timestamp" value={formatDateTime(data.snapshot.source_fetched_at)} />
             <ReportDetail label="Export recorded" value={data.exportRecord ? formatDateTime(data.exportRecord.exported_at) : "Not recorded yet"} />
           </dl>
-          <p className="report-disclaimer">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
+          <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
           <p className="note">This report uses public Companies House evidence, user-entered manual data where present, and transparent rule-based scoring. Missing data is shown rather than hidden.</p>
         </section>
       </article>
@@ -207,9 +215,9 @@ function ReportEmptyState({ companyNumber, message }: { companyNumber: string; m
 }
 
 function Notice({ notice, exportId }: { notice: Record<string, string | string[] | undefined>; exportId: string | null }) {
-  if (notice.exported) return <div className="status-note report-screen-only">Report export recorded. Export id: {exportId ?? singleValue(notice.exportId) ?? "Recorded"}.</div>;
+  if (notice.exported) return <div className="report-export-banner report-screen-only"><strong>Export recorded.</strong><span>Export id: {exportId ?? singleValue(notice.exportId) ?? "Recorded"}. You can now print or save this preview as PDF.</span></div>;
   if (notice.error) return <div className="error-note report-screen-only" role="alert">{singleValue(notice.error)}</div>;
-  return <div className="status-note report-screen-only">Preview only. Record the export before printing/saving as PDF for the audit trail.</div>;
+  return <div className="report-export-banner report-export-banner--preview report-screen-only"><strong>Preview only.</strong><span>Record the export before printing or saving as PDF so the audit trail captures this report context.</span></div>;
 }
 
 function ReportMetric({ label, value }: { label: string; value: string }) {
@@ -280,7 +288,7 @@ function ReportReasonRow({ reason }: { reason: ScoreReasonCode }) {
       <div>
         <strong>{reason.label}</strong>
         <p>{reason.explanation}</p>
-        <small>{reason.code} | {reason.sourceType} | {formatDate(reason.sourceDate)}</small>
+        <small>{reason.code} | {formatValue(reason.sourceType)} | {formatDate(reason.sourceDate)}</small>
       </div>
       <div className="reason-impact">
         <strong>{formatSignedNumber(reason.weight)}</strong>

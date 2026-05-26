@@ -2,7 +2,7 @@
 
 export function PrintButton() {
   return (
-    <button className="button-secondary" type="button" onClick={() => window.print()}>
+    <button className="button-secondary print-button" type="button" onClick={() => window.print()}>
       Print / save as PDF
     </button>
   );

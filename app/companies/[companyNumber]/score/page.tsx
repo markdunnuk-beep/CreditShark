@@ -24,6 +24,10 @@ export default async function CompanyScorePage({ params }: { params: Promise<{ c
 function ScoreExplanation({ data }: { data: ScoreRunResult }) {
   const groupedReasons = groupReasonsByGroup(data.reasonCodes);
   const manualReasons = data.reasonCodes.filter((reason) => reason.group === "manual_adverse_events");
+  const positiveReasons = data.reasonCodes.filter((reason) => reason.direction === "positive");
+  const reviewReasons = data.reasonCodes.filter((reason) => reason.direction === "negative" || reason.direction === "neutral");
+  const missingReasons = data.reasonCodes.filter((reason) => reason.direction === "missing");
+  const hasMissingData = data.missingDataFlags.length > 0 || missingReasons.length > 0;
 
   return (
     <section className="page-shell">
@@ -32,7 +36,7 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
           <p className="eyebrow">Score explanation</p>
           <h1 className="page-title">{data.company.company_name}</h1>
           <p className="lede">
-            Source-linked advisory score for Companies House snapshot {data.snapshot.id}.
+            Source-linked advisory score for the latest Companies House snapshot and active manual data where present.
           </p>
         </div>
         <div className="profile-actions">
@@ -46,7 +50,7 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
       </div>
 
       <div className="score-explanation-grid">
-        <section className="card score-summary-card">
+        <section className="card score-summary-card decision-summary-panel">
           <div className="score-hero">
             <div>
               <span className={`risk-badge risk-badge--${data.scoreRun.riskBand}`}>{formatRiskBand(data.scoreRun.riskBand)}</span>
@@ -62,6 +66,10 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
             <Detail label="Source fetched" value={formatDateTime(data.snapshot.source_fetched_at)} />
             <Detail label="Score run" value={formatDateTime(data.scoreRun.runAt)} />
           </dl>
+          <div className="confidence-strip">
+            <strong>Confidence explanation</strong>
+            <span>{confidenceExplanation(data.scoreRun.confidenceLevel, hasMissingData)}</span>
+          </div>
         </section>
 
         <aside className="card ocean-card">
@@ -79,20 +87,33 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
       </div>
 
       {manualReasons.length > 0 ? (
-        <div className="warning-note">
-          Manual adverse data influenced this score. Review the source note before extending material credit.
+        <div className="manual-data-warning">
+          <strong>Manual data included.</strong>
+          <span>Manual adverse data influenced this score. Review the source note before extending material credit.</span>
         </div>
       ) : null}
 
       <section className="card score-section">
         <div className="section-heading">
-          <h2>Factor group breakdown</h2>
+          <h2>Top score drivers</h2>
+          <span className="badge">Source-linked</span>
+        </div>
+        <div className="driver-columns driver-columns--three">
+          <ReasonDriverGroup title="Positive drivers" reasons={positiveReasons.slice(0, 4)} emptyText="No positive drivers were emitted." />
+          <ReasonDriverGroup title="Review factors" reasons={reviewReasons.slice(0, 4)} emptyText="No review factors were emitted." />
+          <ReasonDriverGroup title="Missing or limited data" reasons={missingReasons.slice(0, 4)} emptyText="No missing-data reason codes were emitted." />
+        </div>
+      </section>
+
+      <section className="card score-section">
+        <div className="section-heading">
+          <h2>Full reason-code detail</h2>
           <span className="badge">{data.reasonCodes.length} reason codes</span>
         </div>
         <div className="factor-groups">
           {Array.from(groupedReasons.entries()).map(([group, reasons]) => (
-            <div className="factor-group" key={group}>
-              <h3>{formatGroup(group)}</h3>
+            <div className={`factor-group factor-group--${group}`} key={group}>
+              <h3>{formatGroupLabel(group)}</h3>
               <div className="reason-list">
                 {reasons.map((reason) => <ReasonRow key={reason.code} reason={reason} />)}
               </div>
@@ -113,7 +134,16 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
         ) : (
           <p className="note">No missing-data flags were emitted for this score run.</p>
         )}
-        <p className="note">Missing data reduces confidence where the scoring model cannot inspect a source section or structured metric.</p>
+        <p className="note">Missing data is shown because it limits what the scoring model can inspect. It can reduce confidence even when the advisory score can still be calculated.</p>
+        <details className="audit-details">
+          <summary>Audit metadata</summary>
+          <dl className="detail-grid detail-grid--compact">
+            <Detail label="Snapshot id" value={data.snapshot.id} />
+            <Detail label="Score run id" value={data.scoreRun.id} />
+            <Detail label="Model version" value={data.modelVersion.version} />
+            <Detail label="Source fetched" value={formatDateTime(data.snapshot.source_fetched_at)} />
+          </dl>
+        </details>
       </section>
     </section>
   );
@@ -145,11 +175,14 @@ function ReasonRow({ reason }: { reason: ScoreReasonCode }) {
       <div>
         <div className="reason-row__title">
           <span>{reason.label}</span>
-          <span className={`source-chip source-chip--${reason.direction}`}>{reason.sourceType}</span>
+          <span className={`source-chip source-chip--${sourceChipVariant(reason.sourceType)}`}>{formatValue(reason.sourceType)}</span>
+          {reason.group === "manual_adverse_events" ? <span className="badge manual-badge">Manual data</span> : null}
         </div>
         <p>{reason.explanation}</p>
         <div className="reason-row__meta">
           <span>Code: {reason.code}</span>
+          <span>Group: {formatGroupLabel(reason.group)}</span>
+          <span>Weight: {formatSignedNumber(reason.weight)}</span>
           <span>Source date: {formatDate(reason.sourceDate)}</span>
           {reason.sourceId ? <span>Source id: {reason.sourceId}</span> : null}
         </div>
@@ -159,6 +192,26 @@ function ReasonRow({ reason }: { reason: ScoreReasonCode }) {
         <span>{reason.impact}</span>
       </div>
     </article>
+  );
+}
+
+function ReasonDriverGroup({ title, reasons, emptyText }: { title: string; reasons: ScoreReasonCode[]; emptyText: string }) {
+  return (
+    <div className="driver-group">
+      <h3>{title}</h3>
+      {reasons.length > 0 ? (
+        <div className="reason-preview">
+          {reasons.map((reason) => (
+            <div className={`reason-pill reason-pill--${reason.direction}`} key={reason.code}>
+              <span>{reason.label}</span>
+              <strong>{formatSignedNumber(reason.weight)}</strong>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="note">{emptyText}</p>
+      )}
+    </div>
   );
 }
 
@@ -205,6 +258,34 @@ function formatGroup(value: string): string {
   return value.replace(/_/g, " ");
 }
 
+function formatGroupLabel(value: string): string {
+  const labels: Record<string, string> = {
+    company_status: "Company status",
+    company_age: "Company age",
+    filing_behaviour: "Filing behaviour",
+    financial_strength: "Financial data",
+    charges: "Charges",
+    manual_adverse_events: "Manual data included",
+    director_psc_signals: "Director and PSC context",
+    sic_sector_weighting: "Sector context",
+    data_completeness: "Data completeness"
+  };
+  return labels[value] ?? formatGroup(value);
+}
+
 function formatSignedNumber(value: number): string {
   return value > 0 ? `+${value}` : String(value);
+}
+
+function confidenceExplanation(value: string | null | undefined, hasMissingData: boolean): string {
+  const confidence = formatValue(value).toLowerCase();
+  if (hasMissingData) return `The ${confidence} confidence level reflects missing or limited evidence in this score run.`;
+  return `The ${confidence} confidence level reflects the available snapshot evidence and current model version.`;
+}
+
+function sourceChipVariant(value: string): string {
+  if (value.includes("manual")) return "manual";
+  if (value.includes("companies_house")) return "companies-house";
+  if (value.includes("model")) return "model";
+  return "evidence";
 }
