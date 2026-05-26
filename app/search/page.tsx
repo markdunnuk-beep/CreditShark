@@ -17,14 +17,16 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const result = query ? await searchCompanies(query) : null;
 
   return (
-    <section className="page-shell">
-      <p className="eyebrow">Company search</p>
-      <h1 className="page-title">Search for a UK limited company</h1>
-      <p className="lede">
-        Enter a company name or Companies House number to create a screening starting point.
-      </p>
+    <section className="page-shell search-page">
+      <div className="search-hero">
+        <p className="eyebrow">Company search</p>
+        <h1 className="page-title">Search for a UK limited company</h1>
+        <p className="lede">
+          Search by company name or Companies House number. Use an exact company number for the cleanest match.
+        </p>
+      </div>
 
-      <div className="card search-panel">
+      <div className="card search-panel search-panel--polished">
         <form action="/search" className="search-form" method="get">
           <label className="sr-only" htmlFor="company-search">
             Company name or Companies House number
@@ -41,9 +43,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             Search
           </button>
         </form>
-        <p className="note" style={{ margin: "12px 0 0" }}>
-          CreditShark is for UK limited-company trade-risk screening only.
-        </p>
+        <div className="search-hints" aria-label="Search guidance">
+          <span>UK limited companies only</span>
+          <span>Companies House source</span>
+          <span>No consumer credit checks</span>
+        </div>
       </div>
 
       {!query ? <InitialEmptyState /> : null}
@@ -72,9 +76,9 @@ async function searchCompanies(query: string): Promise<
 
 function InitialEmptyState() {
   return (
-    <div className="empty-state">
-      <strong>Search by company name or number.</strong>
-      <div>Results will show company identity fields only. Snapshots, scoring and persistence are coming next.</div>
+    <div className="empty-state empty-state--search">
+      <strong>Search by company name or Companies House number.</strong>
+      <div>Use exact company number for the cleanest match. Search results do not create snapshots until you open a profile.</div>
     </div>
   );
 }
@@ -84,6 +88,7 @@ function ErrorState({ message }: { message: string }) {
     <div className="error-note" role="alert">
       <strong>Search unavailable.</strong>
       <div>{message}</div>
+      <div>Try again later or check that server-side Companies House configuration is available.</div>
     </div>
   );
 }
@@ -93,7 +98,7 @@ function SearchResults({ query, items }: { query: string; items: CompaniesHouseS
     return (
       <div className="empty-state">
         <strong>No companies found.</strong>
-        <div>Check the spelling or try a Companies House number.</div>
+        <div>Check the spelling, remove extra punctuation or try the exact Companies House number.</div>
       </div>
     );
   }
@@ -103,24 +108,28 @@ function SearchResults({ query, items }: { query: string; items: CompaniesHouseS
   return (
     <>
       <div className="status-note">
-        Showing {items.length} Companies House result{items.length === 1 ? "" : "s"}. Select a company profile in the next build slice.
+        Showing {items.length} Companies House result{items.length === 1 ? "" : "s"}. Open a profile to create a fresh screening snapshot.
       </div>
       <div className="results">
         {items.map((item) => {
           const exactNumberMatch = item.company_number.toLowerCase() === normalisedQuery;
           return (
             <article className="result-card" key={item.company_number}>
-              <div>
-                <Link className="result-card__title" href={`/companies/${item.company_number}`}>
-                  {item.title}
-                </Link>
-                <div className="result-meta">Company number {item.company_number}</div>
-                {exactNumberMatch ? <span className="badge">Exact number match</span> : null}
+              <div className="result-card__identity">
+                <div className="result-card__title-row">
+                  <Link className="result-card__title" href={`/companies/${item.company_number}`}>
+                    {item.title}
+                  </Link>
+                  {exactNumberMatch ? <span className="badge exact-match-badge">Exact number match</span> : null}
+                </div>
+                <div className="result-card__number">Company number {item.company_number}</div>
               </div>
-              <ResultField label="Status" value={formatValue(item.company_status)} />
-              <ResultField label="Type" value={formatValue(item.company_type)} />
-              <ResultField label="Created" value={formatValue(item.date_of_creation)} />
-              <ResultField label="Location" value={formatAddress(item)} />
+              <div className="result-card__meta-grid">
+                <ResultField label="Status" value={formatValue(item.company_status)} badge />
+                <ResultField label="Type" value={formatValue(item.company_type)} />
+                <ResultField label="Created" value={formatValue(item.date_of_creation)} />
+                <ResultField label="Location" value={formatAddress(item)} wide />
+              </div>
               <Link className="button-secondary result-action" href={`/companies/${item.company_number}`}>
                 Open profile
               </Link>
@@ -132,11 +141,11 @@ function SearchResults({ query, items }: { query: string; items: CompaniesHouseS
   );
 }
 
-function ResultField({ label, value }: { label: string; value: string }) {
+function ResultField({ label, value, badge = false, wide = false }: { label: string; value: string; badge?: boolean; wide?: boolean }) {
   return (
-    <div>
+    <div className={wide ? "result-field result-field--wide" : "result-field"}>
       <div className="result-meta">{label}</div>
-      <div>{value}</div>
+      <div className={badge ? "status-value" : undefined}>{value}</div>
     </div>
   );
 }

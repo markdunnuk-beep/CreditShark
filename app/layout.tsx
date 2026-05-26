@@ -21,20 +21,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <header className="site-header">
             <div className="site-header__inner">
               <Link className="wordmark" href="/">
-                CreditShark
+                <span className="wordmark__main">CreditShark</span>
+                <span className="wordmark__sub">Company risk checks</span>
               </Link>
               <nav aria-label="Primary navigation" className="main-nav">
                 <Link className="nav-link" href="/search">
                   Search
                 </Link>
-                <span aria-disabled="true" className="nav-link" title="Coming soon">
-                  Watchlist
-                </span>
-                <span aria-disabled="true" className="nav-link" title="Coming soon">
-                  Reports
-                </span>
               </nav>
-              <span className="guardrail-pill">Advisory company screening</span>
+              <span className="guardrail-pill">Advisory screening</span>
             </div>
           </header>
           <main className="site-main">{children}</main>
