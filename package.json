@@ -4,18 +4,25 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "next dev",
     "lint": "tsc --noEmit",
     "test": "tsx --test tests/**/*.test.ts",
-    "build": "tsc --noEmit"
+    "build": "next build",
+    "smoke:companies-house": "tsx scripts/smoke-companies-house.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "next": "^15.0.4",
+    "pg": "^8.21.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/pg": "^8.20.0",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "tsx": "^4.19.2",
     "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "dotenv": "^17.4.2",
-    "pg": "^8.21.0"
   }
 }

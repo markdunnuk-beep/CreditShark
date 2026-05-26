@@ -1,5 +1,7 @@
 .audit/
 node_modules/
+.next/
+tsconfig.tsbuildinfo
 .env
 .env.*
 
