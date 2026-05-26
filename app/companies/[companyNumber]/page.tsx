@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createCompanySnapshotFromCompaniesHouse } from "../../../src/lib/companies/company-snapshot-service";
 import type { CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../src/lib/guardrails";
+import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manual-adverse-event-service";
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
 import type { ScoreReasonCode } from "../../../src/types/creditshark";
 
@@ -23,18 +24,28 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
   const scoreResult = await runAndPersistScoreForLatestSnapshot(result.data.company.company_number, {
     createdVia: "company_profile_route"
   });
+  const manualEventsResult = await getManualAdverseEventsForCompany(result.data.company.company_number);
 
-  return <CompanyProfile data={result.data} scoreResult={scoreResult.ok ? scoreResult.data : null} scoreError={scoreResult.ok ? null : scoreResult.error.message} />;
+  return (
+    <CompanyProfile
+      data={result.data}
+      scoreResult={scoreResult.ok ? scoreResult.data : null}
+      scoreError={scoreResult.ok ? null : scoreResult.error.message}
+      activeManualEventCount={manualEventsResult.ok ? manualEventsResult.data.activeEvents.length : 0}
+    />
+  );
 }
 
 function CompanyProfile({
   data,
   scoreResult,
-  scoreError
+  scoreError,
+  activeManualEventCount
 }: {
   data: CreatedCompanySnapshot;
   scoreResult: ScoreRunResult | null;
   scoreError: string | null;
+  activeManualEventCount: number;
 }) {
   const company = data.company;
   const snapshot = data.snapshot;
@@ -138,6 +149,19 @@ function CompanyProfile({
         <SummaryCard label="Current officers" value={data.officersSummary.current} />
         <SummaryCard label="PSC records" value={data.pscSummary.count} />
         <SummaryCard label="Missing/failed sections" value={data.missingSections.length} />
+      </section>
+
+      <section className="card score-section manual-profile-card">
+        <div>
+          <div className="section-heading">
+            <h2>Manual adverse events</h2>
+            <span className="badge manual-badge">{activeManualEventCount} active</span>
+          </div>
+          <p className="note">User-entered risk notes and CCJ-style records. Manual data is labelled separately and should be reviewed before a decision.</p>
+        </div>
+        <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
+          Review manual data
+        </Link>
       </section>
 
       {data.missingSections.length > 0 ? (

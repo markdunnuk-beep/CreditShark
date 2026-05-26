@@ -186,7 +186,7 @@ function evaluateManualAdverseEvents(events: ManualAdverseEvent[], reasons: Scor
 
   const material = events.some((event) => (event.amount ?? 0) >= 10000 && !normalise(event.status).includes("satisfied"));
   const weight = material ? -25 : -8;
-  reasons.push(reason("MANUAL_ADVERSE_EVENTS_PRESENT", "Manual adverse events present", "manual_adverse_events", "negative", weight, material ? "material" : "medium", "manual_adverse_event", events[0]?.id, events[0]?.eventDate, "Authorised users have entered manual adverse-event data that must be reviewed alongside Companies House evidence."));
+  reasons.push(reason("MANUAL_ADVERSE_EVENTS_PRESENT", "Manual adverse event recorded", "manual_adverse_events", "negative", weight, material ? "material" : "medium", "manual_adverse_event", events[0]?.id, events[0]?.eventDate, "A manually entered adverse event is active for this company. Review the source note before extending material credit."));
   return weight;
 }
 
@@ -280,4 +280,3 @@ function normalise(value: string | undefined): string {
 function numberWeight(value: unknown, fallback: number): number {
   return typeof value === "number" ? value : fallback;
 }
-

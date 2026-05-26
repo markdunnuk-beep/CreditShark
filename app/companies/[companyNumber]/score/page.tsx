@@ -23,6 +23,7 @@ export default async function CompanyScorePage({ params }: { params: Promise<{ c
 
 function ScoreExplanation({ data }: { data: ScoreRunResult }) {
   const groupedReasons = groupReasonsByGroup(data.reasonCodes);
+  const manualReasons = data.reasonCodes.filter((reason) => reason.group === "manual_adverse_events");
 
   return (
     <section className="page-shell">
@@ -67,15 +68,21 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
           <p className="eyebrow">Advisory limitations</p>
           <p className="note">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
           <div className="disabled-actions">
-            <span aria-disabled="true" className="button-secondary disabled-button">
-              Manual adverse events coming next
-            </span>
+            <Link className="button-secondary" href={`/companies/${data.company.company_number}/adverse`}>
+              Review manual adverse events
+            </Link>
             <span aria-disabled="true" className="button-secondary disabled-button">
               Export report coming later
             </span>
           </div>
         </aside>
       </div>
+
+      {manualReasons.length > 0 ? (
+        <div className="warning-note">
+          Manual adverse data influenced this score. Review the source note before extending material credit.
+        </div>
+      ) : null}
 
       <section className="card score-section">
         <div className="section-heading">

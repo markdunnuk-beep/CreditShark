@@ -138,5 +138,25 @@ describe("runCreditSharkScore", () => {
     assert.equal(result.manualOverrideState, "manual_data_present");
     assert.ok(result.reasonCodes.some((reason) => reason.code === "MANUAL_ADVERSE_EVENTS_PRESENT"));
   });
-});
 
+  it("ignores inactive or superseded manual adverse events", () => {
+    const inactiveEvent: ManualAdverseEvent = {
+      id: "event-2",
+      companyId: "company-1",
+      eventType: "adverse_note",
+      eventDate: "2026-01-15",
+      currency: "GBP",
+      status: "note_only",
+      sourceNote: "Manual evidence",
+      enteredBy: "tester",
+      enteredAt: "2026-05-26T18:00:00.000Z",
+      supersededById: "event-3",
+      isActive: false
+    };
+
+    const result = runCreditSharkScore({ snapshot: baseSnapshot, manualAdverseEvents: [inactiveEvent], modelVersion });
+
+    assert.equal(result.manualOverrideState, "none");
+    assert.equal(result.reasonCodes.some((reason) => reason.code === "MANUAL_ADVERSE_EVENTS_PRESENT"), false);
+  });
+});
