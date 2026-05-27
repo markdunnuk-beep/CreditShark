@@ -9,7 +9,15 @@ const NAV_ITEMS: Array<{ key: PlatformNavKey; label: string; href: string; helpe
   { key: "watchlist", label: "Watchlist", href: "/watchlist", helper: "Companies under review" }
 ];
 
-export function PlatformShell({ active, children }: { active: PlatformNavKey; children: React.ReactNode }) {
+export function PlatformShell({
+  active,
+  children,
+  note = "Recent Checks, Reports and Decisions are summarised on the dashboard for now."
+}: {
+  active?: PlatformNavKey;
+  children: React.ReactNode;
+  note?: string;
+}) {
   return (
     <div className="platform-shell">
       <aside className="platform-sidebar" aria-label="Platform navigation">
@@ -30,9 +38,7 @@ export function PlatformShell({ active, children }: { active: PlatformNavKey; ch
             </Link>
           ))}
         </nav>
-        <div className="platform-sidebar__note">
-          Recent Checks, Reports and Decisions are summarised on the dashboard for now.
-        </div>
+        <div className="platform-sidebar__note">{note}</div>
       </aside>
       <div className="platform-content">{children}</div>
     </div>

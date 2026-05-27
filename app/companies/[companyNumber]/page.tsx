@@ -77,25 +77,7 @@ function CompanyProfile({
   const hasMissingData = (scoreResult?.missingDataFlags.length ?? 0) > 0;
 
   return (
-    <section className="page-shell">
-      <div className="profile-header">
-        <div>
-        <p className="eyebrow">Company profile</p>
-        <h1 className="page-title">{company.company_name}</h1>
-        <p className="lede">
-            Latest CreditShark check using a fresh Companies House snapshot and current advisory scoring context.
-        </p>
-        </div>
-        <div className="profile-actions">
-          <Link className="button-secondary" href="/search">
-            Back to search
-          </Link>
-          <Link className="button-primary" href={`/companies/${company.company_number}`}>
-            Refresh snapshot
-          </Link>
-        </div>
-      </div>
-
+    <section className="company-tab-page">
       <div className="status-note status-note--compact">
         Latest check captured {formatDateTime(data.sourceFetchedAt)}. This is the current advisory risk view; previous checks remain available in score history.
       </div>
@@ -196,30 +178,11 @@ function CompanyProfile({
 
         <aside className="card workflow-side-card">
           <div className="section-heading">
-            <h2>Next actions</h2>
+            <h2>Current review context</h2>
             <span className="badge">Advisory review</span>
           </div>
-          <div className="secondary-action-list">
-            <Link className="button-secondary" href={`/companies/${company.company_number}/score`}>
-              Review score explanation
-            </Link>
-            <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
-              Review manual data
-            </Link>
-            <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
-              Preview report
-            </Link>
-            <Link className="button-secondary" href={historyRoute(company.company_number)}>
-              Score history
-            </Link>
-            <Link className="button-secondary" href={"/watchlist" as Route}>
-              Watchlist
-            </Link>
-            <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
-              Record decision
-            </Link>
-          </div>
-          <p className="note">Actions use the latest persisted snapshot and score context. Manual data is labelled separately.</p>
+          <p className="note">Actions for decisions, reports, manual data and history are available in the workspace header and tabs.</p>
+          <p className="note">Manual data is labelled separately from Companies House evidence.</p>
         </aside>
       </div>
 

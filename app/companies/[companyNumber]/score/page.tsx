@@ -48,31 +48,7 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
   const hasMissingData = data.missingDataFlags.length > 0 || missingReasons.length > 0;
 
   return (
-    <section className="page-shell">
-      <div className="profile-header">
-        <div>
-          <p className="eyebrow">Score explanation</p>
-          <h1 className="page-title">{data.company.company_name}</h1>
-          <p className="lede">
-            Source-linked advisory score for the latest CreditShark check, using the current Companies House snapshot and active manual data where present.
-          </p>
-        </div>
-        <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
-            Back to profile
-          </Link>
-            <Link className="button-primary" href={`/companies/${data.company.company_number}`}>
-              Refresh snapshot and rerun score
-            </Link>
-            <Link className="button-secondary" href={historyRoute(data.company.company_number)}>
-              Score history
-            </Link>
-            <Link className="button-secondary" href={"/watchlist" as Route}>
-              {watchlistItem ? "View watchlist" : "Watchlist"}
-            </Link>
-          </div>
-      </div>
-
+    <section className="company-tab-page">
       <div className="score-explanation-grid">
         <section className="card score-summary-card decision-summary-panel">
           <div className="score-hero">
@@ -83,7 +59,6 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
             <div className="score-value">{data.scoreRun.score ?? "NS"}</div>
           </div>
           <dl className="detail-grid">
-            <Detail label="Company number" value={data.company.company_number} />
             <Detail label="Confidence" value={formatValue(data.scoreRun.confidenceLevel)} />
             <Detail label="Recommended limit" value={formatMoney(data.scoreRun.recommendedLimit, data.scoreRun.currency)} />
             <Detail label="Model version" value={data.modelVersion.version} />
@@ -100,6 +75,9 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
           <p className="eyebrow">{SOURCE_LINKED_EVIDENCE_LABEL}</p>
           <p className="note">Score and limit are advisory indicators. Review the reasons, confidence and missing data before recording a decision.</p>
           <div className="disabled-actions">
+            <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
+              Refresh snapshot and rerun score
+            </Link>
             <Link className="button-secondary" href={`/companies/${data.company.company_number}/adverse`}>
               Review manual adverse events
             </Link>

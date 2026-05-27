@@ -1,7 +1,7 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { formatDecisionLabel } from "../../../../src/lib/decisions/decision-service";
-import { LATEST_CHECK_LABEL, SCORE_HISTORY_LABEL } from "../../../../src/lib/guardrails";
+import { LATEST_CHECK_LABEL } from "../../../../src/lib/guardrails";
 import {
   formatHistoryMoney,
   formatHistoryValue,
@@ -29,28 +29,7 @@ export default async function CompanyScoreHistoryPage({ params }: { params: Prom
 
 function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
   return (
-    <section className="page-shell">
-      <div className="profile-header">
-        <div>
-          <p className="eyebrow">{SCORE_HISTORY_LABEL}</p>
-          <h1 className="page-title">{data.company.company_name}</h1>
-          <p className="lede">
-            Historical CreditShark checks for this company. The newest row is the latest check and current advisory risk view.
-          </p>
-        </div>
-        <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
-            Back to profile
-          </Link>
-          <Link className="button-secondary" href={"/watchlist" as Route}>
-            Watchlist
-          </Link>
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
-            Latest score explanation
-          </Link>
-        </div>
-      </div>
-
+    <section className="company-tab-page">
       <div className="status-note status-note--compact">Historical rows are previous CreditShark checks, not the current risk view.</div>
 
       {data.latest ? (

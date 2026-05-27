@@ -52,14 +52,11 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
     <section className="report-page-shell">
       <div className="report-controls">
         <div>
-          <p className="eyebrow">Report preview</p>
+          <p className="eyebrow">Reports & decisions</p>
           <h1 className="page-title">Trade-risk report preview</h1>
           <p className="lede">Print-optimised advisory report based on the latest persisted snapshot and score run.</p>
         </div>
         <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
-            Back to profile
-          </Link>
           <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
             Score explanation
           </Link>

@@ -43,25 +43,7 @@ export default async function ManualAdversePage({
   const rerunAction = rerunScoreFromAdversePageAction.bind(null, result.data.company.company_number);
 
   return (
-    <section className="page-shell">
-      <div className="profile-header">
-        <div>
-          <p className="eyebrow">Manual adverse events</p>
-          <h1 className="page-title">{result.data.company.company_name}</h1>
-          <p className="lede">
-            Review Companies House charges separately from user-entered risk notes and CCJ-style records.
-          </p>
-        </div>
-        <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${result.data.company.company_number}`}>
-            Back to profile
-          </Link>
-          <Link className="button-secondary" href={`/companies/${result.data.company.company_number}/score`}>
-            View score explanation
-          </Link>
-        </div>
-      </div>
-
+    <section className="company-tab-page">
       <Notice notices={notices} />
 
       <div className="manual-data-warning">

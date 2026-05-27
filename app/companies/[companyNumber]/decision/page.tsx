@@ -40,25 +40,7 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
   const recommendationLimit = data.recommendation?.recommended_limit ?? data.scoreRun.recommended_limit;
 
   return (
-    <section className="page-shell">
-      <div className="profile-header">
-        <div>
-          <p className="eyebrow">{USER_RECORDED_DECISION_LABEL}</p>
-          <h1 className="page-title">{data.company.company_name}</h1>
-          <p className="lede">
-            Record the commercial credit outcome your team chooses, linked to the latest advisory score, recommendation and snapshot.
-          </p>
-        </div>
-        <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
-            Back to profile
-          </Link>
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
-            Score explanation
-          </Link>
-        </div>
-      </div>
-
+    <section className="company-tab-page">
       <Notice notices={notices} />
 
       <div className="decision-record-grid">
