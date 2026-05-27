@@ -28,12 +28,16 @@ SVG was chosen because it keeps the asset local, lightweight, responsive and bra
 
 The homepage hero now uses the ocean-fin asset as the right-side scene treatment via the shared `CalmFinHero` component.
 
-The previous product-preview overlay was removed from the hero so the visual reads as a proper calm ocean landscape rather than a UI card. The left side retains the CreditShark message:
+The first correction still treated the ocean scene as a standalone boxed visual card and removed the CreditShark trade-risk preview. This pass changes the ocean-fin SVG into an ambient background layer and restores the product/trade-risk preview as foreground content.
+
+The background image now sits mainly on the right side of the hero and fades toward the left. The foreground keeps the CreditShark message:
 
 - `Trade Risk. Calmly Managed.`
 - `Clear credit insight for SMEs before you trade`
 - Source-linked UK limited-company checks
 - Primary CTA: `Check a company`
+
+The restored preview shows advisory score, recommended limit, confidence, source-linked evidence, manual-data labelling, user-recorded decision and report preview concepts. The ocean/fin image is a homepage background treatment, not a logo or standalone product component.
 
 ## `/brand` implementation
 

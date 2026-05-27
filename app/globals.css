@@ -783,6 +783,9 @@ h1 {
 
 .public-hero {
   align-items: stretch;
+  isolation: isolate;
+  min-height: 620px;
+  overflow: hidden;
   padding-top: 64px;
   position: relative;
 }
@@ -807,6 +810,8 @@ h1 {
 
 .hero-copy {
   align-self: center;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-actions {
@@ -833,10 +838,21 @@ h1 {
   box-shadow: 0 24px 70px rgba(6, 43, 63, 0.12);
   min-width: 0;
   padding: 24px;
+  z-index: 2;
 }
 
-.public-calm-fin-hero {
-  min-height: 560px;
+.calm-fin-hero.public-calm-fin-hero {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  height: 100%;
+  inset: 0 0 0 auto;
+  min-height: 0;
+  opacity: 0.9;
+  pointer-events: none;
+  position: absolute;
+  width: min(980px, 74vw);
+  z-index: 0;
 }
 
 .calm-fin-hero {
@@ -909,6 +925,9 @@ h1 {
 .public-product-preview {
   display: grid;
   gap: 18px;
+  justify-self: end;
+  max-width: 460px;
+  width: min(100%, 460px);
 }
 
 .public-preview-grid {
