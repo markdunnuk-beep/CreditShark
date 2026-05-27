@@ -836,18 +836,14 @@ h1 {
 }
 
 .public-calm-fin-hero {
-  min-height: 520px;
-}
-
-.public-calm-fin-hero .public-product-preview {
-  max-width: 430px;
-  width: min(100%, 430px);
+  min-height: 560px;
 }
 
 .calm-fin-hero {
-  border: 1px solid rgba(216, 231, 234, 0.9);
-  border-radius: 28px;
-  box-shadow: 0 28px 80px rgba(6, 43, 63, 0.12);
+  background: rgba(234, 247, 248, 0.28);
+  border: 1px solid rgba(216, 231, 234, 0.72);
+  border-radius: 30px;
+  box-shadow: 0 30px 80px rgba(6, 43, 63, 0.11);
   isolation: isolate;
   min-width: 0;
   overflow: hidden;
@@ -856,8 +852,8 @@ h1 {
 
 .calm-fin-hero::before {
   background:
-    linear-gradient(90deg, rgba(251, 248, 242, 0.88), rgba(251, 248, 242, 0.22) 38%, rgba(250, 251, 252, 0)),
-    radial-gradient(circle at 76% 18%, rgba(109, 209, 214, 0.42), transparent 24rem);
+    linear-gradient(90deg, rgba(251, 248, 242, 0.98), rgba(251, 248, 242, 0.72) 21%, rgba(251, 248, 242, 0.18) 43%, rgba(250, 251, 252, 0) 66%),
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.24), transparent 24rem);
   content: "";
   inset: 0;
   pointer-events: none;
@@ -865,19 +861,17 @@ h1 {
   z-index: 1;
 }
 
-.calm-fin-hero__water {
-  inset: 0;
-  position: absolute;
-  z-index: 0;
-}
-
-.calm-fin-hero__svg {
+.calm-fin-hero__image {
   display: block;
   height: 100%;
+  inset: 0;
   object-fit: cover;
-  transform: scale(1.04);
-  transform-origin: 62% 54%;
+  object-position: center right;
+  position: absolute;
+  transform: scale(1.01);
+  transform-origin: center right;
   width: 100%;
+  z-index: 0;
 }
 
 .calm-fin-hero__content {
@@ -899,13 +893,13 @@ h1 {
 
 .calm-fin-hero--brand::before {
   background:
-    linear-gradient(90deg, rgba(251, 248, 242, 0.78), rgba(251, 248, 242, 0.1) 45%, rgba(250, 251, 252, 0)),
-    radial-gradient(circle at 78% 18%, rgba(109, 209, 214, 0.34), transparent 22rem);
+    linear-gradient(90deg, rgba(251, 248, 242, 0.9), rgba(251, 248, 242, 0.48) 30%, rgba(251, 248, 242, 0.1) 58%, rgba(250, 251, 252, 0)),
+    radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.22), transparent 22rem);
 }
 
-.calm-fin-hero--brand .calm-fin-hero__svg {
-  opacity: 0.86;
-  transform: scale(1.02);
+.calm-fin-hero--brand .calm-fin-hero__image {
+  opacity: 0.92;
+  transform: scale(1.03);
 }
 
 .calm-fin-hero--brand .calm-fin-hero__content {
@@ -2945,7 +2939,7 @@ dd {
   .public-calm-fin-hero,
   .brand-calm-fin-hero,
   .calm-fin-hero--brand {
-    min-height: 390px;
+    min-height: 320px;
   }
 
   .calm-fin-hero__content {
@@ -2958,17 +2952,18 @@ dd {
     padding-left: 18px;
   }
 
-  .calm-fin-hero__svg {
-    transform: scale(1.14) translateX(4%);
+  .calm-fin-hero__image {
+    object-position: 62% center;
+    transform: scale(1.08);
   }
 
   .calm-fin-hero::before {
     background:
-      linear-gradient(180deg, rgba(251, 248, 242, 0.08), rgba(251, 248, 242, 0.64) 62%, rgba(251, 248, 242, 0.86)),
-      radial-gradient(circle at 78% 18%, rgba(109, 209, 214, 0.34), transparent 18rem);
+      linear-gradient(180deg, rgba(251, 248, 242, 0.02), rgba(251, 248, 242, 0.48) 64%, rgba(251, 248, 242, 0.78)),
+      linear-gradient(90deg, rgba(251, 248, 242, 0.72), rgba(251, 248, 242, 0.08) 56%, rgba(250, 251, 252, 0)),
+      radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.2), transparent 18rem);
   }
 
-  .public-calm-fin-hero .public-product-preview,
   .brand-hero__panel {
     max-width: none;
     width: 100%;

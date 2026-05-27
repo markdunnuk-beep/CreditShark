@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sceneFade" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.24" stop-color="#000" stop-opacity="0.14"/>
+      <stop offset="0.42" stop-color="#fff" stop-opacity="0.7"/>
+      <stop offset="0.62" stop-color="#fff" stop-opacity="0.94"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="leftFadeMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+      <rect width="1" height="1" fill="url(#sceneFade)"/>
+    </mask>
+    <linearGradient id="sky" x1="0.1" x2="0.94" y1="0.05" y2="0.7">
+      <stop offset="0" stop-color="#FAFBFC"/>
+      <stop offset="0.38" stop-color="#EAF7F8"/>
+      <stop offset="0.7" stop-color="#BDEBF0"/>
+      <stop offset="1" stop-color="#75C9D2"/>
+    </linearGradient>
+    <linearGradient id="ocean" x1="0.2" x2="0.95" y1="0.35" y2="1">
+      <stop offset="0" stop-color="#77D0D8"/>
+      <stop offset="0.42" stop-color="#1CA3A6"/>
+      <stop offset="1" stop-color="#0D2B45"/>
+    </linearGradient>
+    <linearGradient id="nearWater" x1="0.25" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#AEE8EE" stop-opacity="0.82"/>
+      <stop offset="0.42" stop-color="#1CA3A6" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#0D2B45" stop-opacity="0.92"/>
+    </linearGradient>
+    <linearGradient id="fin" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0D2B45"/>
+      <stop offset="0.58" stop-color="#16415F"/>
+      <stop offset="1" stop-color="#071D31"/>
+    </linearGradient>
+    <radialGradient id="sunHaze" cx="70%" cy="22%" r="55%">
+      <stop offset="0" stop-color="#FAFBFC" stop-opacity="0.74"/>
+      <stop offset="0.42" stop-color="#CFF4F6" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#6DD1D6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softBlur" x="-10%" y="-25%" width="120%" height="150%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <g mask="url(#leftFadeMask)">
+    <rect width="1600" height="900" fill="url(#sky)"/>
+    <rect width="1600" height="900" fill="url(#sunHaze)"/>
+
+    <path d="M0 438C188 415 367 414 548 432C728 450 886 459 1064 436C1230 415 1413 400 1600 417V900H0Z" fill="#EAF7F8" opacity="0.72"/>
+    <path d="M0 476C194 452 386 451 582 472C778 494 944 506 1148 474C1306 450 1459 442 1600 456V900H0Z" fill="url(#ocean)"/>
+    <path d="M0 536C168 512 346 512 526 538C704 563 874 580 1058 546C1245 512 1434 506 1600 526V900H0Z" fill="url(#nearWater)" opacity="0.78"/>
+
+    <path d="M332 448C510 429 714 439 890 456C1092 475 1276 463 1498 438" fill="none" stroke="#FAFBFC" stroke-width="5" stroke-linecap="round" opacity="0.62" filter="url(#softBlur)"/>
+    <path d="M490 495C650 479 824 491 982 508C1144 524 1328 514 1502 492" fill="none" stroke="#FAFBFC" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+    <path d="M560 569C744 546 918 560 1094 584C1250 606 1404 591 1566 565" fill="none" stroke="#DFF8FA" stroke-width="4" stroke-linecap="round" opacity="0.42"/>
+    <path d="M710 635C842 620 984 630 1124 646C1266 662 1410 652 1546 632" fill="none" stroke="#FAFBFC" stroke-width="3" stroke-linecap="round" opacity="0.38"/>
+
+    <path d="M1078 461C1095 369 1141 294 1226 244C1220 356 1178 432 1103 477C1092 484 1079 476 1078 461Z" fill="url(#fin)"/>
+    <path d="M1106 456C1160 441 1222 445 1274 468" fill="none" stroke="#FAFBFC" stroke-width="6" stroke-linecap="round" opacity="0.72"/>
+    <path d="M1040 481C1115 459 1205 464 1288 494" fill="none" stroke="#BDEBF0" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+    <path d="M994 506C1103 477 1228 486 1340 526" fill="none" stroke="#FAFBFC" stroke-width="3" stroke-linecap="round" opacity="0.34"/>
+
+    <path d="M1058 372C1089 319 1136 276 1194 250" fill="none" stroke="#FAFBFC" stroke-width="2" stroke-linecap="round" opacity="0.22"/>
+    <rect x="1172" y="160" width="256" height="96" rx="48" fill="#FAFBFC" opacity="0.18" filter="url(#softBlur)"/>
+  </g>
+</svg>

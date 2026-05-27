@@ -1,13 +1,7 @@
 import {
   ActionGroup,
-  Badge,
   ButtonLink,
-  Card,
-  EvidenceChip,
-  MetricCard,
-  Notice,
-  SectionHeader,
-  TradeRiskScoreGauge
+  Notice
 } from "./components/ui";
 import { CalmFinHero } from "./components/brand/calm-fin-hero";
 
@@ -31,34 +25,7 @@ export default function HomePage() {
           </Notice>
         </div>
 
-        <CalmFinHero className="public-calm-fin-hero">
-          <Card className="report-preview-card public-product-preview" aria-label="CreditShark product preview">
-            <SectionHeader
-              eyebrow="Company risk workspace"
-              title="Current trade-risk view"
-              description="A calm summary before you review deeper evidence."
-              action={<Badge variant="info">Advisory</Badge>}
-            />
-            <div className="public-preview-grid">
-              <TradeRiskScoreGauge
-                score={76}
-                rating="Moderate Risk"
-                interpretation="Some indicators may need review before increasing exposure."
-                lastUpdated="latest check"
-              />
-              <div className="public-preview-metrics">
-                <MetricCard label="Recommended limit" value="£7,500" helper="Advisory indicator" />
-                <MetricCard label="Confidence" value="Medium" helper="Source freshness visible" />
-              </div>
-            </div>
-            <div className="preview-footer">
-              <EvidenceChip sourceType="companies_house" label="Companies House evidence" />
-              <EvidenceChip sourceType="model" label="Source-linked reasons" />
-              <EvidenceChip sourceType="decision" label="User-recorded decision" />
-              <EvidenceChip sourceType="report" label="Report preview" />
-            </div>
-          </Card>
-        </CalmFinHero>
+        <CalmFinHero className="public-calm-fin-hero" />
       </section>
 
       <section className="page-shell public-section">
