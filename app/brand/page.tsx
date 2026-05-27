@@ -17,6 +17,7 @@ import {
   TextInput,
   TradeRiskScoreGauge
 } from "../components/ui";
+import { CalmFinHero } from "../components/brand/calm-fin-hero";
 import { CREDITSHARK_FOOTER_DISCLAIMER } from "../../src/lib/guardrails";
 
 export const metadata: Metadata = {
@@ -97,7 +98,7 @@ export default function BrandPage() {
     <div className="brand-page">
       <section className="page-shell brand-hero">
         <div className="brand-hero__copy">
-          <p className="eyebrow">Live brand reference</p>
+          <p className="eyebrow">Brand system v1.0</p>
           <h1>CreditShark</h1>
           <p className="brand-hero__line">Trade Risk. Calmly Managed.</p>
           <p className="lede">
@@ -114,18 +115,21 @@ export default function BrandPage() {
             <ButtonLink href="/search" variant="secondary">Check a company</ButtonLink>
           </ActionGroup>
         </div>
-        <Card variant="elevated" className="brand-hero__panel">
-          <SectionHeader
-            eyebrow="Brand idea"
-            title="Clear credit insight for SMEs, delivered calmly."
-            description="A practical finance SaaS identity for UK limited-company trade-risk screening."
-          />
-          <div className="brand-attribute-grid">
-            {["Calm", "Clarity", "Confidence", "Practical", "Trustworthy", "SME-friendly"].map((attribute) => (
-              <Badge variant="info" key={attribute}>{attribute}</Badge>
-            ))}
-          </div>
-        </Card>
+        <CalmFinHero variant="brand" className="brand-calm-fin-hero">
+          <Card variant="elevated" className="brand-hero__panel">
+            <SectionHeader
+              eyebrow="Brand idea"
+              title="Clear credit insight for SMEs, delivered calmly."
+              description="A practical finance SaaS identity for UK limited-company trade-risk screening."
+              action={<Badge variant="info">Calm Fin motif</Badge>}
+            />
+            <div className="brand-attribute-grid">
+              {["Calm", "Clarity", "Confidence", "Practical", "Trustworthy", "SME-friendly"].map((attribute) => (
+                <Badge variant="info" key={attribute}>{attribute}</Badge>
+              ))}
+            </div>
+          </Card>
+        </CalmFinHero>
       </section>
 
       <BrandSection
