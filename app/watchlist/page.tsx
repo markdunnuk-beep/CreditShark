@@ -10,6 +10,7 @@ import {
   type WatchlistSummary
 } from "../../src/lib/watchlist/watchlist-service";
 import { removeCompanyFromWatchlistAction } from "./actions";
+import { Badge, Button, ButtonLink, Card, MetricCard, Notice, ResponsiveTableShell, RiskBadge, SectionHeader } from "../components/ui";
 
 export const metadata: Metadata = {
   title: "Watchlist"
@@ -40,15 +41,15 @@ function WatchlistView({ items, summary }: { items: WatchlistCompanyContext[]; s
           </p>
         </div>
         <div className="profile-actions">
-          <Link className="button-secondary" href="/search">
+          <ButtonLink variant="secondary" href="/search">
             Find company
-          </Link>
+          </ButtonLink>
         </div>
       </div>
 
-      <div className="status-note status-note--compact">
+      <Notice className="status-note--compact" variant="info">
         {LATEST_CHECK_LABEL}: watchlist rows show existing CreditShark checks. Automated change monitoring and alerts are planned for a later phase.
-      </div>
+      </Notice>
 
       <section className="summary-cards" aria-label="Watchlist summary">
         <SummaryCard label="Watched companies" value={summary.totalWatched} />
@@ -67,12 +68,9 @@ function WatchlistView({ items, summary }: { items: WatchlistCompanyContext[]; s
           </Link>
         </div>
       ) : (
-        <section className="card score-section">
-          <div className="section-heading">
-            <h2>Watched companies</h2>
-            <span className="badge">{items.length} active</span>
-          </div>
-          <div className="watchlist-table-wrap">
+        <Card className="score-section">
+          <SectionHeader title="Watched companies" action={<Badge>{items.length} active</Badge>} />
+          <ResponsiveTableShell className="watchlist-table-wrap">
             <table className="watchlist-table">
               <thead>
                 <tr>
@@ -90,19 +88,16 @@ function WatchlistView({ items, summary }: { items: WatchlistCompanyContext[]; s
                 {items.map((item) => <WatchlistRow key={item.watchlist.id} item={item} />)}
               </tbody>
             </table>
-          </div>
-        </section>
+          </ResponsiveTableShell>
+        </Card>
       )}
 
-      <section className="card score-section">
-        <div className="section-heading">
-          <h2>Monitoring note</h2>
-          <span className="badge">MVP foundation</span>
-        </div>
+      <Card className="score-section">
+        <SectionHeader title="Monitoring note" action={<Badge>MVP foundation</Badge>} />
         <p className="note">
           The watchlist is a workflow aid. It shows the latest CreditShark checks already created in the app and prepares the data model for future source-change monitoring.
         </p>
-      </section>
+      </Card>
       </section>
     </PlatformShell>
   );
@@ -120,7 +115,7 @@ function WatchlistRow({ item }: { item: WatchlistCompanyContext }) {
         {latest ? (
           <>
             <strong>{latest.score ?? "NS"}</strong>
-            <span className={`risk-badge risk-badge--${latest.risk_band}`}>{formatWatchlistValue(latest.risk_band)}</span>
+            <RiskBadge riskBand={latest.risk_band} />
             <div className="secondary-id">Confidence {formatWatchlistValue(latest.confidence_level)}</div>
           </>
         ) : "No score run"}
@@ -140,7 +135,7 @@ function WatchlistRow({ item }: { item: WatchlistCompanyContext }) {
           <Link href={`/companies/${item.company.company_number}/score`}>Score</Link>
         </div>
         <form action={removeCompanyFromWatchlistAction.bind(null, item.company.company_number, "watchlist")}>
-          <button className="link-button" type="submit">Remove</button>
+          <Button size="sm" variant="ghost" type="submit">Remove</Button>
         </form>
       </td>
     </tr>
@@ -165,12 +160,7 @@ function WatchlistError({ message }: { message: string }) {
 }
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="summary-card">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  );
+  return <MetricCard className="summary-card" label={label} value={value} />;
 }
 
 function formatDateTime(value: string | null): string {

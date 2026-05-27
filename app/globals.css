@@ -1754,6 +1754,20 @@ dd {
   overflow-x: auto;
 }
 
+.ui-responsive-table {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+}
+
+.ui-responsive-table table {
+  margin-top: 0;
+}
+
+.ui-responsive-table:focus-within {
+  outline: 3px solid rgba(24, 191, 199, 0.18);
+  outline-offset: 2px;
+}
+
 .history-table {
   border-collapse: collapse;
   min-width: 980px;
@@ -2291,6 +2305,10 @@ dd {
   width: 100%;
 }
 
+.report-table-wrap {
+  margin-top: 14px;
+}
+
 .report-table th,
 .report-table td {
   border-bottom: 1px solid var(--border-soft);
@@ -2664,7 +2682,8 @@ dd {
   .report-section,
   .report-metric,
   .report-manual-event,
-  .report-reason-row {
+  .report-reason-row,
+  .ui-responsive-table {
     background: #ffffff !important;
     box-shadow: none;
   }

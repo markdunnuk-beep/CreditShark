@@ -9,7 +9,7 @@ import {
   type ScoreHistoryRow,
   type ScoreHistoryViewModel
 } from "../../../../src/lib/history/score-history-service";
-import { ActionGroup, Badge, ButtonLink, Card, EvidenceChip, MetricCard, RiskBadge, SectionHeader } from "../../../components/ui";
+import { ActionGroup, Badge, ButtonLink, Card, EvidenceChip, MetricCard, ResponsiveTableShell, RiskBadge, SectionHeader } from "../../../components/ui";
 
 export const metadata: Metadata = {
   title: "Score history"
@@ -73,7 +73,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
           <ButtonLink variant="secondary" href={`/companies/${data.company.company_number}/decision`}>Record decision</ButtonLink>
         </ActionGroup>
         {data.rows.length > 0 ? (
-          <div className="history-table-wrap">
+          <ResponsiveTableShell className="history-table-wrap">
             <table className="history-table">
               <thead>
                 <tr>
@@ -92,7 +92,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
                 {data.rows.map((row, index) => <HistoryRow key={row.score_run_id} row={row} companyNumber={data.company.company_number} current={index === 0} />)}
               </tbody>
             </table>
-          </div>
+          </ResponsiveTableShell>
         ) : null}
       </Card>
 

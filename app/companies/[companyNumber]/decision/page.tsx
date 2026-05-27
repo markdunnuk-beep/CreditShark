@@ -16,9 +16,15 @@ import {
   Card,
   DetailList,
   EvidencePanel,
+  Field,
+  FormActions,
+  FormSection,
   Notice as UiNotice,
   RiskBadge,
-  SectionHeader
+  Select,
+  SectionHeader,
+  Textarea,
+  TextInput
 } from "../../../components/ui";
 
 export const metadata: Metadata = {
@@ -106,46 +112,39 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
 function DecisionForm({ action }: { action: (formData: FormData) => void | Promise<void> }) {
   return (
     <form action={action} className="manual-event-form decision-record-form">
-      <fieldset className="form-fieldset">
-        <legend>Decision outcome</legend>
-        <label>
-          <span className="form-label">Decision option</span>
-          <select name="decision" required defaultValue="refer_for_review">
+      <FormSection title="Decision outcome" description="Record the commercial outcome your team is choosing.">
+        <Field label="Decision option" helper="This is a user-recorded outcome, not an automated CreditShark decision.">
+          <Select name="decision" required defaultValue="refer_for_review">
             {DECISION_RECORD_VALUES.map((value) => <option key={value} value={value}>{formatDecisionLabel(value)}</option>)}
-          </select>
-        </label>
+          </Select>
+        </Field>
         <p className="form-help">Choose the outcome your team is recording. This is not an automated CreditShark decision.</p>
-      </fieldset>
-      <fieldset className="form-fieldset">
-        <legend>Limits</legend>
-        <label>
-          <span className="form-label">Requested limit</span>
-          <input name="requested_limit" inputMode="decimal" placeholder="Optional" />
-        </label>
-        <label>
-          <span className="form-label">Final approved limit</span>
-          <input name="approved_limit" inputMode="decimal" placeholder="Required for approval" />
-        </label>
-        <label>
-          <span className="form-label">Currency</span>
-          <input name="currency" maxLength={3} defaultValue="GBP" />
-        </label>
-      </fieldset>
-      <fieldset className="form-fieldset form-span-2">
-        <legend>Review notes</legend>
-        <label>
-          <span className="form-label">Reviewer notes</span>
-          <textarea name="reviewer_notes" required minLength={8} rows={4} placeholder="Summarise the commercial rationale and any evidence reviewed." />
-        </label>
-        <label>
-          <span className="form-label">Override reason</span>
-          <textarea name="override_reason" rows={3} placeholder="Required when going outside the advisory recommendation." />
-        </label>
+      </FormSection>
+      <FormSection title="Limits" description="Use whole-number trade limits where possible.">
+        <Field label="Requested limit" helper="Optional requested trade limit.">
+          <TextInput name="requested_limit" inputMode="decimal" placeholder="Optional" />
+        </Field>
+        <Field label="Final approved limit" helper="Required when recording an approval.">
+          <TextInput name="approved_limit" inputMode="decimal" placeholder="Required for approval" />
+        </Field>
+        <Field label="Currency">
+          <TextInput name="currency" maxLength={3} defaultValue="GBP" />
+        </Field>
+      </FormSection>
+      <FormSection title="Review notes" description="Keep the rationale practical and evidence-led." span>
+        <Field label="Reviewer notes" helper="Summarise the commercial rationale and any evidence reviewed.">
+          <Textarea name="reviewer_notes" required minLength={8} rows={4} placeholder="Summarise the commercial rationale and any evidence reviewed." />
+        </Field>
+        <Field label="Override reason" helper="Use this when going outside the advisory recommendation.">
+          <Textarea name="override_reason" rows={3} placeholder="Required when going outside the advisory recommendation." />
+        </Field>
         <p className="form-help">
           Override reasons are required when the approved limit exceeds the recommendation, when approving a high-risk or not-scored case, or when approving a limit without a recommendation.
         </p>
-      </fieldset>
-      <Button type="submit">Record decision</Button>
+      </FormSection>
+      <FormActions>
+        <Button type="submit">Record decision</Button>
+      </FormActions>
     </form>
   );
 }

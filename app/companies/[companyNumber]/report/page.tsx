@@ -24,6 +24,7 @@ import {
   ButtonLink,
   Notice as UiNotice,
   ReportSection,
+  ResponsiveTableShell,
   RiskBadge
 } from "../../../components/ui";
 
@@ -301,19 +302,23 @@ function ReasonSummary({ title, reasons }: { title: string; reasons: ScoreReason
 
 function MiniFilingTable({ filings }: { filings: ReportFiling[] }) {
   return filings.length > 0 ? (
-    <table className="report-table">
-      <thead><tr><th>Date</th><th>Type</th><th>Description</th></tr></thead>
-      <tbody>{filings.map((filing) => <tr key={filing.id}><td>{formatDate(filing.filing_date)}</td><td>{formatValue(filing.filing_type)}</td><td>{formatValue(filing.description)}</td></tr>)}</tbody>
-    </table>
+    <ResponsiveTableShell className="report-table-wrap">
+      <table className="report-table">
+        <thead><tr><th>Date</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>{filings.map((filing) => <tr key={filing.id}><td>{formatDate(filing.filing_date)}</td><td>{formatValue(filing.filing_type)}</td><td>{formatValue(filing.description)}</td></tr>)}</tbody>
+      </table>
+    </ResponsiveTableShell>
   ) : <p className="note">No filing rows were captured for this snapshot.</p>;
 }
 
 function MiniChargeTable({ charges }: { charges: ReportCharge[] }) {
   return charges.length > 0 ? (
-    <table className="report-table">
-      <thead><tr><th>Created</th><th>Status</th><th>Classification</th></tr></thead>
-      <tbody>{charges.map((charge) => <tr key={charge.id}><td>{formatDate(charge.created_on)}</td><td>{formatValue(charge.status)}</td><td>{formatValue(charge.classification)}</td></tr>)}</tbody>
-    </table>
+    <ResponsiveTableShell className="report-table-wrap">
+      <table className="report-table">
+        <thead><tr><th>Created</th><th>Status</th><th>Classification</th></tr></thead>
+        <tbody>{charges.map((charge) => <tr key={charge.id}><td>{formatDate(charge.created_on)}</td><td>{formatValue(charge.status)}</td><td>{formatValue(charge.classification)}</td></tr>)}</tbody>
+      </table>
+    </ResponsiveTableShell>
   ) : <p className="note">No charge rows were captured for this snapshot.</p>;
 }
 

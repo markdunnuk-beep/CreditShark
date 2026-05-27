@@ -51,6 +51,8 @@ describe("CreditShark design-system helpers", () => {
   it("formats generic UI values without introducing legal copy", () => {
     assert.equal(formatUiValue("source-linked_evidence"), "source linked evidence");
     assert.equal(formatUiValue(null), "Not available");
+    assert.equal(formatUiValue(undefined), "Not available");
+    assert.equal(formatUiValue(""), "Not available");
     assert.equal(formatUiValue("source-linked_evidence").includes(CREDITSHARK_FOOTER_DISCLAIMER), false);
   });
 });

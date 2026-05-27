@@ -25,8 +25,14 @@ import {
   DetailList,
   EvidenceChip,
   EvidencePanel,
+  Field,
+  FormActions,
+  FormSection,
   Notice as UiNotice,
-  SectionHeader
+  Select,
+  SectionHeader,
+  Textarea,
+  TextInput
 } from "../../../components/ui";
 
 export const metadata: Metadata = {
@@ -170,10 +176,9 @@ function ManualEventCard({ event, companyNumber, active = false }: { event: Manu
             <ManualEventForm action={supersedeAction} submitLabel="Supersede event" event={event} />
           </details>
           <form action={deactivateAction} className="inline-action-form">
-            <label>
-              <span className="form-label">Deactivation reason</span>
-              <input name="deactivation_reason" required minLength={4} placeholder="e.g. duplicate manual entry" />
-            </label>
+            <Field label="Deactivation reason">
+              <TextInput name="deactivation_reason" required minLength={4} placeholder="e.g. duplicate manual entry" />
+            </Field>
             <Button variant="secondary" type="submit">Deactivate</Button>
           </form>
         </div>
@@ -193,51 +198,41 @@ function ManualEventForm({
 }) {
   return (
     <form action={action} className="manual-event-form">
-      <fieldset className="form-fieldset">
-        <legend>Event details</legend>
-        <label>
-          <span className="form-label">Event type</span>
-          <select name="event_type" required defaultValue={event?.event_type ?? "adverse_note"}>
+      <FormSection title="Event details" description="Record the type and date of the user-entered adverse information.">
+        <Field label="Event type">
+          <Select name="event_type" required defaultValue={event?.event_type ?? "adverse_note"}>
             {MANUAL_ADVERSE_EVENT_TYPES.map((type) => <option key={type} value={type}>{formatEventType(type)}</option>)}
-          </select>
-        </label>
-        <label>
-          <span className="form-label">Event date</span>
-          <input name="event_date" type="date" defaultValue={event?.event_date ?? ""} />
-        </label>
-      </fieldset>
-      <fieldset className="form-fieldset">
-        <legend>Value and status</legend>
-        <label>
-          <span className="form-label">Status</span>
-          <select name="status" required defaultValue={event?.status ?? "note_only"}>
+          </Select>
+        </Field>
+        <Field label="Event date" helper="Required for CCJ-style and payment default entries.">
+          <TextInput name="event_date" type="date" defaultValue={event?.event_date ?? ""} />
+        </Field>
+      </FormSection>
+      <FormSection title="Value and status" description="Keep the status factual and separate from Companies House charge evidence.">
+        <Field label="Status">
+          <Select name="status" required defaultValue={event?.status ?? "note_only"}>
             {MANUAL_ADVERSE_EVENT_STATUSES.map((status) => <option key={status} value={status}>{formatValue(status)}</option>)}
-          </select>
-        </label>
-        <label>
-          <span className="form-label">Amount</span>
-          <input name="amount" inputMode="decimal" placeholder="Optional" defaultValue={event?.amount == null ? "" : String(event.amount)} />
-        </label>
-        <label>
-          <span className="form-label">Currency</span>
-          <input name="currency" maxLength={3} defaultValue={event?.currency ?? "GBP"} />
-        </label>
-      </fieldset>
-      <fieldset className="form-fieldset form-span-2">
-        <legend>Source note and evidence</legend>
-        <label>
-          <span className="form-label">Evidence reference</span>
-          <input name="evidence_reference" placeholder="Optional internal reference" defaultValue={event?.evidence_reference ?? ""} />
-        </label>
-        <label>
-          <span className="form-label">Source note</span>
-          <textarea name="source_note" required minLength={8} rows={4} placeholder="Briefly explain where this manual information came from and who supplied it." defaultValue={event?.source_note ?? ""} />
-        </label>
+          </Select>
+        </Field>
+        <Field label="Amount" helper="Optional. Use numbers only.">
+          <TextInput name="amount" inputMode="decimal" placeholder="Optional" defaultValue={event?.amount == null ? "" : String(event.amount)} />
+        </Field>
+        <Field label="Currency">
+          <TextInput name="currency" maxLength={3} defaultValue={event?.currency ?? "GBP"} />
+        </Field>
+      </FormSection>
+      <FormSection title="Source note and evidence" description="Manual records are user-entered and should be reviewable." span>
+        <Field label="Evidence reference" helper="Optional internal reference.">
+          <TextInput name="evidence_reference" placeholder="Optional internal reference" defaultValue={event?.evidence_reference ?? ""} />
+        </Field>
+        <Field label="Source note" helper="Briefly explain where this manual information came from and who supplied it.">
+          <Textarea name="source_note" required minLength={8} rows={4} placeholder="Briefly explain where this manual information came from and who supplied it." defaultValue={event?.source_note ?? ""} />
+        </Field>
         <p className="form-help">Use concise, factual source notes. Manual records are not verified registry data and should be reviewed before a decision.</p>
-      </fieldset>
-      <ActionGroup>
+      </FormSection>
+      <FormActions>
         <Button type="submit">{submitLabel}</Button>
-      </ActionGroup>
+      </FormActions>
     </form>
   );
 }
