@@ -32,6 +32,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <Link className="nav-link" href="/search">
                   Search
                 </Link>
+                <Link className="nav-link" href={"/brand" as Route}>
+                  Brand
+                </Link>
                 <Link className="nav-link" href={"/watchlist" as Route}>
                   Watchlist
                 </Link>

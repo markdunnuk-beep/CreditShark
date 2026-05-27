@@ -2402,6 +2402,296 @@ dd {
   border-color: rgba(233, 162, 59, 0.34);
 }
 
+.brand-page {
+  min-width: 0;
+}
+
+.brand-page *,
+.brand-hero > *,
+.brand-section > *,
+.brand-two-column > *,
+.brand-do-dont > *,
+.brand-data-visual > *,
+.brand-component-grid > *,
+.brand-layout-rhythm > *,
+.brand-card-grid > *,
+.brand-swatch-grid > * {
+  min-width: 0;
+}
+
+.brand-hero {
+  align-items: stretch;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.8fr);
+  padding-top: 64px;
+}
+
+.brand-hero__copy {
+  align-self: center;
+}
+
+.brand-hero__copy h1 {
+  color: var(--ocean-950);
+  font-size: clamp(3.1rem, 8vw, 6.4rem);
+  line-height: 0.92;
+  margin: 0 0 18px;
+}
+
+.brand-hero__line {
+  color: var(--ocean-800);
+  font-size: clamp(1.45rem, 3vw, 2.25rem);
+  font-weight: 850;
+  line-height: 1.08;
+  margin: 0 0 18px;
+}
+
+.brand-hero__copy > p:not(.eyebrow):not(.brand-hero__line) {
+  color: var(--slate-600);
+  font-size: 1.03rem;
+  line-height: 1.75;
+  max-width: 720px;
+}
+
+.brand-hero__panel {
+  align-self: center;
+  display: grid;
+  gap: 24px;
+}
+
+.brand-attribute-grid,
+.brand-functional-colours,
+.preview-footer {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.brand-section {
+  display: grid;
+  gap: 22px;
+  padding-top: 34px;
+}
+
+.brand-card-grid,
+.brand-swatch-grid,
+.brand-component-grid,
+.brand-layout-rhythm {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.brand-principle-card,
+.brand-language-card,
+.brand-swatch-card {
+  display: grid;
+  gap: 10px;
+}
+
+.brand-principle-card h3,
+.brand-language-card h3,
+.brand-swatch-card h3,
+.brand-logo-card h3,
+.brand-type-sample h3,
+.brand-layout-rhythm h3,
+.brand-motion-grid h3,
+.brand-guidance-card h3 {
+  color: var(--ocean-950);
+  margin: 0;
+}
+
+.brand-principle-card p,
+.brand-language-card p,
+.brand-swatch-card p,
+.brand-logo-card span,
+.brand-guidance-card p,
+.brand-layout-rhythm p,
+.brand-motion-grid p {
+  color: var(--slate-600);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.brand-two-column,
+.brand-do-dont,
+.brand-data-visual {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.brand-logo-card {
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.brand-concept-label {
+  border: 1px solid rgba(24, 191, 199, 0.24);
+  border-radius: 999px;
+  color: var(--ocean-800);
+  font-size: 0.8rem;
+  font-weight: 850;
+  margin: 0;
+  padding: 7px 10px;
+}
+
+.calm-fin-illustration {
+  display: block;
+  height: auto;
+  max-width: 360px;
+  width: 100%;
+}
+
+.brand-swatch {
+  border: 1px solid rgba(13, 43, 69, 0.12);
+  border-radius: 14px;
+  display: block;
+  min-height: 96px;
+  width: 100%;
+}
+
+.brand-swatch-card code {
+  color: var(--ocean-800);
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.brand-guidance-card {
+  display: grid;
+  gap: 16px;
+}
+
+.brand-functional-colour {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.brand-functional-dot {
+  border-radius: 999px;
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+}
+
+.brand-functional-colour strong {
+  color: var(--ocean-950);
+  font-size: 0.9rem;
+}
+
+.brand-functional-colour span:last-child {
+  color: var(--slate-600);
+  font-size: 0.86rem;
+}
+
+.brand-type-sample {
+  display: grid;
+  gap: 18px;
+}
+
+.brand-type-sample h2 {
+  color: var(--ocean-950);
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.96;
+  margin: 0;
+}
+
+.brand-type-sample h3 {
+  font-size: 1.45rem;
+}
+
+.brand-type-sample p {
+  color: var(--slate-600);
+  line-height: 1.75;
+  margin: 0;
+  max-width: 760px;
+}
+
+.brand-metric-row,
+.brand-component-metrics {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.brand-component-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.brand-language-card ul,
+.brand-numbered-list,
+.brand-checklist {
+  color: var(--slate-600);
+  line-height: 1.75;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.brand-component-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.brand-search-example {
+  display: grid;
+  gap: 18px;
+}
+
+.brand-numbered-list li,
+.brand-checklist li {
+  padding-left: 0.2rem;
+}
+
+.brand-motion-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.brand-table {
+  border-collapse: collapse;
+  min-width: 680px;
+  width: 100%;
+}
+
+.brand-table th,
+.brand-table td {
+  border-bottom: 1px solid var(--border-soft);
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.brand-table th {
+  background: rgba(234, 247, 248, 0.8);
+  color: var(--ocean-950);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.brand-table td {
+  color: var(--slate-600);
+  line-height: 1.55;
+}
+
+.brand-checklist-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(234, 247, 248, 0.58)),
+    var(--surface-white);
+}
+
+.brand-checklist li::marker {
+  color: var(--aqua-500);
+  font-weight: 850;
+}
+
 .site-footer {
   border-top: 1px solid var(--border-soft);
   background: rgba(255, 255, 255, 0.64);
@@ -2437,7 +2727,9 @@ dd {
   }
 
   .main-nav {
+    flex-wrap: wrap;
     order: 3;
+    width: 100%;
   }
 
   .nav-link {
@@ -2539,6 +2831,44 @@ dd {
 
   .public-hero {
     padding-top: 42px;
+  }
+
+  .brand-hero,
+  .brand-two-column,
+  .brand-do-dont,
+  .brand-data-visual,
+  .brand-component-grid,
+  .brand-motion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-hero {
+    gap: 20px;
+    padding-top: 42px;
+  }
+
+  .brand-hero__copy h1 {
+    font-size: clamp(2.45rem, 14vw, 3.55rem);
+    overflow-wrap: anywhere;
+  }
+
+  .brand-card-grid,
+  .brand-swatch-grid,
+  .brand-layout-rhythm,
+  .brand-metric-row,
+  .brand-component-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-section {
+    gap: 18px;
+    padding-bottom: 44px;
+  }
+
+  .brand-functional-colour {
+    align-items: flex-start;
+    border-radius: 14px;
+    width: 100%;
   }
 
   .public-section,
