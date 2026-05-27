@@ -17,6 +17,17 @@ import {
   rerunScoreFromAdversePageAction,
   supersedeManualAdverseEventAction
 } from "./actions";
+import {
+  ActionGroup,
+  Badge,
+  Button,
+  Card,
+  DetailList,
+  EvidenceChip,
+  EvidencePanel,
+  Notice as UiNotice,
+  SectionHeader
+} from "../../../components/ui";
 
 export const metadata: Metadata = {
   title: "Manual adverse events"
@@ -46,7 +57,7 @@ export default async function ManualAdversePage({
     <section className="company-tab-page">
       <Notice notices={notices} />
 
-      <section className="card tab-section tab-section--primary">
+      <Card className="tab-section tab-section--primary">
         <div className="tab-intro">
           <div>
             <p className="eyebrow">Adverse events</p>
@@ -54,47 +65,46 @@ export default async function ManualAdversePage({
             <p className="note">Companies House charges and user-entered manual records are shown separately.</p>
           </div>
           <div className="compact-score-strip">
-            <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
-            <span className="badge manual-badge">{MANUAL_DATA_INCLUDED_LABEL}: {result.data.activeEvents.length}</span>
+            <EvidenceChip sourceType="companies_house" label={COMPANIES_HOUSE_EVIDENCE_LABEL} />
+            <Badge variant="manual">{MANUAL_DATA_INCLUDED_LABEL}: {result.data.activeEvents.length}</Badge>
           </div>
         </div>
-      </section>
+      </Card>
 
       <div className="adverse-grid">
-        <section className="card evidence-card evidence-card--companies-house">
-          <div className="section-heading">
-            <h2>Companies House charges</h2>
-            <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
-          </div>
-          <dl className="detail-grid">
-            <Detail label="Active charges" value={String(result.data.chargesSummary.active)} />
-            <Detail label="Satisfied charges" value={String(result.data.chargesSummary.satisfied)} />
-            <Detail label="Latest charge date" value={formatDate(result.data.chargesSummary.latestChargeDate)} />
-            <Detail label="Source fetched" value={formatDateTime(result.data.chargesSummary.sourceFetchedAt)} />
-          </dl>
+        <EvidencePanel
+          className="evidence-card evidence-card--companies-house"
+          title="Companies House charges"
+          variant="companies_house"
+          meta={<EvidenceChip sourceType="companies_house" label={COMPANIES_HOUSE_EVIDENCE_LABEL} />}
+        >
+          <DetailList items={[
+            { label: "Active charges", value: String(result.data.chargesSummary.active) },
+            { label: "Satisfied charges", value: String(result.data.chargesSummary.satisfied) },
+            { label: "Latest charge date", value: formatDate(result.data.chargesSummary.latestChargeDate) },
+            { label: "Source fetched", value: formatDateTime(result.data.chargesSummary.sourceFetchedAt) }
+          ]} />
           <p className="note">
             Charges are sourced from the latest Companies House snapshot and are not the same as manually entered adverse events.
           </p>
-        </section>
+        </EvidencePanel>
 
-        <section className="card evidence-card evidence-card--manual">
-          <div className="section-heading">
-            <h2>Manual records</h2>
-            <span className="badge manual-badge">{USER_ENTERED_RECORD_LABEL}</span>
-          </div>
+        <EvidencePanel
+          className="evidence-card evidence-card--manual"
+          title="Manual records"
+          variant="manual"
+          meta={<Badge variant="manual">{USER_ENTERED_RECORD_LABEL}</Badge>}
+        >
           <p className="note">Manual records are user-entered and should be reviewed with their source notes.</p>
           <form action={rerunAction} className="stacked-form">
-            <button className="button-secondary" type="submit">Re-run advisory score</button>
+            <Button variant="secondary" type="submit">Re-run advisory score</Button>
             <p className="form-help">Uses the latest persisted snapshot and active manual events. It does not fetch a new Companies House snapshot.</p>
           </form>
-        </section>
+        </EvidencePanel>
       </div>
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Active manual adverse events</h2>
-          <span className="badge manual-badge">{result.data.activeEvents.length} active</span>
-        </div>
+      <Card className="tab-section">
+        <SectionHeader title="Active manual adverse events" action={<Badge variant="manual">{result.data.activeEvents.length} active</Badge>} />
         {result.data.activeEvents.length > 0 ? (
           <div className="manual-event-list">
             {result.data.activeEvents.map((event) => (
@@ -104,7 +114,7 @@ export default async function ManualAdversePage({
         ) : (
           <div className="empty-state">No active manual adverse events have been entered for this company.</div>
         )}
-      </section>
+      </Card>
 
       <details className="card tab-section collapsed-history">
         <summary>
@@ -141,17 +151,17 @@ function ManualEventCard({ event, companyNumber, active = false }: { event: Manu
     <article className={`manual-event-card ${active ? "manual-event-card--active" : "manual-event-card--inactive"} ${material ? "manual-event-card--material" : ""}`}>
       <div className="manual-event-card__header">
         <div>
-          <span className="badge manual-badge">{active ? "Active manual data" : "Inactive manual data"}</span>
+        <span className="badge manual-badge">{active ? "Active manual data" : "Inactive manual data"}</span>
           <h3>{formatEventType(event.event_type)}</h3>
         </div>
-        <span className={`risk-badge ${material ? "risk-badge--high" : "risk-badge--moderate"}`}>{formatValue(event.status)}</span>
+        <Badge variant={material ? "high" : "moderate"}>{formatValue(event.status)}</Badge>
       </div>
-      <dl className="detail-grid">
-        <Detail label="Event date" value={formatDate(event.event_date)} />
-        <Detail label="Amount" value={formatAmount(event.amount, event.currency)} />
-        <Detail label="Evidence reference" value={event.evidence_reference || "Not provided"} />
-        <Detail label="Entered" value={formatDateTime(event.entered_at)} />
-      </dl>
+      <DetailList items={[
+        { label: "Event date", value: formatDate(event.event_date) },
+        { label: "Amount", value: formatAmount(event.amount, event.currency) },
+        { label: "Evidence reference", value: event.evidence_reference || "Not provided" },
+        { label: "Entered", value: formatDateTime(event.entered_at) }
+      ]} />
       <p className="manual-source-note"><strong>Source note:</strong> {event.source_note}</p>
       {active ? (
         <div className="manual-event-actions">
@@ -164,7 +174,7 @@ function ManualEventCard({ event, companyNumber, active = false }: { event: Manu
               <span className="form-label">Deactivation reason</span>
               <input name="deactivation_reason" required minLength={4} placeholder="e.g. duplicate manual entry" />
             </label>
-            <button className="button-secondary" type="submit">Deactivate</button>
+            <Button variant="secondary" type="submit">Deactivate</Button>
           </form>
         </div>
       ) : null}
@@ -225,16 +235,18 @@ function ManualEventForm({
         </label>
         <p className="form-help">Use concise, factual source notes. Manual records are not verified registry data and should be reviewed before a decision.</p>
       </fieldset>
-      <button className="button-primary" type="submit">{submitLabel}</button>
+      <ActionGroup>
+        <Button type="submit">{submitLabel}</Button>
+      </ActionGroup>
     </form>
   );
 }
 
 function Notice({ notices }: { notices: Record<string, string | string[] | undefined> }) {
-  if (notices.created) return <div className="status-note">Manual adverse event added. Re-run scoring to include it in a new advisory score.</div>;
-  if (notices.superseded) return <div className="status-note">Manual adverse event superseded. Re-run scoring to include the updated record.</div>;
-  if (notices.deactivated) return <div className="status-note">Manual adverse event deactivated. Re-run scoring to remove it from the next advisory score.</div>;
-  if (notices.error) return <div className="error-note" role="alert">{Array.isArray(notices.error) ? notices.error[0] : notices.error}</div>;
+  if (notices.created) return <UiNotice variant="success">Manual adverse event added. Re-run scoring to include it in a new advisory score.</UiNotice>;
+  if (notices.superseded) return <UiNotice variant="success">Manual adverse event superseded. Re-run scoring to include the updated record.</UiNotice>;
+  if (notices.deactivated) return <UiNotice variant="success">Manual adverse event deactivated. Re-run scoring to remove it from the next advisory score.</UiNotice>;
+  if (notices.error) return <UiNotice variant="error">{Array.isArray(notices.error) ? notices.error[0] : notices.error}</UiNotice>;
   return null;
 }
 

@@ -9,6 +9,7 @@ import {
   type ScoreHistoryRow,
   type ScoreHistoryViewModel
 } from "../../../../src/lib/history/score-history-service";
+import { ActionGroup, Badge, ButtonLink, Card, EvidenceChip, MetricCard, RiskBadge, SectionHeader } from "../../../components/ui";
 
 export const metadata: Metadata = {
   title: "Score history"
@@ -31,7 +32,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
   return (
     <section className="company-tab-page">
       {data.latest ? (
-        <section className="card tab-section tab-section--primary">
+        <Card className="tab-section tab-section--primary">
           <div className="tab-intro">
             <div>
               <p className="eyebrow">Score history</p>
@@ -39,45 +40,38 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
               <p className="note">Historical rows are previous CreditShark checks, not the current risk view.</p>
             </div>
             <div className="compact-score-strip">
-              <span className={`risk-badge risk-badge--${data.latest.risk_band}`}>{formatHistoryValue(data.latest.risk_band)}</span>
+              <RiskBadge riskBand={data.latest.risk_band} />
               <strong>{data.latest.score ?? "NS"}</strong>
               <span>{data.movement.message}</span>
             </div>
           </div>
           <div className="history-movement-grid">
-            <div>
-              <span>{LATEST_CHECK_LABEL}</span>
-              <strong>{data.latest.score ?? "NS"}</strong>
-              <small>{formatDateTime(data.latest.run_at)}</small>
-            </div>
-            <div>
-              <span>Previous check</span>
-              <strong>{data.movement.previousScore == null ? "Not available" : String(data.movement.previousScore)}</strong>
-              <small>{data.movement.bandMessage ?? "No previous band movement available."}</small>
-            </div>
-            <div>
-              <span>Recommended limit</span>
-              <strong>{formatHistoryMoney(data.latest.recommended_limit, data.latest.currency)}</strong>
-              <small>Confidence: {formatHistoryValue(data.latest.confidence_level)}</small>
-            </div>
+            <MetricCard label={LATEST_CHECK_LABEL} value={data.latest.score ?? "NS"} helper={formatDateTime(data.latest.run_at)} />
+            <MetricCard
+              label="Previous check"
+              value={data.movement.previousScore == null ? "Not available" : String(data.movement.previousScore)}
+              helper={data.movement.bandMessage ?? "No previous band movement available."}
+            />
+            <MetricCard
+              label="Recommended limit"
+              value={formatHistoryMoney(data.latest.recommended_limit, data.latest.currency)}
+              helper={`Confidence: ${formatHistoryValue(data.latest.confidence_level)}`}
+            />
           </div>
-        </section>
+        </Card>
       ) : (
         <div className="empty-state">No score runs are available yet. Open the company profile to run the latest CreditShark check.</div>
       )}
 
       {data.rows.length > 1 ? <ScoreTrend rows={data.rows.slice(0, 8).reverse()} /> : null}
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Historical score runs</h2>
-          <span className="badge">{data.rows.length} checks</span>
-        </div>
-        <div className="compact-action-group compact-action-group--left">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>View latest score</Link>
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/report`}>View report</Link>
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/decision`}>Record decision</Link>
-        </div>
+      <Card className="tab-section">
+        <SectionHeader title="Historical score runs" action={<Badge>{data.rows.length} checks</Badge>} />
+        <ActionGroup className="compact-action-group compact-action-group--left" compact>
+          <ButtonLink variant="secondary" href={`/companies/${data.company.company_number}/score`}>View latest score</ButtonLink>
+          <ButtonLink variant="secondary" href={`/companies/${data.company.company_number}/report`}>View report</ButtonLink>
+          <ButtonLink variant="secondary" href={`/companies/${data.company.company_number}/decision`}>Record decision</ButtonLink>
+        </ActionGroup>
         {data.rows.length > 0 ? (
           <div className="history-table-wrap">
             <table className="history-table">
@@ -100,7 +94,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
             </table>
           </div>
         ) : null}
-      </section>
+      </Card>
 
     </section>
   );
@@ -114,15 +108,12 @@ function ScoreTrend({ rows }: { rows: ScoreHistoryRow[] }) {
   }).join(" ");
 
   return (
-    <section className="card tab-section">
-      <div className="section-heading">
-        <h2>Recent score trend</h2>
-        <span className="badge">Latest {rows.length} checks</span>
-      </div>
+    <Card className="tab-section">
+      <SectionHeader title="Recent score trend" action={<Badge>Latest {rows.length} checks</Badge>} />
       <svg className="score-trend" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Recent score trend">
         <polyline points={points} fill="none" vectorEffect="non-scaling-stroke" />
       </svg>
-    </section>
+    </Card>
   );
 }
 
@@ -132,10 +123,10 @@ function HistoryRow({ row, companyNumber, current }: { row: ScoreHistoryRow; com
     <tr>
       <td>
         <strong>{formatDateTime(row.run_at)}</strong>
-        {current ? <span className="source-chip source-chip--model">Latest check</span> : <span className="source-chip">History</span>}
+        {current ? <EvidenceChip sourceType="model" label="Latest check" /> : <Badge>History</Badge>}
       </td>
       <td>{row.score ?? "NS"}</td>
-      <td><span className={`risk-badge risk-badge--${row.risk_band}`}>{formatHistoryValue(row.risk_band)}</span></td>
+      <td><RiskBadge riskBand={row.risk_band} /></td>
       <td>{formatHistoryValue(row.confidence_level)}</td>
       <td>{formatHistoryMoney(row.recommended_limit, row.currency)}</td>
       <td>{context?.label ?? (row.missing_data_flags[0] ? `Missing data: ${row.missing_data_flags[0]}` : "No key reason emitted")}</td>

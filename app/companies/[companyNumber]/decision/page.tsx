@@ -10,6 +10,16 @@ import {
   type DecisionWorkflowData
 } from "../../../../src/lib/decisions/decision-service";
 import { createDecisionRecordAction } from "./actions";
+import {
+  Badge,
+  Button,
+  Card,
+  DetailList,
+  EvidencePanel,
+  Notice as UiNotice,
+  RiskBadge,
+  SectionHeader
+} from "../../../components/ui";
 
 export const metadata: Metadata = {
   title: "Record decision"
@@ -49,47 +59,38 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
       </div>
 
       <div className="decision-record-grid">
-        <section className="card tab-section">
-          <div className="section-heading">
-            <h2>Current advisory recommendation</h2>
-            <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
-          </div>
-          <dl className="detail-grid">
-            <Detail label={ADVISORY_SCORE_LABEL} value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
-            <Detail label="Confidence" value={formatValue(data.scoreRun.confidence_level)} />
-            <Detail label="Recommended limit" value={formatDecisionMoney(recommendationLimit, data.scoreRun.currency)} />
-            <Detail label="Model version" value={data.modelVersion.version} />
-            <Detail label="Score run" value={formatDateTime(data.scoreRun.run_at)} />
-          </dl>
+        <Card className="tab-section">
+          <SectionHeader title="Current advisory recommendation" action={<RiskBadge riskBand={data.scoreRun.risk_band} />} />
+          <DetailList items={[
+            { label: ADVISORY_SCORE_LABEL, value: data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score) },
+            { label: "Confidence", value: formatValue(data.scoreRun.confidence_level) },
+            { label: "Recommended limit", value: formatDecisionMoney(recommendationLimit, data.scoreRun.currency) },
+            { label: "Model version", value: data.modelVersion.version },
+            { label: "Score run", value: formatDateTime(data.scoreRun.run_at) }
+          ]} />
           <details className="secondary-audit-details secondary-audit-details--plain">
             <summary>Linked audit details</summary>
-            <dl className="detail-grid detail-grid--compact">
-              <Detail label="Score run id" value={data.scoreRun.id} />
-              <Detail label="Snapshot id" value={data.snapshot.id} />
-            </dl>
+            <DetailList compact items={[
+              { label: "Score run id", value: data.scoreRun.id },
+              { label: "Snapshot id", value: data.snapshot.id }
+            ]} />
           </details>
-        </section>
+        </Card>
 
-        <aside className="card ocean-card">
+        <EvidencePanel className="ocean-card" title={USER_RECORDED_DECISION_LABEL} variant="decision">
           <p className="eyebrow">{USER_RECORDED_DECISION_LABEL}</p>
           <p className="note">The user records any commercial decision. CreditShark provides advisory support only.</p>
           {data.latestDecision ? <LatestDecisionCompact decision={data.latestDecision} /> : <p className="empty-state">No decision has been recorded for this company yet.</p>}
-        </aside>
+        </EvidencePanel>
       </div>
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Record commercial decision</h2>
-          <span className="badge">Audit logged</span>
-        </div>
+      <Card className="tab-section">
+        <SectionHeader title="Record commercial decision" action={<Badge>Audit logged</Badge>} />
         <DecisionForm action={createAction} />
-      </section>
+      </Card>
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Decision history</h2>
-          <span className="badge">{data.decisionHistory.length} records</span>
-        </div>
+      <Card className="tab-section">
+        <SectionHeader title="Decision history" action={<Badge>{data.decisionHistory.length} records</Badge>} />
         {data.decisionHistory.length > 0 ? (
           <div className="decision-history-list">
             {data.decisionHistory.map((decision) => <DecisionHistoryCard key={decision.id} decision={decision} />)}
@@ -97,7 +98,7 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
         ) : (
           <div className="empty-state">No previous user-recorded decisions are attached to this company.</div>
         )}
-      </section>
+      </Card>
     </section>
   );
 }
@@ -144,7 +145,7 @@ function DecisionForm({ action }: { action: (formData: FormData) => void | Promi
           Override reasons are required when the approved limit exceeds the recommendation, when approving a high-risk or not-scored case, or when approving a limit without a recommendation.
         </p>
       </fieldset>
-      <button className="button-primary" type="submit">Record decision</button>
+      <Button type="submit">Record decision</Button>
     </form>
   );
 }
@@ -167,14 +168,14 @@ function DecisionHistoryCard({ decision }: { decision: DecisionRecord }) {
           <span className="badge">User-recorded</span>
           <h3>{formatDecisionLabel(decision.decision_value)}</h3>
         </div>
-        <span className={`risk-badge risk-badge--${decision.risk_band ?? "not_scored"}`}>{formatRiskBand(decision.risk_band ?? "not_scored")}</span>
+        <RiskBadge riskBand={decision.risk_band ?? "not_scored"} />
       </div>
-      <dl className="detail-grid">
-        <Detail label="Requested limit" value={formatDecisionMoney(decision.requested_limit, decision.currency)} />
-        <Detail label="Recommended limit" value={formatDecisionMoney(decision.recommended_limit, decision.currency)} />
-        <Detail label="Final approved limit" value={formatDecisionMoney(decision.approved_limit, decision.currency)} />
-        <Detail label="Decided" value={formatDateTime(decision.decided_at)} />
-      </dl>
+      <DetailList items={[
+        { label: "Requested limit", value: formatDecisionMoney(decision.requested_limit, decision.currency) },
+        { label: "Recommended limit", value: formatDecisionMoney(decision.recommended_limit, decision.currency) },
+        { label: "Final approved limit", value: formatDecisionMoney(decision.approved_limit, decision.currency) },
+        { label: "Decided", value: formatDateTime(decision.decided_at) }
+      ]} />
       <p className="manual-source-note"><strong>Reviewer notes:</strong> {summarise(decision.reviewer_notes)}</p>
       {decision.override_reason ? <p className="warning-note"><strong>Override reason:</strong> {decision.override_reason}</p> : null}
       <div className="reason-row__meta">
@@ -186,8 +187,8 @@ function DecisionHistoryCard({ decision }: { decision: DecisionRecord }) {
 }
 
 function Notice({ notices }: { notices: Record<string, string | string[] | undefined> }) {
-  if (notices.created) return <div className="status-note">Decision record added and linked to the latest advisory score run.</div>;
-  if (notices.error) return <div className="error-note" role="alert">{Array.isArray(notices.error) ? notices.error[0] : notices.error}</div>;
+  if (notices.created) return <UiNotice variant="success">Decision record added and linked to the latest advisory score run.</UiNotice>;
+  if (notices.error) return <UiNotice variant="error">{Array.isArray(notices.error) ? notices.error[0] : notices.error}</UiNotice>;
   return null;
 }
 

@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CREDITSHARK_FOOTER_DISCLAIMER } from "../src/lib/guardrails.js";
+import { formatReasonGroup, formatSignedImpact } from "../app/components/ui/reason-code-card.js";
 import { formatRiskBandLabel, mapRiskBandToBadgeVariant } from "../app/components/ui/risk-badge.js";
 import { clampTradeRiskScore, scoreToGaugeOffset } from "../app/components/ui/trade-risk-score-gauge.js";
+import { formatUiValue } from "../app/components/ui/utils.js";
 
 describe("CreditShark design-system helpers", () => {
   it("maps persisted risk-band values to display variants without changing the model values", () => {
@@ -37,5 +39,18 @@ describe("CreditShark design-system helpers", () => {
 
   it("keeps UI helper labels separate from the full footer disclaimer", () => {
     assert.ok(!formatRiskBandLabel("very_high").includes(CREDITSHARK_FOOTER_DISCLAIMER));
+  });
+
+  it("formats reason-code helper values consistently", () => {
+    assert.equal(formatSignedImpact(5), "+5");
+    assert.equal(formatSignedImpact(-8), "-8");
+    assert.equal(formatReasonGroup("manual_adverse_events"), "Manual data included");
+    assert.equal(formatReasonGroup("custom_group"), "custom group");
+  });
+
+  it("formats generic UI values without introducing legal copy", () => {
+    assert.equal(formatUiValue("source-linked_evidence"), "source linked evidence");
+    assert.equal(formatUiValue(null), "Not available");
+    assert.equal(formatUiValue("source-linked_evidence").includes(CREDITSHARK_FOOTER_DISCLAIMER), false);
   });
 });

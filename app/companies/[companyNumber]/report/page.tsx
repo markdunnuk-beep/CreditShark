@@ -18,6 +18,14 @@ import type { ManualAdverseEventRecord } from "../../../../src/lib/adverse/manua
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
 import { createReportExportAction } from "./actions";
 import { PrintButton } from "./PrintButton";
+import {
+  ActionGroup,
+  Button,
+  ButtonLink,
+  Notice as UiNotice,
+  ReportSection,
+  RiskBadge
+} from "../../../components/ui";
 
 export const metadata: Metadata = {
   title: "Trade-risk report"
@@ -56,18 +64,18 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           <h1 className="page-title">Report preview</h1>
           <p className="lede">Preview the standalone advisory report before recording an export and printing.</p>
         </div>
-        <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/decision`}>
+        <ActionGroup align="end" className="profile-actions">
+          <ButtonLink variant="secondary" href={`/companies/${data.company.company_number}/decision`}>
             Record decision
-          </Link>
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
+          </ButtonLink>
+          <ButtonLink variant="secondary" href={`/companies/${data.company.company_number}/score`}>
             Score evidence
-          </Link>
+          </ButtonLink>
           <form action={createAction}>
-            <button className="button-primary" type="submit">Record export and print report</button>
+            <Button type="submit">Record export and print report</Button>
           </form>
           <PrintButton />
-        </div>
+        </ActionGroup>
       </div>
 
       <div className="in-tab-switch" aria-label="Reports and decisions">
@@ -78,7 +86,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
       <Notice notice={notice} exportId={data.exportRecord?.id ?? null} />
 
       <article className="report-document">
-        <section className="report-cover report-section">
+        <ReportSection className="report-cover">
           <div className="report-cover__top">
             <div>
               <div className="report-wordmark">CreditShark</div>
@@ -86,7 +94,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
               <h2>Trade-risk report</h2>
               <p>{data.company.company_name}</p>
             </div>
-            <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
+            <RiskBadge riskBand={data.scoreRun.risk_band} />
           </div>
           <div className="report-cover__summary">
             <ReportMetric label={ADVISORY_SCORE_LABEL} value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
@@ -102,13 +110,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Report export id" value={data.exportRecord?.id ?? "Not recorded yet"} />
             <ReportDetail label="Linked decision id" value={data.exportRecord?.decision_record_id ?? data.latestDecision?.id ?? "Not recorded yet"} />
           </dl>
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <div className="report-section-heading">
-            <h2>Recommendation summary</h2>
-            <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
-          </div>
+        <ReportSection title="Recommendation summary" meta={<RiskBadge riskBand={data.scoreRun.risk_band} />}>
           <div className="report-summary-grid">
             <ReportMetric label="Model version" value={data.modelVersion.version} />
             <ReportMetric label="Snapshot timestamp" value={formatDateTime(data.snapshot.source_fetched_at)} />
@@ -122,10 +126,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           ) : null}
           <ReasonSummary title="Top positive reasons" reasons={data.summaries.topPositiveReasons} />
           <ReasonSummary title="Top negative reasons" reasons={data.summaries.topNegativeReasons} />
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Score history context</h2>
+        <ReportSection title="Score history context">
           {data.scoreHistoryMovement ? (
             <>
               <dl className="report-kv-grid">
@@ -139,10 +142,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           ) : (
             <p className="note">Score history context is not available for this report preview.</p>
           )}
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Latest recorded commercial decision</h2>
+        <ReportSection title="Latest recorded commercial decision">
           {data.latestDecision ? (
             <>
               <p className="report-disclaimer report-disclaimer--compact">
@@ -162,10 +164,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           ) : (
             <p className="note">No user-recorded decision is attached to this company yet.</p>
           )}
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Company identity</h2>
+        <ReportSection title="Company identity">
           <dl className="report-kv-grid">
             <ReportDetail label="Company name" value={data.company.company_name} />
             <ReportDetail label="Company number" value={data.company.company_number} />
@@ -179,10 +180,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Latest confirmation statement" value={formatDate(data.snapshot.latest_confirmation_statement_date)} />
           </dl>
           <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Filing and accounts evidence</h2>
+        <ReportSection title="Filing and accounts evidence">
           <dl className="report-kv-grid">
             <ReportDetail label="Filing records captured" value={String(data.filings.length)} />
             <ReportDetail label="Latest filing date" value={formatDate(data.summaries.latestFilingDate)} />
@@ -191,10 +191,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           </dl>
           <p className="note">Structured financial extraction is not yet available, so financial strength is limited to available filing metadata and missing-data reason codes.</p>
           <MiniFilingTable filings={data.filings.slice(0, 5)} />
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Charges and adverse events</h2>
+        <ReportSection title="Charges and adverse events">
           <dl className="report-kv-grid">
             <ReportDetail label="Active charges" value={String(data.summaries.activeCharges)} />
             <ReportDetail label="Satisfied charges" value={String(data.summaries.satisfiedCharges)} />
@@ -205,10 +204,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           <p className="report-warning">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
           <MiniChargeTable charges={data.charges.slice(0, 5)} />
           <ManualEvents events={data.activeManualEvents} />
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Directors and PSC summary</h2>
+        <ReportSection title="Directors and PSC summary">
           <dl className="report-kv-grid">
             <ReportDetail label="Current officers" value={String(data.officerSummary.current)} />
             <ReportDetail label="Officer records captured" value={String(data.officerSummary.total)} />
@@ -216,10 +214,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="PSC records captured" value={String(data.pscSummary.total)} />
           </dl>
           <p className="note">This is light-touch governance context only. CreditShark does not infer personal creditworthiness from officers or PSCs.</p>
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Reason-code detail</h2>
+        <ReportSection title="Reason-code detail">
           <div className="report-reason-groups">
             {Array.from(groupedReasons.entries()).map(([group, reasons]) => (
               <div className="report-reason-group" key={group}>
@@ -228,10 +225,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
               </div>
             ))}
           </div>
-        </section>
+        </ReportSection>
 
-        <section className="report-section">
-          <h2>Audit and limitations</h2>
+        <ReportSection title="Audit and limitations">
           <dl className="report-kv-grid">
             <ReportDetail label="Snapshot id" value={data.snapshot.id} />
             <ReportDetail label="Score run id" value={data.scoreRun.id} />
@@ -242,7 +238,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           </dl>
           <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_REPORT_LIMITATIONS}</p>
           <p className="note">This report uses public Companies House evidence, user-entered manual data where present, and transparent rule-based scoring. Missing data is shown rather than hidden.</p>
-        </section>
+        </ReportSection>
       </article>
     </section>
   );
@@ -267,9 +263,11 @@ function ReportEmptyState({ companyNumber, message }: { companyNumber: string; m
 }
 
 function Notice({ notice, exportId }: { notice: Record<string, string | string[] | undefined>; exportId: string | null }) {
-  if (notice.exported) return <div className="report-export-banner report-screen-only"><strong>Export recorded.</strong><span>Export id: {exportId ?? singleValue(notice.exportId) ?? "Recorded"}. You can now print or save this preview as PDF.</span></div>;
-  if (notice.error) return <div className="error-note report-screen-only" role="alert">{singleValue(notice.error)}</div>;
-  return <div className="report-export-banner report-export-banner--preview report-screen-only"><strong>Preview only.</strong><span>Record the export before printing or saving as PDF so the audit trail captures this report context.</span></div>;
+  if (notice.exported) {
+    return <UiNotice className="report-screen-only" variant="success" title="Export recorded">Export id: {exportId ?? singleValue(notice.exportId) ?? "Recorded"}. You can now print or save this preview as PDF.</UiNotice>;
+  }
+  if (notice.error) return <UiNotice className="report-screen-only" variant="error">{singleValue(notice.error)}</UiNotice>;
+  return <UiNotice className="report-screen-only" variant="report" title="Preview only">Record the export before printing or saving as PDF so the audit trail captures this report context.</UiNotice>;
 }
 
 function ReportMetric({ label, value }: { label: string; value: string }) {

@@ -7,6 +7,18 @@ import {
 import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../../src/lib/history/score-history-service";
 import { getLatestScoreRunForCompany, type ScoreRunResult } from "../../../../src/lib/scoring/scoring-service";
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
+import {
+  Badge,
+  ButtonLink,
+  Card,
+  DetailList,
+  Notice,
+  ReasonCodeCard,
+  RiskBadge,
+  SectionHeader,
+  formatReasonGroup,
+  formatSignedImpact
+} from "../../../components/ui";
 
 export const metadata: Metadata = {
   title: "Score explanation"
@@ -41,7 +53,7 @@ function ScoreExplanation({ data, scoreHistory }: { data: ScoreRunResult; scoreH
 
   return (
     <section className="company-tab-page">
-      <section className="card tab-section tab-section--primary">
+      <Card className="tab-section tab-section--primary">
         <div className="tab-intro">
           <div>
           <p className="eyebrow">{SOURCE_LINKED_EVIDENCE_LABEL}</p>
@@ -51,7 +63,7 @@ function ScoreExplanation({ data, scoreHistory }: { data: ScoreRunResult; scoreH
             </p>
           </div>
           <div className="compact-score-strip">
-            <span className={`risk-badge risk-badge--${data.scoreRun.riskBand}`}>{formatRiskBand(data.scoreRun.riskBand)}</span>
+            <RiskBadge riskBand={data.scoreRun.riskBand} />
             <span>Run: {formatDateTime(data.scoreRun.runAt)}</span>
             <Link href={historyRoute(data.company.company_number)}>Score history</Link>
           </div>
@@ -60,32 +72,25 @@ function ScoreExplanation({ data, scoreHistory }: { data: ScoreRunResult; scoreH
           <p className="note">Previous check: {scoreHistory.previous.score ?? "NS"}. {scoreHistory.movement.message}</p>
         ) : null}
         <p className="note">{confidenceExplanation(data.scoreRun.confidenceLevel, hasMissingData)}</p>
-      </section>
+      </Card>
 
       {manualReasons.length > 0 ? (
-        <div className="manual-data-warning">
-          <strong>{MANUAL_DATA_INCLUDED_LABEL}.</strong>
-          <span>Manual entries are shown separately from Companies House evidence.</span>
-        </div>
+        <Notice variant="manual" title={MANUAL_DATA_INCLUDED_LABEL}>
+          Manual entries are shown separately from Companies House evidence.
+        </Notice>
       ) : null}
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Top score drivers</h2>
-          <span className="badge">Source-linked</span>
-        </div>
+      <Card className="tab-section">
+        <SectionHeader title="Top score drivers" action={<Badge>Source-linked</Badge>} />
         <div className="driver-columns driver-columns--three">
           <ReasonDriverGroup title="Positive drivers" reasons={positiveReasons.slice(0, 4)} emptyText="No positive drivers were emitted." />
           <ReasonDriverGroup title="Review factors" reasons={reviewReasons.slice(0, 4)} emptyText="No review factors were emitted." />
           <ReasonDriverGroup title="Missing or limited data" reasons={missingReasons.slice(0, 4)} emptyText="No missing-data reason codes were emitted." />
         </div>
-      </section>
+      </Card>
 
-      <section className="card tab-section reason-group-compact">
-        <div className="section-heading">
-          <h2>Full reason-code detail</h2>
-          <span className="badge">{data.reasonCodes.length} reason codes</span>
-        </div>
+      <Card className="tab-section reason-group-compact">
+        <SectionHeader title="Full reason-code detail" action={<Badge>{data.reasonCodes.length} reason codes</Badge>} />
         <div className="factor-groups">
           {Array.from(groupedReasons.entries()).map(([group, reasons]) => (
             <div className={`factor-group factor-group--${group}`} key={group}>
@@ -96,13 +101,10 @@ function ScoreExplanation({ data, scoreHistory }: { data: ScoreRunResult; scoreH
             </div>
           ))}
         </div>
-      </section>
+      </Card>
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Missing data</h2>
-          <span className="badge">Confidence: {formatValue(data.scoreRun.confidenceLevel)}</span>
-        </div>
+      <Card className="tab-section">
+        <SectionHeader title="Missing data" action={<Badge>Confidence: {formatValue(data.scoreRun.confidenceLevel)}</Badge>} />
         {data.missingDataFlags.length > 0 ? (
           <ul className="flag-list">
             {data.missingDataFlags.map((flag) => <li key={flag}>{flag}</li>)}
@@ -113,14 +115,14 @@ function ScoreExplanation({ data, scoreHistory }: { data: ScoreRunResult; scoreH
         <p className="note">Missing data is shown because it limits what the scoring model can inspect. It can reduce confidence even when the advisory score can still be calculated.</p>
         <details className="secondary-audit-details">
           <summary>Audit details</summary>
-          <dl className="detail-grid detail-grid--compact">
-            <Detail label="Snapshot id" value={data.snapshot.id} />
-            <Detail label="Score run id" value={data.scoreRun.id} />
-            <Detail label="Model version" value={data.modelVersion.version} />
-            <Detail label="Source fetched" value={formatDateTime(data.snapshot.source_fetched_at)} />
-          </dl>
+          <DetailList compact items={[
+            { label: "Snapshot id", value: data.snapshot.id },
+            { label: "Score run id", value: data.scoreRun.id },
+            { label: "Model version", value: data.modelVersion.version },
+            { label: "Source fetched", value: formatDateTime(data.snapshot.source_fetched_at) }
+          ]} />
         </details>
-      </section>
+      </Card>
     </section>
   );
 }
@@ -136,9 +138,9 @@ function ScoreEmptyState({ companyNumber, message }: { companyNumber: string; me
           <div>{message}</div>
         </div>
         <div className="actions">
-          <Link className="button-primary" href={`/companies/${companyNumber}`}>
+          <ButtonLink href={`/companies/${companyNumber}`}>
             Back to profile
-          </Link>
+          </ButtonLink>
         </div>
       </div>
     </section>
@@ -146,29 +148,7 @@ function ScoreEmptyState({ companyNumber, message }: { companyNumber: string; me
 }
 
 function ReasonRow({ reason }: { reason: ScoreReasonCode }) {
-  return (
-    <article className={`reason-row reason-row--${reason.direction}`}>
-      <div>
-        <div className="reason-row__title">
-          <span>{reason.label}</span>
-          <span className={`source-chip source-chip--${sourceChipVariant(reason.sourceType)}`}>{formatValue(reason.sourceType)}</span>
-          {reason.group === "manual_adverse_events" ? <span className="badge manual-badge">Manual data</span> : null}
-        </div>
-        <p>{reason.explanation}</p>
-        <div className="reason-row__meta">
-          <span>Code: {reason.code}</span>
-          <span>Group: {formatGroupLabel(reason.group)}</span>
-          <span>Weight: {formatSignedNumber(reason.weight)}</span>
-          <span>Source date: {formatDate(reason.sourceDate)}</span>
-          {reason.sourceId ? <span>Source id: {reason.sourceId}</span> : null}
-        </div>
-      </div>
-      <div className="reason-impact">
-        <strong>{formatSignedNumber(reason.weight)}</strong>
-        <span>{reason.impact}</span>
-      </div>
-    </article>
-  );
+  return <ReasonCodeCard reason={reason} />;
 }
 
 function ReasonDriverGroup({ title, reasons, emptyText }: { title: string; reasons: ScoreReasonCode[]; emptyText: string }) {
@@ -180,7 +160,7 @@ function ReasonDriverGroup({ title, reasons, emptyText }: { title: string; reaso
           {reasons.map((reason) => (
             <div className={`reason-pill reason-pill--${reason.direction}`} key={reason.code}>
               <span>{reason.label}</span>
-              <strong>{formatSignedNumber(reason.weight)}</strong>
+              <strong>{formatSignedImpact(reason.weight)}</strong>
             </div>
           ))}
         </div>
@@ -231,35 +211,13 @@ function formatGroup(value: string): string {
 }
 
 function formatGroupLabel(value: string): string {
-  const labels: Record<string, string> = {
-    company_status: "Company status",
-    company_age: "Company age",
-    filing_behaviour: "Filing behaviour",
-    financial_strength: "Financial data",
-    charges: "Charges",
-    manual_adverse_events: "Manual data included",
-    director_psc_signals: "Director and PSC context",
-    sic_sector_weighting: "Sector context",
-    data_completeness: "Data completeness"
-  };
-  return labels[value] ?? formatGroup(value);
-}
-
-function formatSignedNumber(value: number): string {
-  return value > 0 ? `+${value}` : String(value);
+  return formatReasonGroup(value);
 }
 
 function confidenceExplanation(value: string | null | undefined, hasMissingData: boolean): string {
   const confidence = formatValue(value).toLowerCase();
   if (hasMissingData) return `The ${confidence} confidence level reflects missing or limited evidence in this score run.`;
   return `The ${confidence} confidence level reflects the available snapshot evidence and current model version.`;
-}
-
-function sourceChipVariant(value: string): string {
-  if (value.includes("manual")) return "manual";
-  if (value.includes("companies_house")) return "companies-house";
-  if (value.includes("model")) return "model";
-  return "evidence";
 }
 
 function historyRoute(companyNumber: string): Route {

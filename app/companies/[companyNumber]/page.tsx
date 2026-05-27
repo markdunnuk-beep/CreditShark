@@ -12,6 +12,20 @@ import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../src
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
 import { getWatchlistItemForCompany, type WatchlistItem } from "../../../src/lib/watchlist/watchlist-service";
 import type { ScoreReasonCode } from "../../../src/types/creditshark";
+import {
+  ActionGroup,
+  Badge,
+  ButtonLink,
+  Card,
+  DetailList,
+  EvidenceChip,
+  EvidencePanel,
+  MetricCard,
+  Notice,
+  ReasonCodeCard,
+  RiskBadge,
+  SectionHeader
+} from "../../components/ui";
 
 export const metadata: Metadata = {
   title: "Company profile"
@@ -73,7 +87,7 @@ function CompanyProfile({
 
   return (
     <section className="company-tab-page">
-      <section className="card tab-section tab-section--primary">
+      <Card className="tab-section tab-section--primary">
         <div className="tab-intro">
           <div>
             <p className="eyebrow">Current risk summary</p>
@@ -82,7 +96,7 @@ function CompanyProfile({
           </div>
           {scoreResult ? (
             <div className="compact-score-strip" aria-label="Current advisory score summary">
-              <span className={`risk-badge risk-badge--${scoreResult.scoreRun.riskBand}`}>{formatRiskBand(scoreResult.scoreRun.riskBand)}</span>
+              <RiskBadge riskBand={scoreResult.scoreRun.riskBand} />
               <strong>{scoreResult.scoreRun.score ?? "NS"}</strong>
               <span>{formatMoney(scoreResult.scoreRun.recommendedLimit, scoreResult.scoreRun.currency)}</span>
               <span>Confidence: {formatValue(scoreResult.scoreRun.confidenceLevel)}</span>
@@ -96,76 +110,75 @@ function CompanyProfile({
                 <ReasonDriverGroup title="What helps" reasons={topPositiveReasons} emptyText="No positive drivers were emitted for this score." />
                 <ReasonDriverGroup title="What needs review" reasons={topNegativeReasons} emptyText="No review factors were emitted for this score." />
               </div>
-              {hasMissingData ? <div className="missing-data-warning">Data limitations: {scoreResult.missingDataFlags.join(", ")}.</div> : null}
+              {hasMissingData ? <Notice variant="missing" title="Data limitations">Data limitations: {scoreResult.missingDataFlags.join(", ")}.</Notice> : null}
             </>
           ) : (
             <>
               <h2>Score could not be run</h2>
-              <div className="error-note" role="alert">{scoreError ?? "A scoring configuration error occurred."}</div>
+              <Notice variant="error">{scoreError ?? "A scoring configuration error occurred."}</Notice>
             </>
           )}
-      </section>
+      </Card>
 
-      <section className="card tab-section">
-        <div className="section-heading">
-          <h2>Next best actions</h2>
-          <span className="badge">Workspace actions</span>
-        </div>
-        <div className="compact-action-group">
+      <Card className="tab-section">
+        <SectionHeader title="Next best actions" action={<Badge>Workspace actions</Badge>} />
+        <ActionGroup className="compact-action-group">
             {scoreResult ? (
-              <Link className="button-primary" href={`/companies/${company.company_number}/score`}>
+              <ButtonLink href={`/companies/${company.company_number}/score`}>
                 Review evidence
-              </Link>
+              </ButtonLink>
             ) : null}
-            <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
+            <ButtonLink variant="secondary" href={`/companies/${company.company_number}/adverse`}>
               Manual adverse events
-            </Link>
-            <Link className="button-secondary" href={`/companies/${company.company_number}/report`}>
+            </ButtonLink>
+            <ButtonLink variant="secondary" href={`/companies/${company.company_number}/report`}>
               Preview report
-            </Link>
-            <Link className="button-secondary" href={historyRoute(company.company_number)}>
+            </ButtonLink>
+            <ButtonLink variant="secondary" href={historyRoute(company.company_number)}>
               View score history
-            </Link>
-            <Link className="button-secondary" href={"/watchlist" as Route}>
+            </ButtonLink>
+            <ButtonLink variant="secondary" href={"/watchlist" as Route}>
               Watchlist
-            </Link>
-            <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
+            </ButtonLink>
+            <ButtonLink variant="secondary" href={`/companies/${company.company_number}/decision`}>
               Record decision
-            </Link>
-        </div>
-      </section>
+            </ButtonLink>
+        </ActionGroup>
+      </Card>
 
       <div className="profile-grid profile-grid--evidence">
-        <section className="card profile-summary-card tab-section">
-          <div className="section-heading">
-            <h2>Key evidence snapshot</h2>
-            <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
-          </div>
+        <EvidencePanel
+          className="profile-summary-card tab-section"
+          title="Key evidence snapshot"
+          variant="companies_house"
+          meta={<EvidenceChip sourceType="companies_house" label={COMPANIES_HOUSE_EVIDENCE_LABEL} />}
+        >
           <div className="evidence-summary-grid" aria-label="Snapshot captured records">
-            <SummaryCard label="Filings" value={data.filingsSummary.count} />
-            <SummaryCard label="Active charges" value={data.chargesSummary.active} />
-            <SummaryCard label="Satisfied charges" value={data.chargesSummary.satisfied} />
-            <SummaryCard label="Officers" value={data.officersSummary.current} />
-            <SummaryCard label="PSC records" value={data.pscSummary.count} />
-            <SummaryCard label="Manual events" value={activeManualEventCount} />
+            <MetricCard label="Filings" value={data.filingsSummary.count} />
+            <MetricCard label="Active charges" value={data.chargesSummary.active} />
+            <MetricCard label="Satisfied charges" value={data.chargesSummary.satisfied} />
+            <MetricCard label="Officers" value={data.officersSummary.current} />
+            <MetricCard label="PSC records" value={data.pscSummary.count} />
+            <MetricCard label="Manual events" value={activeManualEventCount} />
           </div>
-          <dl className="detail-grid">
-            <Detail label="Type" value={formatValue(company.company_type)} />
-            <Detail label="Jurisdiction" value={formatValue(company.jurisdiction)} />
-            <Detail label="Registered office postcode" value={formatValue(company.registered_office_postcode)} />
-            <Detail label="Incorporated" value={formatDate(company.incorporated_on)} />
-            <Detail label="Company age" value={formatAge(snapshot.derived_company_age_months)} />
-            <Detail label="Latest accounts" value={formatDate(snapshot.latest_accounts_date)} />
-            <Detail label="Latest confirmation statement" value={formatDate(snapshot.latest_confirmation_statement_date)} />
-            <Detail label="Source fetched" value={formatDateTime(data.sourceFetchedAt)} />
-          </dl>
-        </section>
+          <DetailList items={[
+            { label: "Type", value: formatValue(company.company_type) },
+            { label: "Jurisdiction", value: formatValue(company.jurisdiction) },
+            { label: "Registered office postcode", value: formatValue(company.registered_office_postcode) },
+            { label: "Incorporated", value: formatDate(company.incorporated_on) },
+            { label: "Company age", value: formatAge(snapshot.derived_company_age_months) },
+            { label: "Latest accounts", value: formatDate(snapshot.latest_accounts_date) },
+            { label: "Latest confirmation statement", value: formatDate(snapshot.latest_confirmation_statement_date) },
+            { label: "Source fetched", value: formatDateTime(data.sourceFetchedAt) }
+          ]} />
+        </EvidencePanel>
 
-        <aside className="card workflow-side-card tab-section">
-          <div className="section-heading">
-            <h2>Trade context</h2>
-            <span className="badge">{watchlistItem ? "Watching" : "Not watching"}</span>
-          </div>
+        <EvidencePanel
+          className="workflow-side-card tab-section"
+          title="Trade context"
+          variant="decision"
+          meta={<Badge>{watchlistItem ? "Watching" : "Not watching"}</Badge>}
+        >
           {latestDecision ? (
             <p className="note">Latest decision: <strong>{formatDecisionLabel(latestDecision.decision_value)}</strong>. Final limit: {formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)}.</p>
           ) : (
@@ -174,29 +187,28 @@ function CompanyProfile({
           {scoreHistory?.latest ? (
             <p className="note">History: latest {scoreHistory.latest.score ?? "NS"}, previous {scoreHistory.previous?.score ?? "not available"}. {scoreHistory.movement.message}</p>
           ) : null}
-          <p className="note">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
-        </aside>
+          <Notice variant="manual">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</Notice>
+        </EvidencePanel>
       </div>
 
       {scoreResult ? (
         <details className="card secondary-audit-details">
           <summary>Audit details</summary>
-          <dl className="detail-grid detail-grid--compact">
-            <Detail label="Snapshot id" value={snapshot.id} />
-            <Detail label="Score run id" value={scoreResult.scoreRun.id ?? "Not recorded"} />
-            <Detail label="Model version" value={scoreResult.modelVersion.version} />
-            <Detail label="Score run" value={formatDateTime(scoreResult.scoreRun.runAt)} />
-            <Detail label="Snapshot status" value={formatValue(snapshot.snapshot_status)} />
-            <Detail label="Missing/failed sections" value={String(data.missingSections.length)} />
-          </dl>
+          <DetailList compact items={[
+            { label: "Snapshot id", value: snapshot.id },
+            { label: "Score run id", value: scoreResult.scoreRun.id ?? "Not recorded" },
+            { label: "Model version", value: scoreResult.modelVersion.version },
+            { label: "Score run", value: formatDateTime(scoreResult.scoreRun.runAt) },
+            { label: "Snapshot status", value: formatValue(snapshot.snapshot_status) },
+            { label: "Missing/failed sections", value: String(data.missingSections.length) }
+          ]} />
         </details>
       ) : null}
 
       {data.missingSections.length > 0 ? (
-        <div className="error-note">
-          <strong>Partial snapshot.</strong>
-          <div>These Companies House sections were unavailable or failed: {data.missingSections.join(", ")}.</div>
-        </div>
+        <Notice variant="caution" title="Partial snapshot">
+          These Companies House sections were unavailable or failed: {data.missingSections.join(", ")}.
+        </Notice>
       ) : null}
     </section>
   );
@@ -239,15 +251,6 @@ function CompanyProfileError({
   );
 }
 
-function SummaryCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="metric">
-      <div className="metric__label">{label}</div>
-      <div className="metric__value">{value}</div>
-    </div>
-  );
-}
-
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
@@ -258,12 +261,7 @@ function Detail({ label, value }: { label: string; value: string }) {
 }
 
 function ReasonPreview({ reason }: { reason: ScoreReasonCode }) {
-  return (
-    <div className={`reason-pill reason-pill--${reason.direction}`}>
-      <span>{reason.label}</span>
-      <strong>{formatSignedNumber(reason.weight)}</strong>
-    </div>
-  );
+  return <ReasonCodeCard compact reason={reason} />;
 }
 
 function ReasonDriverGroup({ title, reasons, emptyText }: { title: string; reasons: ScoreReasonCode[]; emptyText: string }) {
