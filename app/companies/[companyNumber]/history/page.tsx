@@ -1,7 +1,7 @@
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { formatDecisionLabel } from "../../../../src/lib/decisions/decision-service";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
+import { LATEST_CHECK_LABEL, SCORE_HISTORY_LABEL } from "../../../../src/lib/guardrails";
 import {
   formatHistoryMoney,
   formatHistoryValue,
@@ -32,7 +32,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
     <section className="page-shell">
       <div className="profile-header">
         <div>
-          <p className="eyebrow">Score history</p>
+          <p className="eyebrow">{SCORE_HISTORY_LABEL}</p>
           <h1 className="page-title">{data.company.company_name}</h1>
           <p className="lede">
             Historical CreditShark checks for this company. The newest row is the latest check and current advisory risk view.
@@ -51,7 +51,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
         </div>
       </div>
 
-      <div className="status-note status-note--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</div>
+      <div className="status-note status-note--compact">Historical rows are previous CreditShark checks, not the current risk view.</div>
 
       {data.latest ? (
         <div className="score-explanation-grid">
@@ -59,7 +59,7 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
             <div className="score-hero">
               <div>
                 <span className={`risk-badge risk-badge--${data.latest.risk_band}`}>{formatHistoryValue(data.latest.risk_band)}</span>
-                <h2>Latest check</h2>
+                <h2>{LATEST_CHECK_LABEL}</h2>
               </div>
               <div className="score-value">{data.latest.score ?? "NS"}</div>
             </div>

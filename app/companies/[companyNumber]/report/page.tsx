@@ -1,6 +1,12 @@
 import type { Metadata, Route } from "next";
 import Link from "next/link";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
+import {
+  ADVISORY_SCORE_LABEL,
+  COMPANIES_HOUSE_EVIDENCE_LABEL,
+  CREDITSHARK_REPORT_LIMITATIONS,
+  MANUAL_DATA_INCLUDED_LABEL,
+  USER_RECORDED_DECISION_LABEL
+} from "../../../../src/lib/guardrails";
 import {
   getLatestReportDataForCompany,
   type ReportCharge,
@@ -81,7 +87,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
           </div>
           <div className="report-cover__summary">
-            <ReportMetric label="Advisory score" value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
+            <ReportMetric label={ADVISORY_SCORE_LABEL} value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
             <ReportMetric label="Recommended limit" value={formatMoney(Number(data.scoreRun.recommended_limit), data.scoreRun.currency)} />
             <ReportMetric label="Confidence" value={formatValue(data.scoreRun.confidence_level)} />
           </div>
@@ -94,7 +100,6 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Report export id" value={data.exportRecord?.id ?? "Not recorded yet"} />
             <ReportDetail label="Linked decision id" value={data.exportRecord?.decision_record_id ?? data.latestDecision?.id ?? "Not recorded yet"} />
           </dl>
-          <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
         </section>
 
         <section className="report-section">
@@ -108,7 +113,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportMetric label="Score run timestamp" value={formatDateTime(data.scoreRun.run_at)} />
           </div>
           {data.summaries.hasManualData ? (
-            <p className="report-warning">Manual data is active for this company and has been labelled separately in this report.</p>
+            <p className="report-warning">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
           ) : null}
           {data.scoreRun.missing_data_flags_json.length > 0 ? (
             <p className="report-warning">Missing data flags: {data.scoreRun.missing_data_flags_json.join(", ")}.</p>
@@ -139,7 +144,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           {data.latestDecision ? (
             <>
               <p className="report-disclaimer report-disclaimer--compact">
-                This is a user-recorded commercial decision. CreditShark provided advisory evidence only and did not approve, decline, lend or broker credit.
+                {USER_RECORDED_DECISION_LABEL}: the user records any commercial decision. CreditShark provides advisory support only.
               </p>
               <dl className="report-kv-grid">
                 <ReportDetail label="Recorded decision" value={formatDecisionLabel(data.latestDecision.decision_value)} />
@@ -171,7 +176,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Latest accounts" value={formatDate(data.snapshot.latest_accounts_date)} />
             <ReportDetail label="Latest confirmation statement" value={formatDate(data.snapshot.latest_confirmation_statement_date)} />
           </dl>
-          <span className="source-chip source-chip--companies-house">Companies House evidence</span>
+          <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
         </section>
 
         <section className="report-section">
@@ -195,7 +200,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Active manual events" value={String(data.activeManualEvents.length)} />
             <ReportDetail label="Inactive/superseded manual events" value={String(data.inactiveManualEventCount)} />
           </dl>
-          <p className="report-warning">Manual adverse data is user-entered and is not verified registry data unless a verified source is later integrated.</p>
+          <p className="report-warning">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
           <MiniChargeTable charges={data.charges.slice(0, 5)} />
           <ManualEvents events={data.activeManualEvents} />
         </section>
@@ -233,7 +238,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Source timestamp" value={formatDateTime(data.snapshot.source_fetched_at)} />
             <ReportDetail label="Export recorded" value={data.exportRecord ? formatDateTime(data.exportRecord.exported_at) : "Not recorded yet"} />
           </dl>
-          <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
+          <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_REPORT_LIMITATIONS}</p>
           <p className="note">This report uses public Companies House evidence, user-entered manual data where present, and transparent rule-based scoring. Missing data is shown rather than hidden.</p>
         </section>
       </article>

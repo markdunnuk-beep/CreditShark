@@ -19,9 +19,7 @@ export default function HomePage() {
               View sample report
             </Link>
           </div>
-          <p className="compact-guardrail">
-            Advisory decision support for UK limited companies only. Not consumer credit, lending, broking or debt advice.
-          </p>
+          <p className="compact-guardrail">Trade Risk. Calmly Managed.</p>
         </div>
 
         <aside className="report-preview-card" aria-label="CreditShark product preview">

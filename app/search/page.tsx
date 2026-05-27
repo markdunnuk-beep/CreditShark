@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { COMPANIES_HOUSE_EVIDENCE_LABEL, SOURCE_LINKED_EVIDENCE_LABEL } from "../../src/lib/guardrails";
 import { createCompaniesHouseClient } from "../../src/lib/companies-house/client";
 import type { CompaniesHouseSearchItem } from "../../src/types/companies-house";
 
@@ -45,8 +46,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </form>
         <div className="search-hints" aria-label="Search guidance">
           <span>UK limited companies only</span>
-          <span>Companies House source</span>
-          <span>No consumer credit checks</span>
+          <span>{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
+          <span>{SOURCE_LINKED_EVIDENCE_LABEL}</span>
         </div>
       </div>
 

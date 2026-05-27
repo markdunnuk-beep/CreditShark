@@ -1,6 +1,11 @@
 import type { Metadata, Route } from "next";
 import Link from "next/link";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
+import {
+  ADVISORY_SCORE_LABEL,
+  MANUAL_DATA_INCLUDED_LABEL,
+  SOURCE_LINKED_EVIDENCE_LABEL,
+  USER_RECORDED_DECISION_LABEL
+} from "../../../../src/lib/guardrails";
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../../src/lib/decisions/decision-service";
 import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../../src/lib/history/score-history-service";
 import { getLatestScoreRunForCompany, type ScoreRunResult } from "../../../../src/lib/scoring/scoring-service";
@@ -73,7 +78,7 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
           <div className="score-hero">
             <div>
               <span className={`risk-badge risk-badge--${data.scoreRun.riskBand}`}>{formatRiskBand(data.scoreRun.riskBand)}</span>
-              <h2>Advisory score</h2>
+              <h2>{ADVISORY_SCORE_LABEL}</h2>
             </div>
             <div className="score-value">{data.scoreRun.score ?? "NS"}</div>
           </div>
@@ -92,8 +97,8 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
         </section>
 
         <aside className="card ocean-card">
-          <p className="eyebrow">Advisory limitations</p>
-          <p className="note">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
+          <p className="eyebrow">{SOURCE_LINKED_EVIDENCE_LABEL}</p>
+          <p className="note">Score and limit are advisory indicators. Review the reasons, confidence and missing data before recording a decision.</p>
           <div className="disabled-actions">
             <Link className="button-secondary" href={`/companies/${data.company.company_number}/adverse`}>
               Review manual adverse events
@@ -126,7 +131,7 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
         <section className="card score-section">
           <div className="section-heading">
             <h2>Latest recorded decision</h2>
-            <span className="badge">User-recorded</span>
+            <span className="badge">{USER_RECORDED_DECISION_LABEL}</span>
           </div>
           <dl className="detail-grid">
             <Detail label="Decision" value={formatDecisionLabel(latestDecision.decision_value)} />
@@ -144,8 +149,8 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
 
       {manualReasons.length > 0 ? (
         <div className="manual-data-warning">
-          <strong>Manual data included.</strong>
-          <span>Manual adverse data influenced this score. Review the source note before extending material credit.</span>
+          <strong>{MANUAL_DATA_INCLUDED_LABEL}.</strong>
+          <span>Manual entries are shown separately from Companies House evidence. Review the source note before extending material credit.</span>
         </div>
       ) : null}
 

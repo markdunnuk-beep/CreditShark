@@ -1,5 +1,6 @@
 import type { Metadata, Route } from "next";
 import Link from "next/link";
+import { CREDITSHARK_FOOTER_DISCLAIMER } from "../src/lib/guardrails";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,8 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <main className="site-main">{children}</main>
           <footer className="site-footer">
             <div className="site-footer__inner">
-              CreditShark provides advisory trade-risk screening for UK limited companies only. It does not provide consumer credit reports,
-              regulated credit ratings, lending decisions, credit broking, debt advice or debt collection services.
+              {CREDITSHARK_FOOTER_DISCLAIMER}
             </div>
           </footer>
         </div>

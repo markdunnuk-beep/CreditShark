@@ -2,7 +2,14 @@ import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { createCompanySnapshotFromCompaniesHouse } from "../../../src/lib/companies/company-snapshot-service";
 import type { CompanySnapshotStage, CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../src/lib/guardrails";
+import {
+  ADVISORY_SCORE_LABEL,
+  COMPANIES_HOUSE_EVIDENCE_LABEL,
+  LATEST_CHECK_LABEL,
+  MANUAL_DATA_INCLUDED_LABEL,
+  SCORE_HISTORY_LABEL,
+  USER_RECORDED_DECISION_LABEL
+} from "../../../src/lib/guardrails";
 import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manual-adverse-event-service";
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../src/lib/decisions/decision-service";
 import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../src/lib/history/score-history-service";
@@ -103,7 +110,7 @@ function CompanyProfile({
                   <span className={`risk-badge risk-badge--${scoreResult.scoreRun.riskBand}`}>
                     {formatRiskBand(scoreResult.scoreRun.riskBand)}
                   </span>
-                  <h2>Advisory score</h2>
+                  <h2>{ADVISORY_SCORE_LABEL}</h2>
                   <div className="score-value score-value--large">{scoreResult.scoreRun.score ?? "NS"}</div>
                 </div>
                 <div className="limit-card">
@@ -171,7 +178,7 @@ function CompanyProfile({
         <section className="card profile-summary-card">
           <div className="section-heading">
             <h2>Company identity</h2>
-            <span className="source-chip source-chip--companies-house">Companies House evidence</span>
+            <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
           </div>
           <dl className="detail-grid">
             <Detail label="Company number" value={company.company_number} />
@@ -256,7 +263,7 @@ function CompanyProfile({
             <h2>Manual adverse events</h2>
             <span className="badge manual-badge">{activeManualEventCount} active</span>
           </div>
-          <p className="note">User-entered risk notes and CCJ-style records. Manual data is labelled separately and should be reviewed before a decision.</p>
+          <p className="note">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
         </div>
         <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
           Review manual data
@@ -266,8 +273,8 @@ function CompanyProfile({
       <section className="card score-section manual-profile-card">
         <div>
           <div className="section-heading">
-            <h2>Score history</h2>
-            <span className="badge">Latest check</span>
+            <h2>{SCORE_HISTORY_LABEL}</h2>
+            <span className="badge">{LATEST_CHECK_LABEL}</span>
           </div>
           {scoreHistory?.latest ? (
             <p className="note">
@@ -299,14 +306,14 @@ function CompanyProfile({
         <div>
           <div className="section-heading">
             <h2>Recorded decision</h2>
-            <span className="badge">User-recorded</span>
+            <span className="badge">{USER_RECORDED_DECISION_LABEL}</span>
           </div>
           {latestDecision ? (
             <p className="note">
               Latest decision: <strong>{formatDecisionLabel(latestDecision.decision_value)}</strong>. Final limit: {formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)}.
             </p>
           ) : (
-            <p className="note">No user-recorded commercial decision has been attached yet. Decisions are audit logged and linked to score evidence.</p>
+            <p className="note">No user-recorded commercial decision has been attached yet. The user records any commercial decision.</p>
           )}
         </div>
         <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
@@ -320,8 +327,6 @@ function CompanyProfile({
           <div>These Companies House sections were unavailable or failed: {data.missingSections.join(", ")}.</div>
         </div>
       ) : null}
-
-      <div className="status-note">{CREDITSHARK_PRODUCT_GUARDRAIL}</div>
     </section>
   );
 }

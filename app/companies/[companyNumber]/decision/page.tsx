@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
+import { ADVISORY_SCORE_LABEL, USER_RECORDED_DECISION_LABEL } from "../../../../src/lib/guardrails";
 import {
   DECISION_RECORD_VALUES,
   formatDecisionLabel,
@@ -43,7 +43,7 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
     <section className="page-shell">
       <div className="profile-header">
         <div>
-          <p className="eyebrow">User-recorded decision</p>
+          <p className="eyebrow">{USER_RECORDED_DECISION_LABEL}</p>
           <h1 className="page-title">{data.company.company_name}</h1>
           <p className="lede">
             Record the commercial credit outcome your team chooses, linked to the latest advisory score, recommendation and snapshot.
@@ -61,8 +61,6 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
 
       <Notice notices={notices} />
 
-      <div className="status-note status-note--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</div>
-
       <div className="decision-record-grid">
         <section className="card score-summary-card decision-summary-panel">
           <div className="section-heading">
@@ -71,7 +69,7 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
           </div>
           <dl className="detail-grid">
             <Detail label="Company number" value={data.company.company_number} />
-            <Detail label="Advisory score" value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
+            <Detail label={ADVISORY_SCORE_LABEL} value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
             <Detail label="Confidence" value={formatValue(data.scoreRun.confidence_level)} />
             <Detail label="Recommended limit" value={formatDecisionMoney(recommendationLimit, data.scoreRun.currency)} />
             <Detail label="Model version" value={data.modelVersion.version} />
@@ -91,9 +89,9 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
         </section>
 
         <aside className="card ocean-card">
-          <p className="eyebrow">Decision boundary</p>
+          <p className="eyebrow">{USER_RECORDED_DECISION_LABEL}</p>
           <p className="note">
-            CreditShark does not approve, decline, lend, broker credit or make regulated ratings. This page records a user-made commercial decision and preserves the evidence link.
+            The user records any commercial decision. CreditShark provides advisory support only and preserves the evidence link.
           </p>
           {data.latestDecision ? <LatestDecisionCompact decision={data.latestDecision} /> : <p className="empty-state">No decision has been recorded for this company yet.</p>}
         </aside>

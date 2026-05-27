@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
+import {
+  COMPANIES_HOUSE_EVIDENCE_LABEL,
+  MANUAL_DATA_INCLUDED_LABEL,
+  USER_ENTERED_RECORD_LABEL
+} from "../../../../src/lib/guardrails";
 import {
   getManualAdverseEventsForCompany,
   MANUAL_ADVERSE_EVENT_STATUSES,
@@ -61,15 +65,15 @@ export default async function ManualAdversePage({
       <Notice notices={notices} />
 
       <div className="manual-data-warning">
-        <strong>Manual data is user-entered.</strong>
-        <span>Companies House charges are separate from manual adverse records. Active manual events are included in the next advisory score run.</span>
+        <strong>{MANUAL_DATA_INCLUDED_LABEL}.</strong>
+        <span>Manual entries are shown separately from Companies House evidence and included in the next advisory score run.</span>
       </div>
 
       <div className="adverse-grid">
         <section className="card evidence-card evidence-card--companies-house">
           <div className="section-heading">
             <h2>Companies House charges</h2>
-            <span className="source-chip source-chip--companies-house">Public source snapshot</span>
+            <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
           </div>
           <dl className="detail-grid">
             <Detail label="Active charges" value={String(result.data.chargesSummary.active)} />
@@ -85,10 +89,10 @@ export default async function ManualAdversePage({
         <section className="card ocean-card evidence-card evidence-card--manual">
           <div className="section-heading">
             <h2>Manual data</h2>
-            <span className="badge manual-badge">User-entered</span>
+            <span className="badge manual-badge">{USER_ENTERED_RECORD_LABEL}</span>
           </div>
           <p className="note">
-            Manual entries are not verified registry data. They should be reviewed with the source note before any material credit decision.
+            Manual entries are shown separately from Companies House evidence and should be reviewed with the source note.
           </p>
           <form action={rerunAction} className="stacked-form">
             <button className="button-primary" type="submit">Re-run advisory score</button>
@@ -137,8 +141,6 @@ export default async function ManualAdversePage({
           </div>
         </details>
       ) : null}
-
-      <div className="status-note status-note--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</div>
     </section>
   );
 }

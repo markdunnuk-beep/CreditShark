@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../src/lib/guardrails";
+import { LATEST_CHECK_LABEL } from "../../src/lib/guardrails";
 import {
   formatWatchlistMoney,
   formatWatchlistValue,
@@ -45,7 +45,7 @@ function WatchlistView({ items, summary }: { items: WatchlistCompanyContext[]; s
       </div>
 
       <div className="status-note status-note--compact">
-        {CREDITSHARK_PRODUCT_GUARDRAIL} Automated change monitoring and alerts are planned for a later phase.
+        {LATEST_CHECK_LABEL}: watchlist rows show existing CreditShark checks. Automated change monitoring and alerts are planned for a later phase.
       </div>
 
       <section className="summary-cards" aria-label="Watchlist summary">
