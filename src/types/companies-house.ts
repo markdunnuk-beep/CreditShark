@@ -148,8 +148,12 @@ export type CompaniesHouseClientResult<T> =
 
 export interface CompaniesHouseClientError {
   status?: number;
-  code: "missing_api_key" | "timeout" | "rate_limited" | "not_found" | "upstream_error" | "network_error";
+  code: "missing_api_key" | "invalid_base_url" | "timeout" | "rate_limited" | "not_found" | "upstream_error" | "network_error";
   message: string;
   retryAfterSeconds?: number;
+  endpoint?: string;
+  hostname?: string;
+  pathname?: string;
+  errorName?: string;
+  errorCode?: string;
 }
-

@@ -114,7 +114,7 @@ export async function createCompanySnapshotFromCompaniesHouse(
         profileResult.error.code === "missing_api_key"
           ? "Companies House API key is not configured on the server."
           : profileResult.error.message,
-        { upstreamStatus: profileResult.error.status, details: profileResult.error.code }
+        { upstreamStatus: profileResult.error.status, details: companiesHouseErrorSummary(profileResult.error) }
       )
     };
   }
@@ -469,10 +469,13 @@ function safeErrorDetails(error: unknown): Record<string, unknown> {
   const record = error as Record<string, unknown>;
   return {
     error_name: record.name ?? record.code ?? "Error",
-    error_code: record.code,
+    error_code: record.errorCode ?? record.code,
     table: record.table,
     constraint: record.constraint,
     upstream_status: record.status,
+    endpoint: record.endpoint,
+    hostname: record.hostname,
+    pathname: record.pathname,
     detail: typeof record.detail === "string" ? record.detail.slice(0, 300) : undefined
   };
 }
@@ -481,6 +484,24 @@ function databaseErrorSummary(error: unknown): string | undefined {
   const details = safeErrorDetails(error);
   const parts = [details.error_code, details.table, details.constraint].filter(Boolean);
   return parts.length > 0 ? parts.join(" ") : undefined;
+}
+
+function companiesHouseErrorSummary(error: {
+  code: string;
+  endpoint?: string;
+  hostname?: string;
+  pathname?: string;
+  errorName?: string;
+  errorCode?: string;
+}): string {
+  return [
+    error.code,
+    error.endpoint ? `endpoint=${error.endpoint}` : null,
+    error.hostname ? `host=${error.hostname}` : null,
+    error.pathname ? `path=${error.pathname}` : null,
+    error.errorName ? `error=${error.errorName}` : null,
+    error.errorCode ? `error_code=${error.errorCode}` : null
+  ].filter(Boolean).join(" ");
 }
 
 async function insertAuditEvent(
