@@ -4,6 +4,7 @@ import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../../src/lib/decisions/decision-service";
 import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../../src/lib/history/score-history-service";
 import { getLatestScoreRunForCompany, type ScoreRunResult } from "../../../../src/lib/scoring/scoring-service";
+import { getWatchlistItemForCompany, type WatchlistItem } from "../../../../src/lib/watchlist/watchlist-service";
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
 
 export const metadata: Metadata = {
@@ -22,10 +23,18 @@ export default async function CompanyScorePage({ params }: { params: Promise<{ c
 
   const decisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
   const historyResult = await getScoreHistorySummary(result.data.company.company_number);
-  return <ScoreExplanation data={result.data} latestDecision={decisionResult.ok ? decisionResult.data.decision : null} scoreHistory={historyResult.ok ? historyResult.data : null} />;
+  const watchlistResult = await getWatchlistItemForCompany(result.data.company.company_number);
+  return (
+    <ScoreExplanation
+      data={result.data}
+      latestDecision={decisionResult.ok ? decisionResult.data.decision : null}
+      scoreHistory={historyResult.ok ? historyResult.data : null}
+      watchlistItem={watchlistResult.ok ? watchlistResult.data.watchlist : null}
+    />
+  );
 }
 
-function ScoreExplanation({ data, latestDecision, scoreHistory }: { data: ScoreRunResult; latestDecision: DecisionRecord | null; scoreHistory: ScoreHistoryViewModel | null }) {
+function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }: { data: ScoreRunResult; latestDecision: DecisionRecord | null; scoreHistory: ScoreHistoryViewModel | null; watchlistItem: WatchlistItem | null }) {
   const groupedReasons = groupReasonsByGroup(data.reasonCodes);
   const manualReasons = data.reasonCodes.filter((reason) => reason.group === "manual_adverse_events");
   const positiveReasons = data.reasonCodes.filter((reason) => reason.direction === "positive");
@@ -52,6 +61,9 @@ function ScoreExplanation({ data, latestDecision, scoreHistory }: { data: ScoreR
             </Link>
             <Link className="button-secondary" href={historyRoute(data.company.company_number)}>
               Score history
+            </Link>
+            <Link className="button-secondary" href={"/watchlist" as Route}>
+              {watchlistItem ? "View watchlist" : "Watchlist"}
             </Link>
           </div>
       </div>
@@ -94,6 +106,9 @@ function ScoreExplanation({ data, latestDecision, scoreHistory }: { data: ScoreR
             </Link>
             <Link className="button-secondary" href={historyRoute(data.company.company_number)}>
               View score history
+            </Link>
+            <Link className="button-secondary" href={"/watchlist" as Route}>
+              {watchlistItem ? "Watching" : "Watchlist"}
             </Link>
           </div>
         </aside>

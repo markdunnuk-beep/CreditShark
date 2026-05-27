@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
 import {
@@ -56,6 +56,9 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           </Link>
           <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
             Score explanation
+          </Link>
+          <Link className="button-secondary" href={"/watchlist" as Route}>
+            Watchlist
           </Link>
           <form action={createAction}>
             <button className="button-primary" type="submit">Record export and print report</button>

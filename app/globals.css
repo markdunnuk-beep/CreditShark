@@ -1286,6 +1286,93 @@ dd {
   stroke-width: 3;
 }
 
+.watchlist-table-wrap {
+  margin-top: 18px;
+  overflow-x: auto;
+}
+
+.watchlist-table {
+  border-collapse: collapse;
+  min-width: 1040px;
+  width: 100%;
+}
+
+.watchlist-table th,
+.watchlist-table td {
+  border-bottom: 1px solid var(--border-soft);
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.watchlist-table th {
+  color: var(--ocean-800);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.watchlist-table td {
+  color: var(--slate-600);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.watchlist-table td strong {
+  color: var(--ocean-950);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.watchlist-control-card {
+  align-items: start;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.7fr);
+}
+
+.watchlist-add-form {
+  display: grid;
+  gap: 10px;
+}
+
+.watchlist-add-form label {
+  color: var(--slate-600);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.watchlist-add-form input {
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  min-height: 44px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.inline-action-form {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.link-button {
+  background: transparent;
+  border: 0;
+  color: var(--ocean-800);
+  cursor: pointer;
+  font-weight: 800;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--ocean-950);
+  outline: none;
+}
+
 .latest-decision-compact {
   display: grid;
   gap: 8px;
@@ -1849,6 +1936,7 @@ dd {
   .summary-cards,
   .manual-event-form,
   .form-fieldset,
+  .watchlist-control-card,
   .inline-action-form,
   .report-reason-row {
     grid-template-columns: 1fr;

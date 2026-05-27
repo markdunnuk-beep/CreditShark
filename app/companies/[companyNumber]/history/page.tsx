@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { formatDecisionLabel } from "../../../../src/lib/decisions/decision-service";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
@@ -41,6 +41,9 @@ function ScoreHistory({ data }: { data: ScoreHistoryViewModel }) {
         <div className="profile-actions">
           <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
             Back to profile
+          </Link>
+          <Link className="button-secondary" href={"/watchlist" as Route}>
+            Watchlist
           </Link>
           <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
             Latest score explanation

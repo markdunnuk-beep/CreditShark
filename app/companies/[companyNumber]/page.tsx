@@ -7,7 +7,9 @@ import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manua
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../src/lib/decisions/decision-service";
 import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../src/lib/history/score-history-service";
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
+import { getWatchlistItemForCompany, type WatchlistItem } from "../../../src/lib/watchlist/watchlist-service";
 import type { ScoreReasonCode } from "../../../src/types/creditshark";
+import { addCompanyToWatchlistAction, removeCompanyFromWatchlistAction } from "../../watchlist/actions";
 
 export const metadata: Metadata = {
   title: "Company profile"
@@ -29,6 +31,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
   const manualEventsResult = await getManualAdverseEventsForCompany(result.data.company.company_number);
   const latestDecisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
   const scoreHistoryResult = await getScoreHistorySummary(result.data.company.company_number);
+  const watchlistResult = await getWatchlistItemForCompany(result.data.company.company_number);
 
   return (
     <CompanyProfile
@@ -38,6 +41,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
       activeManualEventCount={manualEventsResult.ok ? manualEventsResult.data.activeEvents.length : 0}
       latestDecision={latestDecisionResult.ok ? latestDecisionResult.data.decision : null}
       scoreHistory={scoreHistoryResult.ok ? scoreHistoryResult.data : null}
+      watchlistItem={watchlistResult.ok ? watchlistResult.data.watchlist : null}
     />
   );
 }
@@ -48,7 +52,8 @@ function CompanyProfile({
   scoreError,
   activeManualEventCount,
   latestDecision,
-  scoreHistory
+  scoreHistory,
+  watchlistItem
 }: {
   data: CreatedCompanySnapshot;
   scoreResult: ScoreRunResult | null;
@@ -56,6 +61,7 @@ function CompanyProfile({
   activeManualEventCount: number;
   latestDecision: DecisionRecord | null;
   scoreHistory: ScoreHistoryViewModel | null;
+  watchlistItem: WatchlistItem | null;
 }) {
   const company = data.company;
   const snapshot = data.snapshot;
@@ -140,6 +146,9 @@ function CompanyProfile({
             <Link className="button-secondary" href={historyRoute(company.company_number)}>
               View score history
             </Link>
+            <Link className="button-secondary" href={"/watchlist" as Route}>
+              Watchlist
+            </Link>
             <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
               Record decision
             </Link>
@@ -196,6 +205,9 @@ function CompanyProfile({
             <Link className="button-secondary" href={historyRoute(company.company_number)}>
               Score history
             </Link>
+            <Link className="button-secondary" href={"/watchlist" as Route}>
+              Watchlist
+            </Link>
             <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
               Record decision
             </Link>
@@ -211,6 +223,31 @@ function CompanyProfile({
         <SummaryCard label="Current officers" value={data.officersSummary.current} />
         <SummaryCard label="PSC records" value={data.pscSummary.count} />
         <SummaryCard label="Missing/failed sections" value={data.missingSections.length} />
+      </section>
+
+      <section className="card score-section watchlist-control-card">
+        <div>
+          <div className="section-heading">
+            <h2>Watchlist</h2>
+            <span className="badge">{watchlistItem ? "Watching" : "Not watching"}</span>
+          </div>
+          <p className="note">
+            Track this company in your CreditShark watchlist. Automated alerts are planned for a later phase.
+          </p>
+          {watchlistItem?.watch_reason ? <p className="secondary-id">Reason: {watchlistItem.watch_reason}</p> : null}
+        </div>
+        {watchlistItem ? (
+          <form action={removeCompanyFromWatchlistAction.bind(null, company.company_number, "profile")} className="inline-action-form">
+            <button className="button-secondary" type="submit">Remove from watchlist</button>
+            <Link className="button-primary" href={"/watchlist" as Route}>View watchlist</Link>
+          </form>
+        ) : (
+          <form action={addCompanyToWatchlistAction.bind(null, company.company_number)} className="watchlist-add-form">
+            <label htmlFor="watch-reason">Watch reason</label>
+            <input id="watch-reason" name="watch_reason" placeholder="Optional review note" />
+            <button className="button-primary" type="submit">Add to watchlist</button>
+          </form>
+        )}
       </section>
 
       <section className="card score-section manual-profile-card">

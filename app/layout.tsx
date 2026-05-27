@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Link from "next/link";
 import "./globals.css";
 
@@ -27,6 +27,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <nav aria-label="Primary navigation" className="main-nav">
                 <Link className="nav-link" href="/search">
                   Search
+                </Link>
+                <Link className="nav-link" href={"/watchlist" as Route}>
+                  Watchlist
                 </Link>
               </nav>
               <span className="guardrail-pill">Advisory screening</span>

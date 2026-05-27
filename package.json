@@ -13,6 +13,7 @@
     "smoke:company-snapshot-batch": "tsx scripts/smoke-company-snapshot-batch.ts",
     "smoke:score-run": "tsx scripts/smoke-score-run.ts",
     "smoke:score-history": "tsx scripts/smoke-score-history.ts",
+    "smoke:watchlist": "tsx scripts/smoke-watchlist.ts",
     "smoke:decision-record": "tsx scripts/smoke-decision-record.ts",
     "smoke:manual-adverse": "tsx scripts/smoke-manual-adverse-event.ts",
     "smoke:report-export": "tsx scripts/smoke-report-export.ts"
