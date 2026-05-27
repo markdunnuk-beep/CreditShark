@@ -1,499 +1,935 @@
 # CreditShark Brand System
 
-## 1. Brand Positioning
-
-CreditShark is a UK company credit-check and trade-risk reporting platform for B2B finance teams, credit control, business owners and commercial approvers. It helps users check UK limited-company risk before they trade, using Companies House evidence, manual adverse-event input, transparent scoring and exportable reports.
+**Version:** 1.0  
+**Brand line:** Trade Risk. Calmly Managed.  
+**Primary audience:** UK SMEs and growing businesses  
+**Primary use:** Website, product UI, company reports, marketing pages, support material, legal/compliance copy
 
-Positioning territory:
+---
 
-- UK company credit checks made clear.
-- Check company risk before you trade.
-- Source-linked credit screening for UK limited companies.
-- Practical trade-risk reports for finance and credit-control teams.
-- Clear evidence, clear limits, clearer decisions.
+## 01. Overview
 
-CreditShark is advisory decision support. It is not consumer credit reporting, a sole trader credit report, an FCA-regulated credit rating, lending, credit broking, debt advice or debt collection. The brand must make this boundary visible without making the product feel defensive or legalistic.
+CreditShark helps SMEs understand who they are trading with, spot trade risk earlier, protect cash flow, and make confident commercial decisions without unnecessary complexity.
 
-## 2. Brand Idea
+The brand is designed to sit between two extremes. It should not feel like a heavy corporate credit bureau, but it should also avoid feeling playful, soft, or lightweight. CreditShark should feel calm, clear, practical, and commercially useful.
 
-Clarity before trade.
+The central visual idea is the **Calm Fin**: a shark fin rising above a smooth waterline. The mark represents visibility before risk fully surfaces. It signals early awareness, measured decision-making, and calm control.
 
-CreditShark helps businesses check company risk before they trade, using public filings, transparent scoring and source-linked evidence. It turns Companies House data and trusted manual adverse-event input into a calm, practical trade-risk view: what changed, what matters, what limit may be appropriate, and what still needs manual review.
+### Core brand idea
 
-Supporting ideas:
+**Clear credit insight for SMEs, delivered calmly.**
 
-- Calm risk visibility.
-- Source-linked evidence.
-- Practical credit decisions.
-- Clear recommendations with visible limits.
-- A report finance teams can explain.
+### Brand promise
 
-## 3. Brand Personality
+CreditShark helps businesses make better trade decisions by turning credit risk into clear, usable insight.
 
-CreditShark should feel:
+### Short brand synopsis
 
-- Clear: plain language, obvious hierarchy, no mystery scoring.
-- Calm: risk is visible without panic.
-- Practical: built for real trade-credit workflows.
-- Commercial: focused on limits, exposure, filings, adverse signals and approvals.
-- Evidence-led: every important claim links to a source or manual input.
-- Decisive but not alarmist: it supports approve, refer or reject decisions without pretending to automate judgement.
-- Trustworthy but not dull: credible finance tone with enough warmth for SMEs.
-- Modern but not over-designed: crisp SaaS patterns, restrained motion and purposeful visual detail.
+**CreditShark**  
+**Trade Risk. Calmly Managed.**
 
-Brand principle:
+CreditShark empowers SMEs with clear, affordable credit insights and practical risk awareness. Designed for growing businesses, it helps users understand who they are trading with, spot potential risk early, protect cash flow, and make confident commercial decisions without unnecessary complexity.
 
-Sharp name. Calm execution.
+---
 
-The name gives the product memorability. The interface, copy and reports must balance that with trust, restraint and evidence.
+## 02. Brand Principles
 
-## 4. Visual Direction
+### Calm, not passive
 
-CreditShark uses a light-first fintech/SaaS system with a calm ocean-finance palette.
+CreditShark should feel composed and reassuring, but never weak. The brand should give users confidence that risk can be understood and managed.
 
-Core direction:
+### Clear, not simplistic
 
-- Warm white page backgrounds.
-- Pale ocean surfaces for panels and quiet emphasis.
-- Deep navy/ocean colour for structure, headings and trust.
-- Aqua/teal for primary CTA, focus and active states.
-- Rounded cards with measured radius.
-- Soft shadows that separate surfaces without feeling decorative.
-- Clear score and report previews.
-- Plain finance tables with strong alignment.
-- Evidence chips for source, date and data type.
-- Restrained warning states used only when they carry decision value.
-- Subtle nautical cues only: wave lines, signal lines, soft ocean badge shapes, quiet fin/check abstractions.
+The platform should simplify credit insight without dumbing it down. Every screen, report, and sentence should help the user understand what matters.
 
-Avoid:
+### Practical, not theoretical
 
-- Cartoon sharks.
-- Teeth, jaws, blood or red gimmicks.
-- Shark mascots.
-- Aggressive fins everywhere.
-- Fear-led imagery.
-- Dark enterprise intelligence-platform styling.
-- Heavy black/navy pages as the default.
-- Overuse of red.
-- Decorative sea illustrations that distract from evidence.
+CreditShark is not there to produce abstract financial analysis. It should help users make better trading decisions.
 
-## 5. Colour Tokens
+### Alert, not alarming
 
-| Token | Hex | Primary use | Do | Do not |
-|---|---|---|---|---|
-| `background-warm` | `#FBF8F2` | Main page background, public site sections, report background tint | Use for warm, approachable empty space | Do not use for dense tables where contrast may suffer |
-| `surface-white` | `#FFFFFF` | Cards, app panels, report pages, tables | Use for primary content surfaces | Do not create stacked cards inside cards unnecessarily |
-| `surface-ocean-pale` | `#EAF7F8` | Secondary panels, evidence summaries, soft highlights | Use for calm emphasis and non-risk information | Do not use as the only surface colour everywhere |
-| `ocean-950` | `#062B3F` | Primary text on light surfaces, header structure, report headings | Use for authority and contrast | Do not make the whole app dark by default |
-| `ocean-800` | `#0B4F66` | Navigation, secondary headings, strong borders, icon colour | Use for structured UI and active context | Do not use for warning or negative states |
-| `ocean-600` | `#117C8C` | Links, secondary action emphasis, charts | Use for informative emphasis | Do not use where aqua should identify the main CTA |
-| `aqua-500` | `#18BFC7` | Primary CTA, active controls, focus ring accent | Use for action and progress | Do not use as a risk colour or success colour |
-| `aqua-100` | `#DDF8FA` | CTA hover surface, active tab background, soft info chips | Use for low-intensity action states | Do not use behind tiny text without contrast checks |
-| `sand-100` | `#F4EAD8` | Warm callouts, neutral report covers, non-risk notes | Use sparingly to add warmth | Do not let the product become beige or lifestyle-led |
-| `slate-900` | `#17212B` | Body text, table text, dense UI labels | Use for readable app text | Do not replace all navy identity colour with generic slate |
-| `slate-600` | `#5F6B76` | Secondary copy, metadata, timestamps | Use for supporting text | Do not use for critical warnings |
-| `border-soft` | `#D8E7EA` | Dividers, card borders, table rules, input borders | Use for quiet structure | Do not rely on border alone for active/risk state |
-| `success` | `#1F9D65` | Positive status, low-risk supporting indicators | Use only where positive decision value exists | Do not use for primary CTAs |
-| `warning` | `#E9A23B` | Moderate risk, review needed, missing data | Use for refer/review states | Do not use for decoration |
-| `danger` | `#D94C4C` | High-risk, adverse events, hard-stop warnings | Reserve for genuine adverse or high-risk states | Do not use for brand personality or marketing emphasis |
-| `neutral` | `#8996A3` | Not scored, disabled states, low-priority badges | Use for neutral and unavailable states | Do not use where a user must act urgently |
-
-Risk colours must be functional. Aqua is the action colour, not a risk colour.
-
-## 6. Typography
-
-Use open-source fonts only.
-
-Recommended font stack:
-
-- Primary UI and marketing: `Inter`, `Arial`, sans-serif.
-- Alternative UI option: `Source Sans 3`, `Arial`, sans-serif.
-- Dense tables and numerics: `Inter`, with tabular numerals enabled.
-- PDF report fallback: `Inter`, `Arial`, sans-serif.
-
-Hierarchy:
-
-- Marketing hero: strong, clear sans-serif; large enough to feel confident, not inflated. Use direct claims such as "UK company credit checks before you trade."
-- Product headings: compact, scannable, sentence case or title case; avoid oversized dashboard headings.
-- App UI: medium-weight labels, readable body copy, generous line height.
-- Dense tables: smaller text with strong alignment, tabular numerals and clear row spacing.
-- Numeric score displays: large numeric treatment with clear band label and reason link nearby.
-- PDF reports: conservative hierarchy with strong section headings, clear table labels and visible source timestamps.
-
-Do not use:
-
-- Decorative nautical fonts.
-- Condensed display fonts for app UI.
-- Paid fonts as a requirement.
-- Negative letter spacing.
-- Tiny low-contrast metadata in reports.
+The brand should help users spot risk early without creating fear. Avoid language that feels dramatic, threatening, or sensational.
 
-## 7. Logo and Identity Direction
+### SME-first, not corporate-heavy
 
-CreditShark should be wordmark first. The name is distinctive enough that the visual identity should stay restrained.
+The product should feel accessible to growing businesses. Avoid the cold, complex, institutional feel of traditional corporate credit tools.
 
-Identity components:
+### Affordable, not cheap
 
-- Wordmark: clean sans-serif wordmark, likely custom-spaced or lightly customised.
-- Optional mark: simple shark-fin/checkmark/signal abstraction.
-- Favicon/app icon: compact ocean badge or fin/check signal mark.
-- One-colour fallback: ocean-950 on light, white on ocean-950.
-- Clear space: keep at least the cap height of the "C" around the wordmark.
-- Minimum size: wordmark must remain legible in app header and PDF report cover.
+CreditShark should communicate value and accessibility without reducing trust. Pricing should feel fair, practical, and suitable for SMEs, not bargain-basement or enterprise-only.
 
-Acceptable mark concepts:
+---
 
-- Simple dorsal fin abstracted into a signal/check shape.
-- Shark fin inside a soft circular or ocean badge.
-- Wave/signal line paired with wordmark.
-- Subtle fin cutout in the letterform.
+## 03. Logo and Mark Usage
 
-Avoid:
-
-- Cartoon shark.
-- Teeth, jaws, blood or red.
-- Aggressive mascot.
-- Comic-style visuals.
-- Over-literal sea imagery.
-- Using the mark as a repeated background motif.
+### Primary logo
 
-## 8. Voice and Copy
-
-Copy rules:
-
-- Use British English.
-- Use plain commercial language.
-- Write short benefit-led headings.
-- Use clear CTAs.
-- Keep risk language calm and specific.
-- Explain source-linked evidence.
-- Do not fearmonger.
-- Do not overclaim.
-- Do not use fake AI language.
-- Do not make regulated credit-rating claims.
-- Do not use consumer-credit language.
-- Do not use shark puns.
-
-Bad / better examples:
-
-| Bad | Better |
-|---|---|
-| Hunt down bad companies before they hurt you. | Check company risk before you trade. |
-| Attack credit risk. | Review filing risk, adverse signals and recommended credit limits. |
-| Blood in the water. | Evidence-led risk indicators for UK limited companies. |
-| AI-powered credit decisions in seconds. | Transparent scoring with source-linked reason codes. |
-| This company is dangerous. | This company requires review before material credit is extended. |
-| Reject this customer. | Prepayment or senior approval may be appropriate. |
-| Instant credit rating for any business. | Advisory trade-risk score for UK limited companies. |
-| Find risky directors now. | Review officer and PSC context from available public records. |
-
-CTA examples:
-
-- Check a company.
-- View sample report.
-- Run score.
-- Review evidence.
-- Add manual adverse event.
-- Export report.
-- Add to watchlist.
-
-## 9. Public Site System
-
-Future public marketing site sections:
-
-- Homepage hero.
-- Company search CTA.
-- Trust/proof row.
-- Sample report preview.
-- How it works.
-- Use cases.
-- Feature cards.
-- Pricing/plan cards.
-- Compliance/guardrail note.
-- Footer.
+The primary logo combines the **Calm Fin** mark with the **CreditShark** wordmark.
 
-Homepage should feel like a modern UK SME finance SaaS product: light, useful, confident and commercially practical. It should not feel like a dark surveillance tool, a lending marketplace or a consumer credit app.
+The fin sits above a smooth wave or waterline. This represents clarity above the line, risk awareness, and a calm view of what may otherwise be hidden.
 
-Suggested homepage H1:
+The wordmark should be clean, modern, and balanced. The preferred treatment is a deep navy wordmark with a subtle teal accent in the mark. Where suitable, “Credit” and “Shark” may use a two-colour treatment, with “Shark” carrying the teal accent.
 
-UK company credit checks before you trade
+### Icon / favicon
 
-Suggested subheading:
+The icon version should use the Calm Fin mark only.
 
-CreditShark helps you check limited companies, review filing risk, spot adverse signals and produce clear trade-risk reports using Companies House evidence and transparent scoring.
+It should remain recognisable at small sizes and work across:
 
-Suggested CTAs:
+- Browser favicon
+- App icon
+- Social avatar
+- Dashboard sidebar
+- Mobile header
+- Document/report icon
+- Email signature mark
 
-- Check a company.
-- View sample report.
+### Monochrome version
 
-Public site tone:
+The logo should work clearly in black, white, and single-colour navy.
 
-- Lead with clarity and trade-risk value.
-- Show sample outputs instead of abstract illustrations.
-- Explain guardrails without making the hero legal-heavy.
-- Avoid claims of authorisation or regulated ratings unless legally confirmed.
+Use monochrome versions where colour reproduction is limited, including:
 
-## 10. App UI System
+- Legal documents
+- PDF exports
+- Invoice footers
+- Print materials
+- Small interface placements
+- High-contrast accessibility contexts
 
-Core components:
+### Clear space
 
-- Search page: single strong search field, status filters, clear no-result state.
-- Search result card/table: company name, number, status, locality, incorporation date, latest accounts date, SIC where available.
-- Company profile first viewport: identity, status, score, band, confidence, recommended limit, top reasons, data limitations and actions.
-- Score summary card: score, band, model version, run timestamp, link to reason codes.
-- Recommended credit limit card: amount, basis, caps, requested limit comparison where available.
-- Confidence indicator: high, medium, low, insufficient with plain explanation.
-- Reason-code list: grouped positive, negative and missing drivers.
-- Source evidence chip: source type, source date, source id or filing link.
-- Adverse event badge: count and severity, red only when material.
-- Manual data warning: clearly labelled manual input with user and timestamp.
-- Missing data warning: explains what is unavailable and how it affects confidence.
-- Filing timeline: filing date, filing type, source link, overdue/current indicator.
-- Watchlist row: company, band, last refresh, latest event, action.
-- Audit trail entry: actor, action, entity, timestamp, short details.
-- PDF report preview: cover summary, recommendation, reason codes, evidence and limitations.
+Use generous clear space around the logo. As a general rule, leave at least the height of the fin between the logo and any surrounding element.
 
-UI principles:
+Do not crowd the mark with badges, text, legal disclaimers, icons, or navigation elements.
 
-- Decision summary first.
-- Evidence trail second.
-- Calm density.
-- Readable finance tables.
-- Source timestamps visible.
-- Score never shown without explanation.
-- Missing data explained, not hidden.
-- Manual data clearly labelled.
-- Mobile layout should use stacked cards and accordions, not wide horizontal tab strips.
+### Minimum size
 
-## 11. Risk-Status System
+The Calm Fin should remain legible at small sizes.
 
-| Status | Colour role | Badge style | Wording guidance | Decision guidance |
-|---|---|---|---|---|
-| Very low risk | Success with ocean support | Soft green badge, not celebratory | "Very low risk" with source-linked drivers | Standard approval may be appropriate within the recommended limit. |
-| Low risk | Success/neutral | Soft green or ocean badge | "Low risk" with light review cue | Approval may be appropriate with light review. |
-| Moderate risk | Warning | Amber badge with review icon/text | "Moderate risk" and "Refer for review" | Refer for review before extending material credit. |
-| High risk | Danger | Red-outline or soft red badge | "High risk" with specific reason, not alarm | Restrict exposure or require senior approval. |
-| Very high risk | Danger | Stronger red badge, still restrained | "Very high risk" and hard evidence summary | Prepayment, rejection or exceptional approval may be appropriate. |
-| Not scored | Neutral | Grey badge | "Not scored" with missing/blocked reason | Manual review required because critical data is unavailable or status prevents normal scoring. |
-| Manual review required | Warning/neutral | Amber badge or neutral badge with warning text | "Manual review required" | User must review source evidence, manual data and limitations before deciding. |
+Recommended minimums:
 
-Do not write risk labels as automated final decisions. Avoid phrases like "reject this customer" or "safe to trade".
+- Full horizontal logo: 140px wide
+- Icon only: 24px wide in product UI
+- Favicon: simplified icon treatment only
 
-## 12. Product-Specific Brand Rules
+### Correct usage
 
-- Never show a score without reason codes, source dates and data limitations.
-- Red is reserved for genuine adverse or high-risk states.
-- Aqua/teal is the primary action/accent, not a risk colour.
-- Manual data must always be labelled.
-- Scores are advisory, not automatic decisions.
-- Limit recommendations must show their basis.
-- Missing data must be visible.
-- The UI should make risk visible without making the product feel alarmist.
-- Source timestamps must be easy to find in app and PDF contexts.
-- Report exports must reuse the same guardrail language as the app.
-- Tables should prioritise alignment and scanning over decorative styling.
-- Use nautical cues as a quiet identity detail, not the interface theme.
-
-## 13. Compliance and Disclaimer Language
-
-Reusable advisory decision-support copy:
-
-CreditShark supports advisory trade-risk screening for UK limited companies. Scores and recommended limits are decision-support indicators and should be reviewed alongside your own commercial judgement.
-
-Reusable UK limited-companies-only copy:
-
-CreditShark is designed for UK limited-company checks using Companies House evidence and trusted manual adverse-event input. It is not designed for consumer or sole trader credit checks.
-
-Reusable not-regulated-services copy:
-
-CreditShark does not provide consumer credit reports, regulated credit ratings, lending decisions, credit broking, debt advice or debt collection services.
-
-Reusable source-linked evidence copy:
-
-Each score is built from source-linked evidence, model version, reason codes, data timestamps and visible data limitations.
-
-Reusable manual review copy:
-
-Manual review is required where critical data is unavailable, the company status prevents normal scoring, manual adverse events are present, or the recommended limit is overridden.
-
-Required reusable disclaimer:
-
-CreditShark provides company information, filing analysis and trade-risk indicators for UK limited companies. It does not provide consumer credit reports, regulated credit ratings, lending decisions, credit broking, debt advice or debt collection services. Scores and risk bands are advisory decision-support indicators only and should be reviewed alongside your own commercial judgement.
-
-## 14. Do / Do Not
+Use the logo in ways that preserve calmness, clarity, and confidence.
 
 Do:
 
-- Build an original CreditShark identity.
-- Use light-first ocean-finance styling.
-- Make evidence and source dates visible.
-- Keep copy calm and practical.
-- Use risk colour only when it adds decision value.
-- Make score explanations unavoidable.
-- Treat manual data as a first-class labelled source.
-- Use report previews and tables as trust builders.
+- Use generous clear space around the mark
+- Keep the fin clean and uncluttered
+- Use the icon alone where space is limited
+- Preserve the calm, horizontal balance of the logo
+- Use the mark on clean, quiet backgrounds
+- Use the logo consistently across public site and app surfaces
 
-Do not:
+Avoid:
 
-- Look like a Creditsafe clone.
-- Look like a lending marketplace.
-- Look like a consumer credit app.
-- Turn the shark name into a novelty brand.
-- Use shark puns.
-- Make unregulated claims that imply regulated credit ratings.
-- Use fear-based risk language.
-- Create a dark enterprise intelligence-platform aesthetic.
-- Copy layouts, colours, screenshots, wording, logos, illustrations or report designs from any named category reference.
-- Copy Sonartra brand content or design patterns.
+- Adding teeth, eyes, cartoon shark features, or aggressive details
+- Stretching, compressing, rotating, or distorting the mark
+- Placing the logo over busy backgrounds
+- Using harsh red warning colours beside the logo
+- Making the fin too sharp, predatory, or mascot-like
+- Adding shadows, outlines, glow effects, or 3D treatments to the logo
+- Rebuilding the wordmark in an unrelated typeface
 
-## 15. Example Applications
+---
 
-### Homepage Hero
+## 04. Colour
 
-H1:
+CreditShark uses a calm, professional colour system based around deep navy, teal, aqua, and soft neutral surfaces.
 
-UK company credit checks before you trade
+The palette should feel trustworthy, modern, SME-friendly, and lightly financial without looking like a traditional bank.
 
-Subheading:
+### Primary palette
 
-CreditShark helps you check limited companies, review filing risk, spot adverse signals and produce clear trade-risk reports using Companies House evidence and transparent scoring.
+| Token | Suggested value | Usage |
+|---|---:|---|
+| Deep Navy | `#0D2B45` | Wordmark, headings, primary text, strong UI elements |
+| Signal Teal | `#1CA3A6` | Wave mark, highlights, active states, CTAs, key accents |
+| Fresh Aqua | `#6DD1D6` | Secondary accents, soft panels, subtle highlights |
+| Soft Mist | `#F0F2F4` | Page backgrounds, panels, subdued card surfaces |
+| Clean White | `#FAFBFC` | Main surfaces, cards, dashboard areas, reports |
 
-CTAs:
+### Functional colour guidance
 
-- Check a company
-- View sample report
+Colour should support clarity rather than decoration.
 
-### Feature Card
+Recommended functional use:
 
-Heading:
+- Navy: authority, structure, primary information
+- Teal: action, signal, active state, positive confidence
+- Aqua: supporting information, subtle depth, gentle emphasis
+- Soft neutrals: calm background, separation, readability
 
-Source-linked score explanations
+### Risk colours
 
-Body:
+Risk states should be controlled and readable. Avoid turning the interface into a warning system dominated by red.
 
-See the filings, charges, manual adverse events and missing data behind each advisory score.
+Recommended approach:
 
-### Search Page Empty State
+- Use calm amber for caution
+- Use muted red only for material risk, overdue alerts, or important negative changes
+- Use teal or navy for neutral information and monitoring states
+- Always pair colour with text labels so meaning is not colour-only
 
-Heading:
+### Avoid
 
-Search for a UK limited company
+Avoid visual systems dominated by:
 
-Body:
+- Harsh red warning states
+- Aggressive black
+- Corporate royal blue
+- Neon fintech gradients
+- Playful pastels
+- Overly complex risk colour scales
 
-Enter a company name or Companies House number to create a fresh screening snapshot.
+---
 
-### Company Profile First Viewport
+## 05. Typography
 
-Heading:
+CreditShark typography should be clean, modern, and highly readable.
 
-Trade-risk summary
+The type system should support dashboards, company reports, risk explanations, pricing pages, support content, and SME-facing marketing copy.
 
-Body:
+### Recommended type direction
 
-Review the advisory score, recommended limit, confidence level and top source-linked reasons before recording a decision.
+Use a contemporary sans-serif with:
 
-### Score Explanation Panel
+- Strong readability
+- Clear numerals
+- Balanced spacing
+- Reliable performance in tables and dashboards
+- Enough warmth to avoid feeling institutional
 
-Heading:
+Suitable type directions include:
 
-Why this score?
+- Inter
+- Manrope
+- DM Sans
+- Avenir-style sans
+- Satoshi-style sans
 
-Body:
+### Typography hierarchy
 
-This score uses model version 1.0.0 and the latest snapshot from 26 May 2026. Review the positive, negative and missing-data reasons below.
+Suggested hierarchy:
 
-### Adverse Event Warning
+| Role | Style guidance |
+|---|---|
+| Display heading | Confident, clear, medium-to-bold weight |
+| Page heading | Strong navy, direct wording, generous spacing |
+| Section heading | Compact, structured, easy to scan |
+| Body copy | Plain, practical, readable at standard sizes |
+| Data labels | Compact, high contrast, clear numerals |
+| Metadata | Small but legible; avoid excessive faint grey |
+| Legal copy | Quiet but readable; never hidden or illegible |
 
-Heading:
+### Typography principles
 
-Adverse event requires review
+Headings should be clear and confident.  
+Body copy should be plain, direct, and practical.  
+Data labels should be compact but readable.  
+Reports should feel calm and structured, not like raw database output.
 
-Body:
+### Avoid
 
-A manual adverse event has been added to this company record. Review the source note and event status before extending material credit.
+Avoid:
 
-### Manual Data Warning
+- Playful rounded fonts
+- Condensed corporate fonts
+- Decorative typefaces
+- Overly technical monospace-heavy layouts
+- Excessive uppercase
+- Tiny low-contrast metadata
 
-Heading:
+Uppercase can be used for small labels, but it should be tracked out and restrained.
 
-Manual data included
+---
 
-Body:
+## 06. Voice and Tone
 
-This score includes information entered by a user. Manual data is shown separately from Companies House evidence and should be reviewed before a decision is recorded.
+CreditShark’s voice is calm, clear, practical, and commercially aware.
 
-### PDF Report Cover
+The tone should help business owners and finance teams feel informed rather than overwhelmed.
 
-Title:
+### Voice attributes
 
-CreditShark trade-risk report
+**Clear**  
+Say what matters directly.
 
-Subtitle:
+**Calm**  
+Avoid panic-led language.
 
-Advisory company screening for UK limited companies using source-linked evidence and transparent scoring.
+**Practical**  
+Focus on what the user can understand and act on.
 
-### Pricing Card
+**Credible**  
+Use measured language. Do not overpromise.
 
-Heading:
+**Accessible**  
+Avoid corporate jargon and dense credit-bureau phrasing.
 
-Starter
+### Preferred language
 
-Body:
+Use language such as:
 
-For small teams that need clear UK company checks, source-linked reports and manual review records.
+- Clear credit insights
+- Trade risk awareness
+- Spot risk earlier
+- Protect cash flow
+- Make informed decisions
+- Review before extending further credit
+- Monitor company changes
+- Understand who you are trading with
 
-CTA:
+### Language to avoid
 
-Start checking companies
+Avoid language such as:
 
-### Watchlist Row
+- Expose bad companies
+- Dangerous debtor
+- Guaranteed credit decision
+- Approved / declined
+- Safe / unsafe
+- Creditworthy / not creditworthy
+- Enterprise-grade predictive intelligence
+- Debt collection language
+- Fear-led warning copy
 
-Text:
+### Example tone
 
-Moderate risk. Last refreshed today. New filing detected. Review before increasing exposure.
+Use:
 
-## 16. Implementation Handoff
+> This company shows signs of increased trade risk. Review payment terms before extending further credit.
 
-Future build tasks should apply this brand system consistently across public site, app and PDF reports.
+Avoid:
 
-Tailwind/theme tokens:
+> Warning: this company is highly dangerous and should not be trusted.
 
-- Add colour tokens using the names in this document.
-- Keep risk tokens separate from action/accent tokens.
-- Use tabular numerals for score and limit components.
+Use:
 
-Component naming:
+> CreditShark helps SMEs spot risk early and trade with greater confidence.
 
-- Use product-specific names such as `ScoreSummaryCard`, `ReasonCodeList`, `SourceEvidenceChip`, `ManualDataWarning`, `MissingDataWarning`, `RecommendedLimitCard`, `AuditTrailEntry`, `FilingTimeline` and `ReportPreview`.
-- Keep brand primitives generic enough to share across app and public site.
+Avoid:
 
-UI copy source:
+> Enterprise-grade predictive credit intelligence powered by next-generation data infrastructure.
 
-- Store reusable guardrail and disclaimer copy in one shared module.
-- Use British English.
-- Do not duplicate regulated-service disclaimers across components by hand.
+### Legal and compliance tone
 
-Report/PDF styling:
+Legal clarification should be present but not overused.
 
-- Use the same colour tokens and typography hierarchy as the app, with stronger print contrast.
-- Put advisory disclaimer, model version, source timestamps and data limitations in every report.
+Approved wording:
 
-App/public site consistency:
+> CreditShark provides advisory trade-risk screening for UK limited companies only. It does not provide consumer credit reports, regulated credit ratings, lending decisions, credit broking, debt advice or debt collection services.
 
-- Public site can be warmer and more spacious.
-- App should be denser and task-focused.
-- Both should share wordmark, colour tokens, CTA style, evidence-chip language and guardrail copy.
+This wording should usually appear in the site footer, legal pages, and relevant product/legal contexts. It should not be repeated heavily across every marketing section.
 
-Risk colours and badge components:
+---
 
-- Build one shared risk badge system.
-- Never use red for normal brand emphasis.
-- Require wording guidance for every risk badge state.
+## 07. Components
 
-Guardrail copy reuse:
+CreditShark components should be clean, spacious, and easy to understand.
 
-- Reuse the required disclaimer wherever the product describes score outputs, report exports or trade-risk recommendations.
-- Keep "advisory decision support" visible near score and report contexts.
+The interface should feel like a calm operating layer for trade-risk decisions.
+
+### Core component principles
+
+- Cards should separate information clearly
+- Buttons should be decisive but not loud
+- Tables should be readable and practical
+- Risk indicators should be visible but controlled
+- Search should feel fast, simple, and central
+- Explanatory copy should be short and useful
+- Empty states should guide the user toward the next action
+
+### Key components
+
+#### Company search bar
+
+The main entry point. It should feel prominent, simple, and trustworthy.
+
+Preferred CTA examples:
+
+- Search company
+- Start screening
+- Find a company
+
+#### Company summary card
+
+Should give users a fast overview of:
+
+- Company name
+- Registration number
+- Status
+- Key credit/risk signal
+- Latest material changes
+- Watchlist status
+
+#### Risk signal badges
+
+Risk badges should use controlled colours and plain English labels.
+
+Preferred labels:
+
+- Low visible risk
+- Monitor
+- Review recommended
+- Material risk signal
+- Recent change
+
+Avoid labels that imply regulated decisions:
+
+- Approved
+- Declined
+- Safe
+- Unsafe
+- Creditworthy
+
+#### Watchlist cards
+
+Watchlist cards should show monitored companies, key changes, and recent alerts in a calm hierarchy.
+
+#### Insight panels
+
+Insight panels explain what a signal means and why it matters. They should help the user interpret information without making the page feel like a legal or accounting report.
+
+#### CTA buttons
+
+Use confident but calm language:
+
+- Search company
+- View risk summary
+- Add to watchlist
+- Review company
+- Start screening
+- Compare companies
+
+Avoid aggressive CTAs such as:
+
+- Expose risk now
+- Find bad companies
+- Stop debtors today
+- Reveal hidden danger
+
+---
+
+## 08. Company Reports and Risk Results
+
+This product area should be referred to as **Company Reports**, **Credit Insights**, or **Risk Results** rather than “assessment results” unless the product has a deliberate assessment-style workflow.
+
+### Report experience
+
+CreditShark results should be clear, structured, and decision-focused.
+
+A user should quickly understand:
+
+1. Who the company is
+2. Whether there are visible signs of risk
+3. What has changed
+4. What the key indicators mean
+5. What practical next steps to consider
+
+### Recommended report structure
+
+#### Company overview
+
+Basic company identity, registration status, trading context, and key reference details.
+
+#### Risk summary
+
+A plain-English explanation of the current risk position.
+
+#### Key signals
+
+A small number of visible, meaningful indicators.
+
+Examples:
+
+- Filing status
+- Recent changes
+- Payment indicators
+- Director/company changes
+- Adverse events
+- Watchlist movement
+
+#### Watch points
+
+Specific areas that may need attention.
+
+#### Practical guidance
+
+Suggested commercial considerations, such as:
+
+- Review payment terms
+- Check exposure
+- Monitor before extending further credit
+- Request updated information
+- Consider staged credit limits
+- Reassess before accepting larger orders
+
+### Advisory language
+
+Results should not sound like automated judgement or regulated credit ratings.
+
+Use advisory language:
+
+- may indicate
+- worth reviewing
+- potential sign of
+- consider checking
+- monitor before extending further exposure
+- review before increasing credit terms
+
+Avoid:
+
+- approved
+- declined
+- safe
+- unsafe
+- creditworthy
+- not creditworthy
+- lending decision
+- regulated rating
+
+### Result hierarchy
+
+A report should make the most important point quickly, then support it with structured detail.
+
+Recommended order:
+
+1. Company identity
+2. Overall risk summary
+3. Key visible signals
+4. Supporting detail
+5. Suggested review points
+6. Monitoring/watchlist action
+7. Legal/compliance boundary where relevant
+
+---
+
+## 09. Layout and Spacing
+
+CreditShark layouts should feel calm, structured, and uncluttered.
+
+The design should create confidence through order and clarity.
+
+### Layout principles
+
+- Use generous whitespace
+- Group related information into clear sections
+- Avoid dense dashboards that feel like legacy accounting software
+- Keep important decisions visible above the fold
+- Use calm horizontal rhythm inspired by the waterline in the logo
+- Make the main action obvious
+- Keep legal clarification visible but not dominant
+
+### Page structure
+
+A typical CreditShark page should use:
+
+- Clear heading
+- Short explanatory subheading
+- Focused primary action
+- Structured cards
+- Simple risk summaries
+- Restrained supporting detail
+
+### Visual hierarchy
+
+The user should always know:
+
+1. What company they are viewing
+2. What the current risk picture is
+3. What information supports that view
+4. What action they can take next
+
+### Spacing rules
+
+Spacing should be consistent and generous enough to make the product feel composed.
+
+Avoid:
+
+- Cramped tables
+- Overloaded cards
+- Excessive badges
+- Crowded sidebars
+- Dense blocks of legal text
+- Multiple competing CTAs
+
+### Surface design
+
+Use clean cards, subtle borders, soft shadows, and quiet background contrast.
+
+Surfaces should feel light, practical, and readable. Avoid heavy glassmorphism, complex gradients, or decorative panels that reduce clarity.
+
+---
+
+## 10. Motion
+
+Motion should be subtle, calm, and purposeful.
+
+CreditShark should not feel animated for the sake of it. Movement should support clarity and confidence.
+
+### Motion principles
+
+Use motion to:
+
+- Guide attention
+- Confirm actions
+- Reveal supporting detail
+- Show loading or monitoring states calmly
+- Make the product feel responsive
+
+Avoid:
+
+- Bouncy animations
+- Playful mascot movement
+- Dramatic warning flashes
+- Fast or distracting transitions
+- Excessive parallax
+- Repeated logo animation in standard UI
+
+### Recommended motion style
+
+- Soft fades
+- Small upward transitions
+- Smooth card reveals
+- Subtle line movement for charts
+- Gentle shimmer or pulse for loading states
+- Calm hover states on cards and buttons
+
+### Logo motion
+
+The Calm Fin can be animated sparingly in premium brand moments.
+
+Suitable logo motion:
+
+- Soft wave line reveal
+- Fin gently rising above the line
+- Subtle teal sweep across the waterline
+
+Use this only in high-value brand moments, such as a landing page hero or onboarding screen. Do not animate the logo repeatedly across the product.
+
+---
+
+## 11. Iconography
+
+Icons should be simple, line-based, and clear.
+
+They should support practical understanding rather than decorate the interface.
+
+### Icon style
+
+Recommended icon style:
+
+- Clean line icons
+- Rounded stroke ends where appropriate
+- Consistent stroke width
+- Minimal internal detail
+- Navy or teal usage
+- Clear labels where meaning may not be obvious
+
+### Useful icon themes
+
+- Visibility
+- Search
+- Shield
+- Chart
+- Alert
+- Company
+- Document
+- Watchlist
+- Cash flow
+- Confidence
+- Calendar/change
+- Director/person
+
+### Avoid
+
+Avoid icons that feel:
+
+- Playful
+- Cartoonish
+- Aggressive
+- Cyber-security-heavy
+- Too abstract
+- Too detailed at small sizes
+
+---
+
+## 12. Data Visualisation
+
+CreditShark data visualisation should make trade risk easy to understand at a glance. The product is designed for SMEs, so charts, scores and indicators should reduce decision friction rather than add analytical complexity.
+
+The primary data visualisation component is the **CreditShark Trade Risk Score**: a simple circular gauge that combines a numerical score, a plain-English rating and a short practical interpretation.
+
+The score component should always show:
+
+- the score name
+- the rating label
+- the numerical score
+- a short explanation of what the score means
+- the date or source freshness where relevant
+
+### CreditShark Trade Risk Score
+
+The **CreditShark Trade Risk Score** should provide a clear visual summary of a company’s current trade-risk position.
+
+The gauge should be calm, legible and easy to interpret. It should not feel like a complex credit-bureau report or a regulated lending decision.
+
+Recommended structure:
+
+```text
+CreditShark Trade Risk Score
+
+Low Risk
+82 / 100
+
+No major adverse trade-risk signals are currently detected.
+Standard trading terms may be appropriate subject to your own credit policy.
+
+Last updated: 14 June 2026
+Score Bands
+
+A 0–100 model should be used for simplicity and consistency.
+
+Score	Label	Meaning	Colour Direction
+80–100	Low Risk	Stronger trading confidence	Calm teal / green-teal
+60–79	Moderate Risk	Generally acceptable, but monitor key indicators	Soft aqua / blue-teal
+40–59	Elevated Risk	Review before extending further credit	Amber / muted gold
+0–39	High Risk	Higher caution advised	Controlled red / deep coral
+Gauge Design
+
+The score gauge should follow the CreditShark visual system:
+
+rounded circular progress ring
+deep navy score text
+teal or aqua progress arc for stronger scores
+amber for review states
+controlled red or coral only for higher-risk states
+soft neutral background
+clear central rating label
+numerical score shown plainly
+concise explanatory text underneath
+optional “last updated” timestamp
+
+The gauge should be visually simple enough for a user to understand the company’s position within a few seconds.
+
+Interpretation Language
+
+Risk interpretation should be advisory, practical and measured.
+
+Use language such as:
+
+“No major adverse trade-risk signals are currently detected.”
+“Some risk indicators are present. Review payment terms before extending further credit.”
+“Monitor this company for material changes before increasing exposure.”
+“Higher caution is advised. Consider reducing exposure or requesting payment in advance.”
+
+Avoid language such as:
+
+“Approved”
+“Declined”
+“Safe”
+“Unsafe”
+“Creditworthy”
+“Not creditworthy”
+“Guaranteed”
+“High danger”
+“Do not trade”
+
+CreditShark should help users understand risk. It should not present itself as making lending decisions, regulated credit ratings or absolute trading judgements.
+
+Supporting Charts
+
+Supporting charts should only be used where they help users make a clearer commercial decision.
+
+Useful chart types may include:
+
+payment trend indicators
+score movement over time
+filing or status change timelines
+risk signal breakdowns
+exposure or watchlist summaries
+company monitoring changes
+
+Charts should be simple, restrained and decision-focused. They should avoid unnecessary decoration, dense legends or technical financial complexity.
+
+Colour Use in Data
+
+Colour should support interpretation, not create panic.
+
+Teal and aqua should represent stronger confidence or stable positions. Amber should indicate review or caution. Red or coral should be reserved for genuinely higher-risk states and should be used sparingly.
+
+Never rely on colour alone. Pair colour with clear labels, icons or explanatory text so that the meaning remains accessible and unambiguous.
+
+Design Principles
+
+Data visualisation should be:
+
+clear before clever
+calm before dramatic
+practical before technical
+readable at small sizes
+accessible on mobile
+consistent across reports, dashboards and watchlists
+
+Avoid dense dashboards, unexplained scores, aggressive warning states or visual treatments that imply a regulated credit score, lending decision or formal approval outcome.
+
+---
+
+## 13. Trust, Compliance and Boundaries
+
+CreditShark must be clear about what it does and does not do.
+
+The product provides advisory trade-risk screening for UK limited companies. It should not present itself as a regulated credit rating agency, lender, debt advisor, debt collector, credit broker, or consumer credit report provider.
+
+### Approved legal wording
+
+> CreditShark provides advisory trade-risk screening for UK limited companies only. It does not provide consumer credit reports, regulated credit ratings, lending decisions, credit broking, debt advice or debt collection services.
+
+### Where this wording should appear
+
+Recommended placements:
+
+- Site footer
+- Legal/compliance page
+- Terms and conditions
+- Product/legal information page
+- Relevant report footer where needed
+
+Avoid placing this wording repeatedly across every marketing section unless there is a clear compliance reason.
+
+### Words and phrases to avoid
+
+Avoid:
+
+- Credit rating
+- Regulated rating
+- Lending decision
+- Approved
+- Declined
+- Debt advice
+- Debt collection
+- Consumer credit report
+- Guaranteed risk assessment
+- Creditworthy / not creditworthy
+
+### Preferred alternatives
+
+Use:
+
+- Trade-risk screening
+- Credit insight
+- Risk signal
+- Company report
+- Advisory screening
+- Review recommended
+- Monitor before extending credit
+- Visible signs of risk
+- Practical risk awareness
+
+### Compliance tone
+
+Compliance copy should be clear and calm. It should not dominate the brand, but it should remove ambiguity around the product’s role.
+
+---
+
+## 14. Brand Implementation Notes
+
+### Public website
+
+The public website should communicate clarity, affordability, and practical value for SMEs.
+
+Primary themes:
+
+- Understand who you are trading with
+- Spot risk earlier
+- Protect cash flow
+- Make confident decisions
+- Built for SMEs, not corporate complexity
+
+### Product application
+
+The product should prioritise:
+
+- Fast company search
+- Clear company summaries
+- Watchlist monitoring
+- Plain-English insight
+- Low-friction upgrade paths
+- Calm report reading experience
+
+### Marketing application
+
+Marketing should be direct and useful.
+
+Recommended message themes:
+
+- “Spot risk before it becomes a cash-flow problem.”
+- “Clear credit insight for growing businesses.”
+- “Know who you are trading with.”
+- “Trade with more confidence.”
+- “Affordable trade-risk screening for SMEs.”
+
+Avoid overpromising or presenting CreditShark as a substitute for professional legal, financial, or regulated credit advice.
+
+---
+
+## 15. Production Checklist
+
+Before publishing any CreditShark page, component, report, or campaign, check the following:
+
+### Brand fit
+
+- Does it feel calm, clear, and practical?
+- Does it avoid heavy corporate credit-bureau styling?
+- Does it avoid playful shark imagery?
+- Does it feel suitable for SMEs?
+
+### Visual fit
+
+- Is the colour palette used consistently?
+- Is the Calm Fin mark used cleanly?
+- Is there enough whitespace?
+- Are cards, tables, and reports easy to scan?
+- Are risk colours controlled and readable?
+
+### Copy fit
+
+- Is the language plain and commercially useful?
+- Does it avoid fear-led claims?
+- Does it avoid regulated credit decision language?
+- Does it explain risk signals clearly?
+- Does it give users practical next steps?
+
+### Compliance fit
+
+- Is the advisory nature of the product clear?
+- Is legal clarification present where needed?
+- Does the page avoid implying regulated ratings, lending decisions, debt advice, credit broking, or debt collection?
+- Are consumer credit references avoided?
+
+---
+
+## 16. Summary
+
+CreditShark is a calm, practical trade-risk screening brand for SMEs.
+
+It should help businesses understand who they are trading with, spot risk earlier, protect cash flow, and make more confident commercial decisions.
+
+The brand should always feel:
+
+- Calm
+- Clear
+- Confident
+- Practical
+- Trustworthy
+- SME-friendly
+- Commercially useful
+
+The **Calm Fin** is the core visual symbol of the brand: clarity above the line, risk spotted early, and decisions made with control.
 
