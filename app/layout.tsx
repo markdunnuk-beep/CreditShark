@@ -26,6 +26,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 <span className="wordmark__sub">Company risk checks</span>
               </Link>
               <nav aria-label="Primary navigation" className="main-nav">
+                <Link className="nav-link" href={"/app" as Route}>
+                  Dashboard
+                </Link>
                 <Link className="nav-link" href="/search">
                   Search
                 </Link>

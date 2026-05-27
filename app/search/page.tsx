@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PlatformShell } from "../components/platform-shell";
 import { COMPANIES_HOUSE_EVIDENCE_LABEL, SOURCE_LINKED_EVIDENCE_LABEL } from "../../src/lib/guardrails";
 import { createCompaniesHouseClient } from "../../src/lib/companies-house/client";
 import type { CompaniesHouseSearchItem } from "../../src/types/companies-house";
@@ -18,7 +19,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const result = query ? await searchCompanies(query) : null;
 
   return (
-    <section className="page-shell search-page">
+    <PlatformShell active="search">
+      <section className="platform-page search-page">
       <div className="search-hero">
         <p className="eyebrow">Company search</p>
         <h1 className="page-title">Search for a UK limited company</h1>
@@ -54,7 +56,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       {!query ? <InitialEmptyState /> : null}
       {result?.kind === "error" ? <ErrorState message={result.message} /> : null}
       {result?.kind === "success" ? <SearchResults query={query} items={result.items} /> : null}
-    </section>
+      </section>
+    </PlatformShell>
   );
 }
 

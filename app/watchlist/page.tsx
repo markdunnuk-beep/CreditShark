@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PlatformShell } from "../components/platform-shell";
 import { LATEST_CHECK_LABEL } from "../../src/lib/guardrails";
 import {
   formatWatchlistMoney,
@@ -28,7 +29,8 @@ export default async function WatchlistPage() {
 
 function WatchlistView({ items, summary }: { items: WatchlistCompanyContext[]; summary: WatchlistSummary }) {
   return (
-    <section className="page-shell">
+    <PlatformShell active="watchlist">
+      <section className="platform-page">
       <div className="profile-header">
         <div>
           <p className="eyebrow">Watchlist</p>
@@ -101,7 +103,8 @@ function WatchlistView({ items, summary }: { items: WatchlistCompanyContext[]; s
           The watchlist is a workflow aid. It shows the latest CreditShark checks already created in the app and prepares the data model for future source-change monitoring.
         </p>
       </section>
-    </section>
+      </section>
+    </PlatformShell>
   );
 }
 
@@ -146,7 +149,8 @@ function WatchlistRow({ item }: { item: WatchlistCompanyContext }) {
 
 function WatchlistError({ message }: { message: string }) {
   return (
-    <section className="page-shell">
+    <PlatformShell active="watchlist">
+      <section className="platform-page">
       <div className="placeholder-stack">
         <p className="eyebrow">Watchlist</p>
         <h1 className="page-title">Watchlist unavailable</h1>
@@ -155,7 +159,8 @@ function WatchlistError({ message }: { message: string }) {
           Back to search
         </Link>
       </div>
-    </section>
+      </section>
+    </PlatformShell>
   );
 }
 
