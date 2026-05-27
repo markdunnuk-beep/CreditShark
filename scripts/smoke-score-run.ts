@@ -13,7 +13,11 @@ const snapshotResult = await createCompanySnapshotFromCompaniesHouse(companyNumb
 });
 
 if (!snapshotResult.ok) {
-  console.error(`Score smoke test failed while creating snapshot: ${snapshotResult.error.code} - ${snapshotResult.error.message}`);
+  console.error(`Score smoke test failed while creating snapshot: ${snapshotResult.error.code}`);
+  console.error(`Company number: ${companyNumber}`);
+  console.error(`Stage: ${snapshotResult.error.stage}`);
+  console.error(`Reference: ${snapshotResult.error.referenceCode}`);
+  console.error(`Message: ${snapshotResult.error.message}`);
   process.exitCode = 1;
 } else {
   const scoreResult = await runAndPersistScoreForLatestSnapshot(snapshotResult.data.company.company_number, {

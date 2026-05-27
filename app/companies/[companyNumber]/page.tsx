@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createCompanySnapshotFromCompaniesHouse } from "../../../src/lib/companies/company-snapshot-service";
-import type { CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
+import type { CompanySnapshotStage, CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../src/lib/guardrails";
 import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manual-adverse-event-service";
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
@@ -18,7 +18,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
   const result = await createCompanySnapshotFromCompaniesHouse(companyNumber, { createdVia: "company_profile_route" });
 
   if (!result.ok) {
-    return <CompanyProfileError companyNumber={companyNumber} message={result.error.message} />;
+    return <CompanyProfileError companyNumber={companyNumber} message={result.error.message} stage={result.error.stage} referenceCode={result.error.referenceCode} />;
   }
 
   const scoreResult = await runAndPersistScoreForLatestSnapshot(result.data.company.company_number, {
@@ -229,7 +229,17 @@ function CompanyProfile({
   );
 }
 
-function CompanyProfileError({ companyNumber, message }: { companyNumber: string; message: string }) {
+function CompanyProfileError({
+  companyNumber,
+  message,
+  stage,
+  referenceCode
+}: {
+  companyNumber: string;
+  message: string;
+  stage: CompanySnapshotStage;
+  referenceCode: string;
+}) {
   return (
     <section className="page-shell">
       <div className="placeholder-stack">
@@ -238,8 +248,15 @@ function CompanyProfileError({ companyNumber, message }: { companyNumber: string
         <div className="error-note" role="alert">
           <strong>{companyNumber}</strong>
           <div>{message}</div>
+          <dl className="detail-grid detail-grid--compact">
+            <Detail label="Failed stage" value={formatStage(stage)} />
+            <Detail label="Reference" value={referenceCode} />
+          </dl>
         </div>
         <div className="actions">
+          <Link className="button-primary" href={`/companies/${companyNumber}`}>
+            Retry profile
+          </Link>
           <Link className="button-secondary" href="/search">
             Back to search
           </Link>
@@ -315,6 +332,10 @@ function formatMoney(value: number, currency: string): string {
 }
 
 function formatRiskBand(value: string): string {
+  return value.replace(/_/g, " ");
+}
+
+function formatStage(value: string): string {
   return value.replace(/_/g, " ");
 }
 

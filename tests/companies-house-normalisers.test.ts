@@ -6,7 +6,9 @@ import {
   normaliseCharge,
   normaliseCompanyIdentity,
   normaliseCompanySnapshot,
+  normaliseFiling,
   normaliseOfficer,
+  normalisePsc,
   sanitiseCompanyNumber
 } from "../src/lib/companies/companies-house-normalisers.js";
 import type { CompaniesHouseProfile } from "../src/types/companies-house.js";
@@ -73,6 +75,51 @@ describe("Companies House normalisers", () => {
     assert.equal(officer.date_of_birth_partial, null);
   });
 
+  it("truncates long scalar fields before insert mapping", () => {
+    const filing = normaliseFiling({
+      type: "AA".repeat(80),
+      description: "description ".repeat(150),
+      date: "2026-05-27",
+      links: { self: `/company/${"1".repeat(1200)}` }
+    });
+
+    assert.equal(filing.filing_type?.length, 100);
+    assert.equal(filing.description?.length, 1000);
+    assert.equal(filing.source_url?.length, 1000);
+  });
+
+  it("normalises undefined and empty scalar values to null", () => {
+    const charge = normaliseCharge({
+      charge_number: undefined,
+      status: "",
+      persons_entitled: [{ name: undefined }]
+    });
+
+    assert.equal(charge.charge_number, null);
+    assert.equal(charge.status, null);
+    assert.equal(charge.persons_entitled, null);
+    assert.ok(Object.entries(charge).every(([key, value]) => key === "raw_json" || value !== undefined));
+  });
+
+  it("rejects invalid dates and invalid partial dates", () => {
+    const filing = normaliseFiling({ date: "2026-02-31", description_values: { made_up_date: "not-a-date" } });
+    const officer = normaliseOfficer({ name: "A DIRECTOR", appointed_on: "2026-13-01", date_of_birth: { month: 13, year: 2026 } });
+
+    assert.equal(filing.filing_date, null);
+    assert.equal(filing.made_up_date, null);
+    assert.equal(officer?.appointed_on, null);
+    assert.equal(officer?.date_of_birth_partial, null);
+  });
+
+  it("keeps PSC natures of control as a safe string array", () => {
+    const psc = normalisePsc({
+      name: "CONTROL PERSON",
+      natures_of_control: ["ownership-of-shares-75-to-100-percent", "", "x".repeat(400)]
+    });
+
+    assert.deepEqual(psc?.natures_of_control, ["ownership-of-shares-75-to-100-percent", "x".repeat(300)]);
+  });
+
   it("counts active and satisfied charges", () => {
     const charges = [
       normaliseCharge({ charge_number: 1, status: "outstanding" }),
@@ -82,4 +129,3 @@ describe("Companies House normalisers", () => {
     assert.deepEqual(countCharges(charges), { active: 1, satisfied: 1 });
   });
 });
-

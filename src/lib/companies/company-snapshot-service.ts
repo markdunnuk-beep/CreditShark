@@ -16,6 +16,22 @@ import {
   type CompanyPscRow
 } from "./companies-house-normalisers";
 
+export type CompanySnapshotStage =
+  | "validate_company_number"
+  | "fetch_profile"
+  | "fetch_filings"
+  | "fetch_charges"
+  | "fetch_officers"
+  | "fetch_pscs"
+  | "upsert_company"
+  | "insert_snapshot"
+  | "insert_filings"
+  | "insert_charges"
+  | "insert_officers"
+  | "insert_pscs"
+  | "insert_audit_event"
+  | "run_score_after_snapshot";
+
 export interface CompanySnapshotServiceOptions {
   actorId?: string | null;
   createdVia?: string;
@@ -28,6 +44,10 @@ export type CompanySnapshotServiceResult =
 export interface CompanySnapshotServiceError {
   code: "invalid_company_number" | "missing_database_url" | "companies_house_error" | "database_error";
   message: string;
+  stage: CompanySnapshotStage;
+  referenceCode: string;
+  upstreamStatus?: number;
+  details?: string;
 }
 
 export interface CreatedCompanySnapshot {
@@ -71,22 +91,31 @@ export async function createCompanySnapshotFromCompaniesHouse(
   companyNumberInput: string,
   options: CompanySnapshotServiceOptions = {}
 ): Promise<CompanySnapshotServiceResult> {
+  let stage: CompanySnapshotStage = "validate_company_number";
   const companyNumber = sanitiseCompanyNumber(companyNumberInput);
   if (!companyNumber) {
-    return { ok: false, error: { code: "invalid_company_number", message: "Enter a valid Companies House company number." } };
+    return {
+      ok: false,
+      error: buildServiceError("invalid_company_number", stage, companyNumberInput, "Enter a valid Companies House company number.")
+    };
   }
 
   const companiesHouse = createCompaniesHouseClient();
+  stage = "fetch_profile";
   const profileResult = await companiesHouse.getCompanyProfile(companyNumber);
   if (!profileResult.ok) {
+    logSnapshotDiagnostic(companyNumber, stage, profileResult.error);
     return {
       ok: false,
-      error: {
-        code: "companies_house_error",
-        message: profileResult.error.code === "missing_api_key"
+      error: buildServiceError(
+        "companies_house_error",
+        stage,
+        companyNumber,
+        profileResult.error.code === "missing_api_key"
           ? "Companies House API key is not configured on the server."
-          : profileResult.error.message
-      }
+          : profileResult.error.message,
+        { upstreamStatus: profileResult.error.status, details: profileResult.error.code }
+      )
     };
   }
 
@@ -107,6 +136,10 @@ export async function createCompanySnapshotFromCompaniesHouse(
   const pscs: CompanyPscRow[] = pscsResult.ok
     ? (pscsResult.data.items ?? []).map(normalisePsc).filter((psc): psc is CompanyPscRow => psc !== null)
     : recordMissing(missingSections, "pscs");
+  logOptionalFetchFailure(companyNumber, "fetch_filings", filingsResult.ok ? null : filingsResult.error);
+  logOptionalFetchFailure(companyNumber, "fetch_charges", chargesResult.ok ? null : chargesResult.error);
+  logOptionalFetchFailure(companyNumber, "fetch_officers", officersResult.ok ? null : officersResult.error);
+  logOptionalFetchFailure(companyNumber, "fetch_pscs", pscsResult.ok ? null : pscsResult.error);
 
   const identity = normaliseCompanyIdentity(profileResult.data);
   const snapshotRow = normaliseCompanySnapshot(profileResult.data, sourceFetchedAt, missingSections);
@@ -117,13 +150,16 @@ export async function createCompanySnapshotFromCompaniesHouse(
     try {
       await client.query("begin");
 
+      stage = "upsert_company";
       const company = await upsertCompany(client, identity);
+      stage = "insert_snapshot";
       const snapshot = await insertSnapshot(client, company.id, snapshotRow, options.actorId ?? null);
-      await insertFilings(client, company.id, snapshot.id, filings);
-      await insertCharges(client, company.id, snapshot.id, charges);
-      await insertOfficers(client, company.id, snapshot.id, officers);
-      await insertPscs(client, company.id, snapshot.id, pscs);
-      await insertAuditEvent(client, company.id, snapshot.id, company.company_number, missingSections, options);
+      await insertOptionalSection(client, companyNumber, "insert_filings", "filings", missingSections, () => insertFilings(client, company.id, snapshot.id, filings));
+      await insertOptionalSection(client, companyNumber, "insert_charges", "charges", missingSections, () => insertCharges(client, company.id, snapshot.id, charges));
+      await insertOptionalSection(client, companyNumber, "insert_officers", "officers", missingSections, () => insertOfficers(client, company.id, snapshot.id, officers));
+      await insertOptionalSection(client, companyNumber, "insert_pscs", "pscs", missingSections, () => insertPscs(client, company.id, snapshot.id, pscs));
+      stage = "insert_audit_event";
+      await insertAuditEventBestEffort(client, company.id, snapshot.id, company.company_number, missingSections, options);
 
       await client.query("commit");
 
@@ -148,21 +184,82 @@ export async function createCompanySnapshotFromCompaniesHouse(
       client.release();
     }
   } catch (error) {
+    logSnapshotDiagnostic(companyNumber, stage, error);
     if (error instanceof DatabaseConfigurationError) {
-      return { ok: false, error: { code: "missing_database_url", message: "Database connection is not configured on the server." } };
+      return {
+        ok: false,
+        error: buildServiceError("missing_database_url", stage, companyNumber, "Database connection is not configured on the server.")
+      };
     }
 
     if (error instanceof DatabaseQueryError || error instanceof Error) {
-      return { ok: false, error: { code: "database_error", message: "Company snapshot could not be saved. Check server database configuration and permissions." } };
+      return {
+        ok: false,
+        error: buildServiceError(
+          "database_error",
+          stage,
+          companyNumber,
+          `CreditShark could not save the Companies House snapshot at the ${formatStageForUser(stage)} stage. Please retry or check server logs with reference code ${snapshotReferenceCode(companyNumber, stage)}.`,
+          { details: databaseErrorSummary(error) }
+        )
+      };
     }
 
-    return { ok: false, error: { code: "database_error", message: "Company snapshot could not be saved." } };
+    return {
+      ok: false,
+      error: buildServiceError("database_error", stage, companyNumber, "Company snapshot could not be saved.")
+    };
   }
 }
 
 function recordMissing<T>(missingSections: string[], section: string): T[] {
-  missingSections.push(section);
+  addMissingSection(missingSections, section);
   return [];
+}
+
+function addMissingSection(missingSections: string[], section: string): void {
+  if (!missingSections.includes(section)) missingSections.push(section);
+}
+
+async function insertOptionalSection(
+  client: pg.PoolClient,
+  companyNumber: string,
+  stage: Extract<CompanySnapshotStage, "insert_filings" | "insert_charges" | "insert_officers" | "insert_pscs">,
+  section: string,
+  missingSections: string[],
+  write: () => Promise<void>
+): Promise<void> {
+  const savepointName = `snapshot_${stage}`;
+  await client.query(`savepoint ${savepointName}`);
+  try {
+    await write();
+    await client.query(`release savepoint ${savepointName}`);
+  } catch (error) {
+    await client.query(`rollback to savepoint ${savepointName}`);
+    await client.query(`release savepoint ${savepointName}`);
+    addMissingSection(missingSections, section);
+    logSnapshotDiagnostic(companyNumber, stage, error);
+  }
+}
+
+async function insertAuditEventBestEffort(
+  client: pg.PoolClient,
+  companyId: string,
+  snapshotId: string,
+  companyNumber: string,
+  missingSections: string[],
+  options: CompanySnapshotServiceOptions
+): Promise<void> {
+  const savepointName = "snapshot_insert_audit_event";
+  await client.query(`savepoint ${savepointName}`);
+  try {
+    await insertAuditEvent(client, companyId, snapshotId, companyNumber, missingSections, options);
+    await client.query(`release savepoint ${savepointName}`);
+  } catch (error) {
+    await client.query(`rollback to savepoint ${savepointName}`);
+    await client.query(`release savepoint ${savepointName}`);
+    logSnapshotDiagnostic(companyNumber, "insert_audit_event", error);
+  }
 }
 
 async function upsertCompany(client: pg.PoolClient, row: ReturnType<typeof normaliseCompanyIdentity>): Promise<PersistedCompany> {
@@ -313,6 +410,77 @@ async function insertPscs(client: pg.PoolClient, companyId: string, snapshotId: 
       ]
     );
   }
+}
+
+function buildServiceError(
+  code: CompanySnapshotServiceError["code"],
+  stage: CompanySnapshotStage,
+  companyNumber: string,
+  message: string,
+  options: { upstreamStatus?: number; details?: string } = {}
+): CompanySnapshotServiceError {
+  return {
+    code,
+    message,
+    stage,
+    referenceCode: snapshotReferenceCode(companyNumber, stage),
+    upstreamStatus: options.upstreamStatus,
+    details: options.details
+  };
+}
+
+function snapshotReferenceCode(companyNumber: string, stage: CompanySnapshotStage): string {
+  const safeCompany = sanitiseCompanyNumber(companyNumber) ?? "UNKNOWN";
+  const suffix = Math.abs(hashString(`${safeCompany}:${stage}`)).toString(36).toUpperCase().slice(0, 6).padStart(6, "0");
+  return `CS-${safeCompany}-${suffix}`;
+}
+
+function hashString(value: string): number {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = ((hash << 5) - hash + value.charCodeAt(index)) | 0;
+  }
+  return hash;
+}
+
+function formatStageForUser(stage: CompanySnapshotStage): string {
+  return stage.replace(/^insert_/, "").replace(/^fetch_/, "").replace(/_/g, " ");
+}
+
+function logOptionalFetchFailure(companyNumber: string, stage: CompanySnapshotStage, error: unknown): void {
+  if (!error) return;
+  logSnapshotDiagnostic(companyNumber, stage, error);
+}
+
+function logSnapshotDiagnostic(companyNumber: string, stage: CompanySnapshotStage, error: unknown): void {
+  console.error("[creditshark.snapshot]", {
+    company_number: sanitiseCompanyNumber(companyNumber) ?? "invalid",
+    stage,
+    reference_code: snapshotReferenceCode(companyNumber, stage),
+    ...safeErrorDetails(error)
+  });
+}
+
+function safeErrorDetails(error: unknown): Record<string, unknown> {
+  if (!error || typeof error !== "object") {
+    return { error_name: "UnknownError" };
+  }
+
+  const record = error as Record<string, unknown>;
+  return {
+    error_name: record.name ?? record.code ?? "Error",
+    error_code: record.code,
+    table: record.table,
+    constraint: record.constraint,
+    upstream_status: record.status,
+    detail: typeof record.detail === "string" ? record.detail.slice(0, 300) : undefined
+  };
+}
+
+function databaseErrorSummary(error: unknown): string | undefined {
+  const details = safeErrorDetails(error);
+  const parts = [details.error_code, details.table, details.constraint].filter(Boolean);
+  return parts.length > 0 ? parts.join(" ") : undefined;
 }
 
 async function insertAuditEvent(

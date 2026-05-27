@@ -11,7 +11,13 @@ const result = await createCompanySnapshotFromCompaniesHouse(companyNumber, {
 });
 
 if (!result.ok) {
-  console.error(`Snapshot smoke test failed: ${result.error.code} - ${result.error.message}`);
+  console.error(`Snapshot smoke test failed: ${result.error.code}`);
+  console.error(`Company number: ${companyNumber}`);
+  console.error(`Stage: ${result.error.stage}`);
+  console.error(`Reference: ${result.error.referenceCode}`);
+  console.error(`Message: ${result.error.message}`);
+  if (result.error.upstreamStatus) console.error(`Upstream status: ${result.error.upstreamStatus}`);
+  if (result.error.details) console.error(`Details: ${result.error.details}`);
   process.exitCode = 1;
 } else {
   const snapshot = result.data;
@@ -25,4 +31,3 @@ if (!result.ok) {
   console.log(`PSCs: ${snapshot.pscSummary.count}`);
   console.log(`Missing sections: ${snapshot.missingSections.length ? snapshot.missingSections.join(", ") : "none"}`);
 }
-

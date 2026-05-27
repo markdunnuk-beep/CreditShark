@@ -84,12 +84,12 @@ export function sanitiseCompanyNumber(input: string): string | null {
 
 export function normaliseCompanyIdentity(profile: CompaniesHouseProfile): CompanyIdentityRow {
   return {
-    company_number: profile.company_number,
-    company_name: profile.company_name,
-    company_status: profile.company_status ?? null,
-    company_type: profile.company_type ?? null,
-    jurisdiction: profile.jurisdiction ?? null,
-    registered_office_postcode: profile.registered_office_address?.postal_code ?? null,
+    company_number: textOrNull(profile.company_number, 32) ?? "",
+    company_name: textOrNull(profile.company_name, 500) ?? "Unknown company",
+    company_status: textOrNull(profile.company_status, 100),
+    company_type: textOrNull(profile.company_type, 100),
+    jurisdiction: textOrNull(profile.jurisdiction, 100),
+    registered_office_postcode: textOrNull(profile.registered_office_address?.postal_code, 50),
     incorporated_on: validDate(profile.date_of_creation),
     dissolved_on: validDate(profile.date_of_cessation)
   };
@@ -101,11 +101,11 @@ export function normaliseCompanySnapshot(
   missingSections: string[]
 ): CompanySnapshotRow {
   return {
-    company_number: profile.company_number,
+    company_number: textOrNull(profile.company_number, 32) ?? "",
     source: "companies_house",
     source_fetched_at: sourceFetchedAt,
     raw_profile_json: profile,
-    derived_status: profile.company_status ?? null,
+    derived_status: textOrNull(profile.company_status, 100),
     derived_company_age_months: calculateCompanyAgeMonths(profile.date_of_creation, sourceFetchedAt),
     latest_accounts_date: validDate(profile.accounts?.last_accounts?.made_up_to),
     latest_confirmation_statement_date: validDate(profile.confirmation_statement?.last_made_up_to),
@@ -116,59 +116,61 @@ export function normaliseCompanySnapshot(
 
 export function normaliseFiling(filing: CompaniesHouseFiling): CompanyFilingRow {
   return {
-    filing_type: filing.type ?? null,
-    description: filing.description ?? null,
+    filing_type: textOrNull(filing.type, 100),
+    description: textOrNull(filing.description, 1000),
     filing_date: validDate(filing.date),
     made_up_date: validDate(filing.description_values?.made_up_date),
-    category: filing.category ?? null,
-    barcode: filing.barcode ?? null,
-    source_url: filing.links?.document_metadata ?? filing.links?.self ?? null,
+    category: textOrNull(filing.category, 100),
+    barcode: textOrNull(filing.barcode, 100),
+    source_url: textOrNull(filing.links?.document_metadata ?? filing.links?.self, 1000),
     raw_json: filing
   };
 }
 
 export function normaliseCharge(charge: CompaniesHouseCharge): CompanyChargeRow {
   return {
-    charge_number: charge.charge_number == null ? null : String(charge.charge_number),
-    status: charge.status ?? null,
+    charge_number: textOrNull(charge.charge_number == null ? null : String(charge.charge_number), 100),
+    status: textOrNull(charge.status, 100),
     created_on: validDate(charge.created_on),
     delivered_on: validDate(charge.delivered_on),
     satisfied_on: validDate(charge.satisfied_on),
-    persons_entitled: charge.persons_entitled?.map((person) => person.name).filter(Boolean).join("; ") || null,
-    classification: charge.classification?.description ?? charge.classification?.type ?? null,
-    source_url: charge.links?.self ?? null,
+    persons_entitled: textOrNull(charge.persons_entitled?.map((person) => person.name).filter(Boolean).join("; "), 2000),
+    classification: textOrNull(charge.classification?.description ?? charge.classification?.type, 500),
+    source_url: textOrNull(charge.links?.self, 1000),
     raw_json: charge
   };
 }
 
 export function normaliseOfficer(officer: CompaniesHouseOfficer): CompanyOfficerRow | null {
-  if (!officer.name) return null;
+  const officerName = textOrNull(officer.name, 500);
+  if (!officerName) return null;
 
   return {
-    officer_name: officer.name,
-    officer_role: officer.officer_role ?? null,
+    officer_name: officerName,
+    officer_role: textOrNull(officer.officer_role, 100),
     appointed_on: validDate(officer.appointed_on),
     resigned_on: validDate(officer.resigned_on),
-    nationality: officer.nationality ?? null,
-    occupation: officer.occupation ?? null,
-    country_of_residence: officer.country_of_residence ?? null,
+    nationality: textOrNull(officer.nationality, 100),
+    occupation: textOrNull(officer.occupation, 500),
+    country_of_residence: textOrNull(officer.country_of_residence, 100),
     date_of_birth_partial: formatPartialDateOfBirth(officer.date_of_birth),
-    source_id: officer.links?.self ?? null,
+    source_id: textOrNull(officer.links?.self, 1000),
     raw_json: officer
   };
 }
 
 export function normalisePsc(psc: CompaniesHousePsc): CompanyPscRow | null {
-  if (!psc.name) return null;
+  const pscName = textOrNull(psc.name, 500);
+  if (!pscName) return null;
 
   return {
-    psc_name: psc.name,
-    psc_kind: psc.kind ?? null,
+    psc_name: pscName,
+    psc_kind: textOrNull(psc.kind, 100),
     notified_on: validDate(psc.notified_on),
     ceased_on: validDate(psc.ceased_on),
-    natures_of_control: psc.natures_of_control ?? [],
-    country_of_residence: psc.country_of_residence ?? null,
-    source_id: psc.links?.self ?? null,
+    natures_of_control: (psc.natures_of_control ?? []).map((value) => textOrNull(value, 300)).filter((value): value is string => value !== null),
+    country_of_residence: textOrNull(psc.country_of_residence, 100),
+    source_id: textOrNull(psc.links?.self, 1000),
     raw_json: psc
   };
 }
@@ -199,10 +201,22 @@ export function countCharges(charges: CompanyChargeRow[]): { active: number; sat
 
 function validDate(value: string | undefined): string | null {
   if (!value) return null;
-  return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value ? null : value;
 }
 
 function formatPartialDateOfBirth(dateOfBirth: { month?: number; year?: number } | undefined): string | null {
   if (!dateOfBirth?.year) return null;
-  return dateOfBirth.month ? `${dateOfBirth.year}-${String(dateOfBirth.month).padStart(2, "0")}` : String(dateOfBirth.year);
+  if (!Number.isInteger(dateOfBirth.year) || dateOfBirth.year < 1800 || dateOfBirth.year > 2200) return null;
+  if (dateOfBirth.month == null) return String(dateOfBirth.year);
+  if (!Number.isInteger(dateOfBirth.month) || dateOfBirth.month < 1 || dateOfBirth.month > 12) return null;
+  return `${dateOfBirth.year}-${String(dateOfBirth.month).padStart(2, "0")}`;
+}
+
+function textOrNull(value: unknown, maxLength: number): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed;
 }
