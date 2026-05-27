@@ -121,3 +121,6 @@ For production, verify without exposing values:
 ## Next Recommended Task
 
 Deploy this resilience patch, reproduce `/companies/06895946` in production, then inspect Vercel runtime logs for the emitted `[creditshark.snapshot]` entry and reference code. If the stage points to connection or permission failure, fix the production Supabase/Vercel environment before adding new product features.
+
+Local .env.local may use Supabase direct connection.
+Vercel Production should use Supabase Transaction Pooler for DATABASE_URL.
