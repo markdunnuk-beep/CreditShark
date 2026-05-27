@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --background-warm: #fbf8f2;
   --surface-white: #ffffff;
@@ -304,6 +308,25 @@ textarea {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.company-workspace-score-gauge {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  min-width: 0;
+  padding: 14px;
+}
+
+.company-workspace-score-gauge > span {
+  color: var(--slate-600);
+  font-size: 0.82rem;
+  font-weight: 800;
+  justify-self: start;
 }
 
 .company-workspace-metric {

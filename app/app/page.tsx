@@ -11,6 +11,7 @@ import {
   type DashboardReportExport,
   type DashboardScoreMovement
 } from "../../src/lib/dashboard/dashboard-service";
+import { Card, MetricCard, RiskBadge } from "../components/ui";
 
 export const metadata: Metadata = {
   title: "Dashboard"
@@ -162,23 +163,18 @@ function DashboardConfigurationState({ message }: { message: string }) {
 }
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="summary-card">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  );
+  return <MetricCard className="summary-card" label={label} value={value} />;
 }
 
 function DashboardPanel({ title, badge, children }: { title: string; badge: string; children: React.ReactNode }) {
   return (
-    <section className="card dashboard-panel">
+    <Card className="dashboard-panel">
       <div className="section-heading">
         <h2>{title}</h2>
         <span className="badge">{badge}</span>
       </div>
       {children}
-    </section>
+    </Card>
   );
 }
 
@@ -192,7 +188,7 @@ function RecentCheckCard({ item }: { item: DashboardRecentCheck }) {
         <span>Company number {item.company_number}</span>
       </div>
       <div className="dashboard-list-card__meta">
-        <span className={`risk-badge risk-badge--${item.risk_band}`}>{formatDashboardValue(item.risk_band)}</span>
+        <RiskBadge riskBand={item.risk_band} />
         <strong>{item.score ?? "NS"}</strong>
         <span>{formatDashboardMoney(item.recommended_limit, item.currency)}</span>
       </div>

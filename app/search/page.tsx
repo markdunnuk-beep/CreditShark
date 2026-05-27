@@ -4,6 +4,7 @@ import { PlatformShell } from "../components/platform-shell";
 import { COMPANIES_HOUSE_EVIDENCE_LABEL, SOURCE_LINKED_EVIDENCE_LABEL } from "../../src/lib/guardrails";
 import { createCompaniesHouseClient } from "../../src/lib/companies-house/client";
 import type { CompaniesHouseSearchItem } from "../../src/types/companies-house";
+import { Badge, Card } from "../components/ui";
 
 export const metadata: Metadata = {
   title: "Search"
@@ -29,7 +30,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </p>
       </div>
 
-      <div className="card search-panel search-panel--polished">
+      <Card className="search-panel search-panel--polished">
         <form action="/search" className="search-form" method="get">
           <label className="sr-only" htmlFor="company-search">
             Company name or Companies House number
@@ -51,7 +52,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <span>{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
           <span>{SOURCE_LINKED_EVIDENCE_LABEL}</span>
         </div>
-      </div>
+      </Card>
 
       {!query ? <InitialEmptyState /> : null}
       {result?.kind === "error" ? <ErrorState message={result.message} /> : null}
@@ -124,7 +125,7 @@ function SearchResults({ query, items }: { query: string; items: CompaniesHouseS
                   <Link className="result-card__title" href={`/companies/${item.company_number}`}>
                     {item.title}
                   </Link>
-                  {exactNumberMatch ? <span className="badge exact-match-badge">Exact number match</span> : null}
+                  {exactNumberMatch ? <Badge className="exact-match-badge" variant="info">Exact number match</Badge> : null}
                 </div>
                 <div className="result-card__number">Company number {item.company_number}</div>
               </div>

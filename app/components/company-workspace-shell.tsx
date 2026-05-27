@@ -14,6 +14,7 @@ import {
 } from "../../src/lib/company-workspace/company-workspace-service";
 import { addCompanyToWatchlistAction, removeCompanyFromWatchlistAction } from "../watchlist/actions";
 import { CompanyWorkspaceTabs } from "./company-workspace-tabs";
+import { MetricCard, RiskBadge, TradeRiskScoreGauge } from "./ui";
 
 export function CompanyWorkspaceShell({
   header,
@@ -50,10 +51,30 @@ export function CompanyWorkspaceShell({
         </div>
 
         <div className="company-workspace-metrics" aria-label="Current trade-risk summary">
-          <MetricCard label={ADVISORY_SCORE_LABEL} value={header.advisoryScore == null ? "NS" : String(header.advisoryScore)} strong />
-          <MetricCard label="Risk band" value={formatCompanyWorkspaceValue(header.riskBand)} badgeClass={header.riskBand ? `risk-badge risk-badge--${header.riskBand}` : undefined} />
-          <MetricCard label="Recommended limit" value={formatCompanyWorkspaceMoney(header.recommendedLimit, header.currency)} />
-          <MetricCard label="Confidence" value={formatCompanyWorkspaceValue(header.confidence)} />
+          <div className="company-workspace-score-gauge">
+            <span>{ADVISORY_SCORE_LABEL}</span>
+            <TradeRiskScoreGauge
+              score={header.advisoryScore}
+              rating={formatCompanyWorkspaceValue(header.riskBand)}
+              lastUpdated={formatCompanyWorkspaceDateTime(header.latestCheckAt)}
+            />
+          </div>
+          <MetricCard
+            className="company-workspace-metric"
+            label="Risk band"
+            value={formatCompanyWorkspaceValue(header.riskBand)}
+            status={<RiskBadge riskBand={header.riskBand} />}
+          />
+          <MetricCard
+            className="company-workspace-metric"
+            label="Recommended limit"
+            value={formatCompanyWorkspaceMoney(header.recommendedLimit, header.currency)}
+          />
+          <MetricCard
+            className="company-workspace-metric"
+            label="Confidence"
+            value={formatCompanyWorkspaceValue(header.confidence)}
+          />
         </div>
 
         <div className="company-workspace-flags">
@@ -81,25 +102,6 @@ export function CompanyWorkspaceShell({
       </section>
 
       <div className="company-workspace-content">{children}</div>
-    </div>
-  );
-}
-
-function MetricCard({
-  label,
-  value,
-  badgeClass,
-  strong = false
-}: {
-  label: string;
-  value: string;
-  badgeClass?: string;
-  strong?: boolean;
-}) {
-  return (
-    <div className="company-workspace-metric">
-      <span>{label}</span>
-      {badgeClass ? <strong className={badgeClass}>{value}</strong> : <strong className={strong ? "company-workspace-score" : undefined}>{value}</strong>}
     </div>
   );
 }
