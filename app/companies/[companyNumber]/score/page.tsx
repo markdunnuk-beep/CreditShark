@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
+import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../../src/lib/decisions/decision-service";
 import { getLatestScoreRunForCompany, type ScoreRunResult } from "../../../../src/lib/scoring/scoring-service";
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
 
@@ -18,10 +19,11 @@ export default async function CompanyScorePage({ params }: { params: Promise<{ c
     return <ScoreEmptyState companyNumber={companyNumber} message={result.error.message} />;
   }
 
-  return <ScoreExplanation data={result.data} />;
+  const decisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
+  return <ScoreExplanation data={result.data} latestDecision={decisionResult.ok ? decisionResult.data.decision : null} />;
 }
 
-function ScoreExplanation({ data }: { data: ScoreRunResult }) {
+function ScoreExplanation({ data, latestDecision }: { data: ScoreRunResult; latestDecision: DecisionRecord | null }) {
   const groupedReasons = groupReasonsByGroup(data.reasonCodes);
   const manualReasons = data.reasonCodes.filter((reason) => reason.group === "manual_adverse_events");
   const positiveReasons = data.reasonCodes.filter((reason) => reason.direction === "positive");
@@ -82,9 +84,32 @@ function ScoreExplanation({ data }: { data: ScoreRunResult }) {
             <Link className="button-primary" href={`/companies/${data.company.company_number}/report`}>
               Preview report
             </Link>
+            <Link className="button-secondary" href={`/companies/${data.company.company_number}/decision`}>
+              Record decision
+            </Link>
           </div>
         </aside>
       </div>
+
+      {latestDecision ? (
+        <section className="card score-section">
+          <div className="section-heading">
+            <h2>Latest recorded decision</h2>
+            <span className="badge">User-recorded</span>
+          </div>
+          <dl className="detail-grid">
+            <Detail label="Decision" value={formatDecisionLabel(latestDecision.decision_value)} />
+            <Detail label="Final approved limit" value={formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)} />
+            <Detail label="Recorded" value={formatDateTime(latestDecision.decided_at)} />
+            <Detail label="Linked score run" value={latestDecision.score_run_id} />
+          </dl>
+          <p className="note">This block records the user's commercial outcome. The score explanation remains advisory evidence.</p>
+        </section>
+      ) : (
+        <div className="status-note status-note--compact">
+          No user-recorded decision is attached yet. <Link href={`/companies/${data.company.company_number}/decision`}>Record decision</Link>.
+        </div>
+      )}
 
       {manualReasons.length > 0 ? (
         <div className="manual-data-warning">

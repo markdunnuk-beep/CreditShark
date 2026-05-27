@@ -4,6 +4,7 @@ import { createCompanySnapshotFromCompaniesHouse } from "../../../src/lib/compan
 import type { CompanySnapshotStage, CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../src/lib/guardrails";
 import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manual-adverse-event-service";
+import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../src/lib/decisions/decision-service";
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
 import type { ScoreReasonCode } from "../../../src/types/creditshark";
 
@@ -25,6 +26,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
     createdVia: "company_profile_route"
   });
   const manualEventsResult = await getManualAdverseEventsForCompany(result.data.company.company_number);
+  const latestDecisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
 
   return (
     <CompanyProfile
@@ -32,6 +34,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
       scoreResult={scoreResult.ok ? scoreResult.data : null}
       scoreError={scoreResult.ok ? null : scoreResult.error.message}
       activeManualEventCount={manualEventsResult.ok ? manualEventsResult.data.activeEvents.length : 0}
+      latestDecision={latestDecisionResult.ok ? latestDecisionResult.data.decision : null}
     />
   );
 }
@@ -40,12 +43,14 @@ function CompanyProfile({
   data,
   scoreResult,
   scoreError,
-  activeManualEventCount
+  activeManualEventCount,
+  latestDecision
 }: {
   data: CreatedCompanySnapshot;
   scoreResult: ScoreRunResult | null;
   scoreError: string | null;
   activeManualEventCount: number;
+  latestDecision: DecisionRecord | null;
 }) {
   const company = data.company;
   const snapshot = data.snapshot;
@@ -127,6 +132,9 @@ function CompanyProfile({
             <Link className="button-secondary" href={`/companies/${company.company_number}/report`}>
               Preview report
             </Link>
+            <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
+              Record decision
+            </Link>
           </div>
           {scoreResult ? (
             <details className="audit-details">
@@ -177,6 +185,9 @@ function CompanyProfile({
             <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
               Preview report
             </Link>
+            <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
+              Record decision
+            </Link>
           </div>
           <p className="note">Actions use the latest persisted snapshot and score context. Manual data is labelled separately.</p>
         </aside>
@@ -214,6 +225,25 @@ function CompanyProfile({
         </div>
         <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
           Preview report
+        </Link>
+      </section>
+
+      <section className="card score-section manual-profile-card">
+        <div>
+          <div className="section-heading">
+            <h2>Recorded decision</h2>
+            <span className="badge">User-recorded</span>
+          </div>
+          {latestDecision ? (
+            <p className="note">
+              Latest decision: <strong>{formatDecisionLabel(latestDecision.decision_value)}</strong>. Final limit: {formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)}.
+            </p>
+          ) : (
+            <p className="note">No user-recorded commercial decision has been attached yet. Decisions are audit logged and linked to score evidence.</p>
+          )}
+        </div>
+        <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
+          Record decision
         </Link>
       </section>
 

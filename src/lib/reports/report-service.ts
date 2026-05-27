@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { sanitiseCompanyNumber } from "../companies/companies-house-normalisers";
 import { DatabaseConfigurationError, getDatabasePool } from "../db/client";
 import type { ManualAdverseEventRecord } from "../adverse/manual-adverse-event-service";
+import type { DecisionRecordValue, PersistedDecisionValue } from "../decisions/decision-service";
 import type { ConfidenceLevel, ReasonDirection, RiskBand, ScoreReasonCode } from "../../types/creditshark";
 
 export const REPORT_INCLUDED_SECTIONS = [
@@ -69,6 +70,21 @@ export interface ReportRecommendation {
   limit_cap_reason: string | null;
 }
 
+export interface ReportDecision {
+  id: string;
+  score_run_id: string;
+  credit_recommendation_id: string | null;
+  decision: PersistedDecisionValue;
+  decision_value: DecisionRecordValue;
+  requested_limit: string | number | null;
+  recommended_limit: string | number | null;
+  approved_limit: string | number | null;
+  currency: string;
+  reviewer_notes: string;
+  override_reason: string | null;
+  decided_at: string;
+}
+
 export interface ReportFiling {
   id: string;
   filing_type: string | null;
@@ -92,6 +108,7 @@ export interface ReportExportRecord {
   company_id: string;
   snapshot_id: string;
   score_run_id: string;
+  decision_record_id: string | null;
   report_type: "trade_risk_report";
   file_path: string | null;
   file_hash: string | null;
@@ -106,6 +123,7 @@ export interface ReportViewModel {
   scoreRun: ReportScoreRun;
   reasonCodes: ScoreReasonCode[];
   recommendation: ReportRecommendation | null;
+  latestDecision: ReportDecision | null;
   modelVersion: { id: string; version: string; change_note: string };
   filings: ReportFiling[];
   charges: ReportCharge[];
@@ -181,6 +199,7 @@ export async function getLatestReportDataForCompany(companyNumberInput: string, 
       manualResult,
       officerResult,
       pscResult,
+      decisionResult,
       exportResult
     ] = await Promise.all([
       pool.query<ReportSnapshot>(
@@ -255,9 +274,34 @@ export async function getLatestReportDataForCompany(companyNumberInput: string, 
          from company_pscs where snapshot_id = $1`,
         [scoreRun.snapshot_id]
       ),
+      pool.query<ReportDecision>(
+        `select
+          decision_records.id,
+          decision_records.score_run_id,
+          decision_records.credit_recommendation_id,
+          decision_records.decision,
+          case decision_records.decision
+            when 'approve' then 'approve_within_recommended_limit'
+            when 'refer' then 'refer_for_review'
+            else 'decline_or_prepayment_only'
+          end as decision_value,
+          decision_records.requested_limit,
+          credit_recommendations.recommended_limit,
+          decision_records.approved_limit,
+          decision_records.currency,
+          decision_records.reviewer_notes,
+          decision_records.override_reason,
+          decision_records.decided_at::text
+         from decision_records
+         left join credit_recommendations on credit_recommendations.id = decision_records.credit_recommendation_id
+         where decision_records.company_id = $1
+         order by decision_records.decided_at desc
+         limit 1`,
+        [company.id]
+      ),
       exportId
         ? pool.query<ReportExportRecord>(
-          `select id, company_id, snapshot_id, score_run_id, report_type, file_path, file_hash,
+          `select id, company_id, snapshot_id, score_run_id, decision_record_id, report_type, file_path, file_hash,
             exported_by, exported_at::text, included_sections_json
            from report_exports where id = $1 and company_id = $2`,
           [exportId, company.id]
@@ -289,6 +333,7 @@ export async function getLatestReportDataForCompany(companyNumberInput: string, 
         scoreRun,
         reasonCodes,
         recommendation: recommendationResult.rows[0] ?? null,
+        latestDecision: decisionResult.rows[0] ?? null,
         modelVersion: modelResult.rows[0] ?? { id: scoreRun.model_version_id, version: "Unknown", change_note: "Not available" },
         filings: filingResult.rows,
         charges: chargeResult.rows,
@@ -319,17 +364,21 @@ export async function createReportExportRecord(input: CreateReportExportInput): 
     try {
       await client.query("begin");
       const fileHash = hashReportContext(reportData.data);
+      const decisionRecordId = reportData.data.latestDecision?.score_run_id === reportData.data.scoreRun.id
+        ? reportData.data.latestDecision.id
+        : null;
       const exportResult = await client.query<ReportExportRecord>(
         `insert into report_exports (
           company_id, snapshot_id, score_run_id, decision_record_id, report_type,
           file_path, file_hash, exported_by, included_sections_json
-        ) values ($1, $2, $3, null, $4, null, $5, $6, $7)
-        returning id, company_id, snapshot_id, score_run_id, report_type, file_path,
+        ) values ($1, $2, $3, $4, $5, null, $6, $7, $8)
+        returning id, company_id, snapshot_id, score_run_id, decision_record_id, report_type, file_path,
           file_hash, exported_by, exported_at::text, included_sections_json`,
         [
           reportData.data.company.id,
           reportData.data.snapshot.id,
           reportData.data.scoreRun.id,
+          decisionRecordId,
           "trade_risk_report",
           fileHash,
           input.actorId ?? "anonymous_user",
@@ -353,6 +402,7 @@ export async function createReportExportRecord(input: CreateReportExportInput): 
             reportExportId: record.id,
             snapshotId: reportData.data.snapshot.id,
             scoreRunId: reportData.data.scoreRun.id,
+            decisionRecordId,
             createdVia: input.createdVia ?? "report_service"
           }))
         ]
@@ -374,7 +424,7 @@ export async function getReportExportRecord(exportId: string): Promise<ReportSer
   try {
     const pool = getDatabasePool();
     const result = await pool.query<ReportExportRecord>(
-      `select id, company_id, snapshot_id, score_run_id, report_type, file_path, file_hash,
+      `select id, company_id, snapshot_id, score_run_id, decision_record_id, report_type, file_path, file_hash,
         exported_by, exported_at::text, included_sections_json
        from report_exports where id = $1`,
       [exportId]
@@ -393,6 +443,7 @@ export function buildReportViewModel(input: {
   scoreRun: ReportScoreRun;
   reasonCodes: ScoreReasonCode[];
   recommendation: ReportRecommendation | null;
+  latestDecision: ReportDecision | null;
   modelVersion: { id: string; version: string; change_note: string };
   filings: ReportFiling[];
   charges: ReportCharge[];
@@ -435,6 +486,7 @@ export function createReportExportAuditMetadata(input: {
   reportExportId: string;
   snapshotId: string;
   scoreRunId: string;
+  decisionRecordId?: string | null;
   createdVia: string;
 }): Record<string, unknown> {
   return {
@@ -442,6 +494,7 @@ export function createReportExportAuditMetadata(input: {
     report_export_id: input.reportExportId,
     snapshot_id: input.snapshotId,
     score_run_id: input.scoreRunId,
+    decision_record_id: input.decisionRecordId ?? null,
     report_type: "trade_risk_report",
     included_sections: REPORT_INCLUDED_SECTIONS,
     created_via: input.createdVia
@@ -455,6 +508,7 @@ function hashReportContext(report: ReportViewModel): string {
       company_number: report.company.company_number,
       snapshot_id: report.snapshot.id,
       score_run_id: report.scoreRun.id,
+      decision_record_id: report.latestDecision?.id ?? null,
       model_version: report.modelVersion.version,
       included_sections: REPORT_INCLUDED_SECTIONS
     }))

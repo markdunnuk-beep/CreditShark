@@ -7,6 +7,7 @@ import {
   type ReportFiling,
   type ReportViewModel
 } from "../../../../src/lib/reports/report-service";
+import { formatDecisionLabel, formatDecisionMoney } from "../../../../src/lib/decisions/decision-service";
 import type { ManualAdverseEventRecord } from "../../../../src/lib/adverse/manual-adverse-event-service";
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
 import { createReportExportAction } from "./actions";
@@ -88,6 +89,7 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
             <ReportDetail label="Snapshot timestamp" value={formatDateTime(data.snapshot.source_fetched_at)} />
             <ReportDetail label="Score run timestamp" value={formatDateTime(data.scoreRun.run_at)} />
             <ReportDetail label="Report export id" value={data.exportRecord?.id ?? "Not recorded yet"} />
+            <ReportDetail label="Linked decision id" value={data.exportRecord?.decision_record_id ?? data.latestDecision?.id ?? "Not recorded yet"} />
           </dl>
           <p className="report-disclaimer report-disclaimer--compact">{CREDITSHARK_PRODUCT_GUARDRAIL}</p>
         </section>
@@ -110,6 +112,29 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
           ) : null}
           <ReasonSummary title="Top positive reasons" reasons={data.summaries.topPositiveReasons} />
           <ReasonSummary title="Top negative reasons" reasons={data.summaries.topNegativeReasons} />
+        </section>
+
+        <section className="report-section">
+          <h2>Latest recorded commercial decision</h2>
+          {data.latestDecision ? (
+            <>
+              <p className="report-disclaimer report-disclaimer--compact">
+                This is a user-recorded commercial decision. CreditShark provided advisory evidence only and did not approve, decline, lend or broker credit.
+              </p>
+              <dl className="report-kv-grid">
+                <ReportDetail label="Recorded decision" value={formatDecisionLabel(data.latestDecision.decision_value)} />
+                <ReportDetail label="Requested limit" value={formatDecisionMoney(data.latestDecision.requested_limit, data.latestDecision.currency)} />
+                <ReportDetail label="Recommended limit" value={formatDecisionMoney(data.latestDecision.recommended_limit, data.latestDecision.currency)} />
+                <ReportDetail label="Final approved limit" value={formatDecisionMoney(data.latestDecision.approved_limit, data.latestDecision.currency)} />
+                <ReportDetail label="Decided timestamp" value={formatDateTime(data.latestDecision.decided_at)} />
+                <ReportDetail label="Linked score run" value={data.latestDecision.score_run_id} />
+              </dl>
+              <p className="manual-source-note"><strong>Reviewer notes:</strong> {summarise(data.latestDecision.reviewer_notes)}</p>
+              {data.latestDecision.override_reason ? <p className="report-warning"><strong>Override reason:</strong> {data.latestDecision.override_reason}</p> : null}
+            </>
+          ) : (
+            <p className="note">No user-recorded decision is attached to this company yet.</p>
+          )}
         </section>
 
         <section className="report-section">
@@ -348,4 +373,8 @@ function formatAge(months: number | null): string {
   const remainingMonths = months % 12;
   if (years === 0) return `${remainingMonths} month${remainingMonths === 1 ? "" : "s"}`;
   return `${years} year${years === 1 ? "" : "s"} ${remainingMonths} month${remainingMonths === 1 ? "" : "s"}`;
+}
+
+function summarise(value: string): string {
+  return value.length > 260 ? `${value.slice(0, 257)}...` : value;
 }
