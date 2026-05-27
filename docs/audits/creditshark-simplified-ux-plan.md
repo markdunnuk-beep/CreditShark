@@ -4,6 +4,8 @@ Plan date: 27 May 2026
 
 Purpose: define the target route map, navigation model, company workspace structure, copy rules and staged simplification backlog for CreditShark.
 
+Interpretation note: this plan should be read alongside `docs/brand/creditshark-brand-system.md` and `docs/audits/creditshark-ia-brand-alignment-addendum.md`. The brand system is the source of truth for future design, score-display, risk-label and copy decisions.
+
 ## A. Target Route Map
 
 Public routes:
