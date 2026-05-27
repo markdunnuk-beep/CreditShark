@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { createCompanySnapshotFromCompaniesHouse } from "../../../src/lib/companies/company-snapshot-service";
 import type { CompanySnapshotStage, CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../src/lib/guardrails";
 import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manual-adverse-event-service";
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../src/lib/decisions/decision-service";
+import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../src/lib/history/score-history-service";
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
 import type { ScoreReasonCode } from "../../../src/types/creditshark";
 
@@ -27,6 +28,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
   });
   const manualEventsResult = await getManualAdverseEventsForCompany(result.data.company.company_number);
   const latestDecisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
+  const scoreHistoryResult = await getScoreHistorySummary(result.data.company.company_number);
 
   return (
     <CompanyProfile
@@ -35,6 +37,7 @@ export default async function CompanyProfilePage({ params }: { params: Promise<{
       scoreError={scoreResult.ok ? null : scoreResult.error.message}
       activeManualEventCount={manualEventsResult.ok ? manualEventsResult.data.activeEvents.length : 0}
       latestDecision={latestDecisionResult.ok ? latestDecisionResult.data.decision : null}
+      scoreHistory={scoreHistoryResult.ok ? scoreHistoryResult.data : null}
     />
   );
 }
@@ -44,13 +47,15 @@ function CompanyProfile({
   scoreResult,
   scoreError,
   activeManualEventCount,
-  latestDecision
+  latestDecision,
+  scoreHistory
 }: {
   data: CreatedCompanySnapshot;
   scoreResult: ScoreRunResult | null;
   scoreError: string | null;
   activeManualEventCount: number;
   latestDecision: DecisionRecord | null;
+  scoreHistory: ScoreHistoryViewModel | null;
 }) {
   const company = data.company;
   const snapshot = data.snapshot;
@@ -62,11 +67,11 @@ function CompanyProfile({
     <section className="page-shell">
       <div className="profile-header">
         <div>
-          <p className="eyebrow">Company profile</p>
-          <h1 className="page-title">{company.company_name}</h1>
-          <p className="lede">
-            Source-timestamped Companies House snapshot for UK limited-company trade-risk screening.
-          </p>
+        <p className="eyebrow">Company profile</p>
+        <h1 className="page-title">{company.company_name}</h1>
+        <p className="lede">
+            Latest CreditShark check using a fresh Companies House snapshot and current advisory scoring context.
+        </p>
         </div>
         <div className="profile-actions">
           <Link className="button-secondary" href="/search">
@@ -79,7 +84,7 @@ function CompanyProfile({
       </div>
 
       <div className="status-note status-note--compact">
-        Latest Companies House snapshot captured {formatDateTime(data.sourceFetchedAt)}. Refreshing creates a new point-in-time snapshot.
+        Latest check captured {formatDateTime(data.sourceFetchedAt)}. This is the current advisory risk view; previous checks remain available in score history.
       </div>
 
       <div className="decision-layout">
@@ -131,6 +136,9 @@ function CompanyProfile({
             </Link>
             <Link className="button-secondary" href={`/companies/${company.company_number}/report`}>
               Preview report
+            </Link>
+            <Link className="button-secondary" href={historyRoute(company.company_number)}>
+              View score history
             </Link>
             <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
               Record decision
@@ -185,6 +193,9 @@ function CompanyProfile({
             <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
               Preview report
             </Link>
+            <Link className="button-secondary" href={historyRoute(company.company_number)}>
+              Score history
+            </Link>
             <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
               Record decision
             </Link>
@@ -212,6 +223,25 @@ function CompanyProfile({
         </div>
         <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
           Review manual data
+        </Link>
+      </section>
+
+      <section className="card score-section manual-profile-card">
+        <div>
+          <div className="section-heading">
+            <h2>Score history</h2>
+            <span className="badge">Latest check</span>
+          </div>
+          {scoreHistory?.latest ? (
+            <p className="note">
+              Latest check: <strong>{scoreHistory.latest.score ?? "NS"}</strong>. Previous check: <strong>{scoreHistory.previous?.score ?? "Not available"}</strong>. {scoreHistory.movement.message}
+            </p>
+          ) : (
+            <p className="note">No score history is available yet beyond the current page load.</p>
+          )}
+        </div>
+        <Link className="button-secondary" href={historyRoute(company.company_number)}>
+          View score history
         </Link>
       </section>
 
@@ -367,6 +397,10 @@ function formatRiskBand(value: string): string {
 
 function formatStage(value: string): string {
   return value.replace(/_/g, " ");
+}
+
+function historyRoute(companyNumber: string): Route {
+  return `/companies/${companyNumber}/history` as Route;
 }
 
 function formatSignedNumber(value: number): string {

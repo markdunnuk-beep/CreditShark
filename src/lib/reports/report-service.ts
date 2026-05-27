@@ -3,6 +3,7 @@ import { sanitiseCompanyNumber } from "../companies/companies-house-normalisers"
 import { DatabaseConfigurationError, getDatabasePool } from "../db/client";
 import type { ManualAdverseEventRecord } from "../adverse/manual-adverse-event-service";
 import type { DecisionRecordValue, PersistedDecisionValue } from "../decisions/decision-service";
+import { getScoreHistorySummary, type ScoreMovementSummary } from "../history/score-history-service";
 import type { ConfidenceLevel, ReasonDirection, RiskBand, ScoreReasonCode } from "../../types/creditshark";
 
 export const REPORT_INCLUDED_SECTIONS = [
@@ -124,6 +125,7 @@ export interface ReportViewModel {
   reasonCodes: ScoreReasonCode[];
   recommendation: ReportRecommendation | null;
   latestDecision: ReportDecision | null;
+  scoreHistoryMovement: ScoreMovementSummary | null;
   modelVersion: { id: string; version: string; change_note: string };
   filings: ReportFiling[];
   charges: ReportCharge[];
@@ -325,6 +327,8 @@ export async function getLatestReportDataForCompany(companyNumberInput: string, 
       explanation: reason.explanation
     }));
 
+    const historyResult = await getScoreHistorySummary(company.company_number);
+
     return {
       ok: true,
       data: buildReportViewModel({
@@ -334,6 +338,7 @@ export async function getLatestReportDataForCompany(companyNumberInput: string, 
         reasonCodes,
         recommendation: recommendationResult.rows[0] ?? null,
         latestDecision: decisionResult.rows[0] ?? null,
+        scoreHistoryMovement: historyResult.ok ? historyResult.data.movement : null,
         modelVersion: modelResult.rows[0] ?? { id: scoreRun.model_version_id, version: "Unknown", change_note: "Not available" },
         filings: filingResult.rows,
         charges: chargeResult.rows,
@@ -444,6 +449,7 @@ export function buildReportViewModel(input: {
   reasonCodes: ScoreReasonCode[];
   recommendation: ReportRecommendation | null;
   latestDecision: ReportDecision | null;
+  scoreHistoryMovement: ScoreMovementSummary | null;
   modelVersion: { id: string; version: string; change_note: string };
   filings: ReportFiling[];
   charges: ReportCharge[];

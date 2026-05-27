@@ -115,6 +115,23 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
         </section>
 
         <section className="report-section">
+          <h2>Score history context</h2>
+          {data.scoreHistoryMovement ? (
+            <>
+              <dl className="report-kv-grid">
+                <ReportDetail label="Latest score" value={data.scoreHistoryMovement.latestScore == null ? "Not scored" : String(data.scoreHistoryMovement.latestScore)} />
+                <ReportDetail label="Previous score" value={data.scoreHistoryMovement.previousScore == null ? "Not available" : String(data.scoreHistoryMovement.previousScore)} />
+                <ReportDetail label="Movement" value={data.scoreHistoryMovement.message} />
+              </dl>
+              {data.scoreHistoryMovement.bandMessage ? <p className="note">{data.scoreHistoryMovement.bandMessage}</p> : null}
+              <p className="note">Full score history is available in the app. Historical rows are prior CreditShark checks, not the current risk view.</p>
+            </>
+          ) : (
+            <p className="note">Score history context is not available for this report preview.</p>
+          )}
+        </section>
+
+        <section className="report-section">
           <h2>Latest recorded commercial decision</h2>
           {data.latestDecision ? (
             <>

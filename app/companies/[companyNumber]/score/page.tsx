@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { CREDITSHARK_PRODUCT_GUARDRAIL } from "../../../../src/lib/guardrails";
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../../src/lib/decisions/decision-service";
+import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../../src/lib/history/score-history-service";
 import { getLatestScoreRunForCompany, type ScoreRunResult } from "../../../../src/lib/scoring/scoring-service";
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
 
@@ -20,10 +21,11 @@ export default async function CompanyScorePage({ params }: { params: Promise<{ c
   }
 
   const decisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
-  return <ScoreExplanation data={result.data} latestDecision={decisionResult.ok ? decisionResult.data.decision : null} />;
+  const historyResult = await getScoreHistorySummary(result.data.company.company_number);
+  return <ScoreExplanation data={result.data} latestDecision={decisionResult.ok ? decisionResult.data.decision : null} scoreHistory={historyResult.ok ? historyResult.data : null} />;
 }
 
-function ScoreExplanation({ data, latestDecision }: { data: ScoreRunResult; latestDecision: DecisionRecord | null }) {
+function ScoreExplanation({ data, latestDecision, scoreHistory }: { data: ScoreRunResult; latestDecision: DecisionRecord | null; scoreHistory: ScoreHistoryViewModel | null }) {
   const groupedReasons = groupReasonsByGroup(data.reasonCodes);
   const manualReasons = data.reasonCodes.filter((reason) => reason.group === "manual_adverse_events");
   const positiveReasons = data.reasonCodes.filter((reason) => reason.direction === "positive");
@@ -38,17 +40,20 @@ function ScoreExplanation({ data, latestDecision }: { data: ScoreRunResult; late
           <p className="eyebrow">Score explanation</p>
           <h1 className="page-title">{data.company.company_name}</h1>
           <p className="lede">
-            Source-linked advisory score for the latest Companies House snapshot and active manual data where present.
+            Source-linked advisory score for the latest CreditShark check, using the current Companies House snapshot and active manual data where present.
           </p>
         </div>
         <div className="profile-actions">
           <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
             Back to profile
           </Link>
-          <Link className="button-primary" href={`/companies/${data.company.company_number}`}>
-            Refresh snapshot and rerun score
-          </Link>
-        </div>
+            <Link className="button-primary" href={`/companies/${data.company.company_number}`}>
+              Refresh snapshot and rerun score
+            </Link>
+            <Link className="button-secondary" href={historyRoute(data.company.company_number)}>
+              Score history
+            </Link>
+          </div>
       </div>
 
       <div className="score-explanation-grid">
@@ -87,9 +92,20 @@ function ScoreExplanation({ data, latestDecision }: { data: ScoreRunResult; late
             <Link className="button-secondary" href={`/companies/${data.company.company_number}/decision`}>
               Record decision
             </Link>
+            <Link className="button-secondary" href={historyRoute(data.company.company_number)}>
+              View score history
+            </Link>
           </div>
         </aside>
       </div>
+
+      {scoreHistory?.previous ? (
+        <div className="status-note status-note--compact">
+          Previous check: {scoreHistory.previous.score ?? "NS"}. {scoreHistory.movement.message}
+        </div>
+      ) : (
+        <div className="status-note status-note--compact">This is the latest score explanation. Historical score runs are available as checks accumulate.</div>
+      )}
 
       {latestDecision ? (
         <section className="card score-section">
@@ -313,4 +329,8 @@ function sourceChipVariant(value: string): string {
   if (value.includes("companies_house")) return "companies-house";
   if (value.includes("model")) return "model";
   return "evidence";
+}
+
+function historyRoute(companyNumber: string): Route {
+  return `/companies/${companyNumber}/history` as Route;
 }

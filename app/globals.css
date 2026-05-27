@@ -1225,6 +1225,67 @@ dd {
   margin: 8px 0 0;
 }
 
+.history-table-wrap {
+  margin-top: 18px;
+  overflow-x: auto;
+}
+
+.history-table {
+  border-collapse: collapse;
+  min-width: 980px;
+  width: 100%;
+}
+
+.history-table th,
+.history-table td {
+  border-bottom: 1px solid var(--border-soft);
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.history-table th {
+  color: var(--ocean-800);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.history-table td {
+  color: var(--slate-600);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.history-table td strong {
+  color: var(--ocean-950);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.table-actions a {
+  color: var(--ocean-800);
+  font-weight: 850;
+}
+
+.score-trend {
+  display: block;
+  height: 160px;
+  width: 100%;
+}
+
+.score-trend polyline {
+  stroke: var(--ocean-600);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
 .latest-decision-compact {
   display: grid;
   gap: 8px;
