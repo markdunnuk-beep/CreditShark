@@ -4,7 +4,7 @@ import { PlatformShell } from "../components/platform-shell";
 import { COMPANIES_HOUSE_EVIDENCE_LABEL, SOURCE_LINKED_EVIDENCE_LABEL } from "../../src/lib/guardrails";
 import { createCompaniesHouseClient } from "../../src/lib/companies-house/client";
 import type { CompaniesHouseSearchItem } from "../../src/types/companies-house";
-import { Badge, Card } from "../components/ui";
+import { Badge, Button, ButtonLink, Card, EvidenceChip, Field, Notice, TextInput } from "../components/ui";
 
 export const metadata: Metadata = {
   title: "Search"
@@ -32,25 +32,15 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       <Card className="search-panel search-panel--polished">
         <form action="/search" className="search-form" method="get">
-          <label className="sr-only" htmlFor="company-search">
-            Company name or Companies House number
-          </label>
-          <input
-            className="search-input"
-            defaultValue={query}
-            id="company-search"
-            name="query"
-            placeholder="Company name or Companies House number"
-            type="search"
-          />
-          <button className="button-primary" type="submit">
-            Search
-          </button>
+          <Field className="search-field" label="Company name or Companies House number">
+            <TextInput defaultValue={query} id="company-search" name="query" placeholder="Company name or Companies House number" type="search" />
+          </Field>
+          <Button type="submit">Search</Button>
         </form>
         <div className="search-hints" aria-label="Search guidance">
-          <span>UK limited companies only</span>
-          <span>{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
-          <span>{SOURCE_LINKED_EVIDENCE_LABEL}</span>
+          <Badge>UK limited companies only</Badge>
+          <EvidenceChip sourceType="companies_house" label={COMPANIES_HOUSE_EVIDENCE_LABEL} />
+          <EvidenceChip sourceType="model" label={SOURCE_LINKED_EVIDENCE_LABEL} />
         </div>
       </Card>
 
@@ -81,20 +71,18 @@ async function searchCompanies(query: string): Promise<
 
 function InitialEmptyState() {
   return (
-    <div className="empty-state empty-state--search">
-      <strong>Search by company name or Companies House number.</strong>
+    <Notice className="empty-state--search" variant="info" title="Search by company name or Companies House number.">
       <div>Use exact company number for the cleanest match. Search results do not create snapshots until you open a profile.</div>
-    </div>
+    </Notice>
   );
 }
 
 function ErrorState({ message }: { message: string }) {
   return (
-    <div className="error-note" role="alert">
-      <strong>Search unavailable.</strong>
+    <Notice variant="error" title="Search unavailable">
       <div>{message}</div>
       <div>Try again later or check that server-side Companies House configuration is available.</div>
-    </div>
+    </Notice>
   );
 }
 
@@ -135,9 +123,9 @@ function SearchResults({ query, items }: { query: string; items: CompaniesHouseS
                 <ResultField label="Created" value={formatValue(item.date_of_creation)} />
                 <ResultField label="Location" value={formatAddress(item)} wide />
               </div>
-              <Link className="button-secondary result-action" href={`/companies/${item.company_number}`}>
+              <ButtonLink className="result-action" variant="secondary" href={`/companies/${item.company_number}`}>
                 Open profile
-              </Link>
+              </ButtonLink>
             </article>
           );
         })}

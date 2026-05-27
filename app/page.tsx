@@ -1,96 +1,93 @@
-import Link from "next/link";
+import {
+  ActionGroup,
+  Badge,
+  ButtonLink,
+  Card,
+  EvidenceChip,
+  MetricCard,
+  Notice,
+  SectionHeader,
+  TradeRiskScoreGauge
+} from "./components/ui";
 
 export default function HomePage() {
   return (
     <>
       <section className="page-shell hero public-hero">
         <div className="hero-copy">
-          <p className="eyebrow">Source-linked trade-risk screening</p>
-          <h1>UK company credit checks before you trade</h1>
+          <p className="eyebrow">Trade Risk. Calmly Managed.</p>
+          <h1>Clear company credit insight for growing SMEs</h1>
           <p className="lede">
-            Review UK limited companies with Companies House evidence, transparent reason codes, manual adverse data where needed,
-            and audit-ready advisory reports.
+            CreditShark helps you understand who you are trading with, spot visible risk signals earlier,
+            protect cash flow and record practical commercial decisions without unnecessary complexity.
           </p>
-          <div className="actions hero-actions">
-            <Link className="button-primary" href="/search">
-              Check a company
-            </Link>
-            <Link className="button-secondary" href="/companies/00445790/report">
-              View sample report
-            </Link>
-          </div>
-          <p className="compact-guardrail">Trade Risk. Calmly Managed.</p>
+          <ActionGroup className="actions hero-actions">
+            <ButtonLink href="/search">Check a company</ButtonLink>
+            <ButtonLink href="/app" variant="secondary">View platform dashboard</ButtonLink>
+          </ActionGroup>
+          <Notice variant="info" className="public-hero-note">
+            Built for UK limited-company trade-risk screening, with source-linked evidence and advisory reports.
+          </Notice>
         </div>
 
-        <aside className="report-preview-card" aria-label="CreditShark product preview">
-          <div className="preview-header">
-            <div>
-              <p className="eyebrow">Example report preview</p>
-              <h2>Decision summary first</h2>
+        <Card className="report-preview-card public-product-preview" aria-label="CreditShark product preview">
+          <SectionHeader
+            eyebrow="Company risk workspace"
+            title="Current trade-risk view"
+            description="A calm summary before you review deeper evidence."
+            action={<Badge variant="info">Advisory</Badge>}
+          />
+          <div className="public-preview-grid">
+            <TradeRiskScoreGauge
+              score={76}
+              rating="Moderate Risk"
+              interpretation="Some indicators may need review before increasing exposure."
+              lastUpdated="latest check"
+            />
+            <div className="public-preview-metrics">
+              <MetricCard label="Recommended limit" value="£7,500" helper="Advisory indicator" />
+              <MetricCard label="Confidence" value="Medium" helper="Source freshness visible" />
             </div>
-            <span className="risk-badge risk-badge--low">Low risk</span>
-          </div>
-          <div className="preview-score-row">
-            <div>
-              <span className="preview-label">Advisory score</span>
-              <strong>72</strong>
-            </div>
-            <div>
-              <span className="preview-label">Recommended limit</span>
-              <strong>£10,000</strong>
-            </div>
-          </div>
-          <div className="preview-reasons" aria-label="Example report evidence">
-            <PreviewReason label="Active company" meta="Companies House evidence" tone="positive" />
-            <PreviewReason label="Latest accounts date available" meta="Source-linked reason" tone="positive" />
-            <PreviewReason label="Manual adverse data" meta="Labelled separately" tone="manual" />
           </div>
           <div className="preview-footer">
-            <span className="source-chip">Model v1.0.0</span>
-            <span className="source-chip">Exportable report</span>
+            <EvidenceChip sourceType="companies_house" label="Companies House evidence" />
+            <EvidenceChip sourceType="model" label="Source-linked reasons" />
+            <EvidenceChip sourceType="decision" label="User-recorded decision" />
+            <EvidenceChip sourceType="report" label="Report preview" />
           </div>
-        </aside>
+        </Card>
       </section>
 
       <section className="page-shell public-section">
-        <div className="proof-row" aria-label="CreditShark trust signals">
-          <ProofItem title="Companies House evidence" body="Profiles, filings, charges, officers and PSC context." />
-          <ProofItem title="Transparent scoring" body="Rule-based scores with reason codes and source dates." />
-          <ProofItem title="Manual review" body="Manual adverse data is labelled and reviewable." />
-          <ProofItem title="Audit-ready reports" body="Snapshot, model and score-run context preserved." />
+        <div className="proof-row public-benefit-row" aria-label="CreditShark SME benefits">
+          <ProofItem title="Understand who you trade with" body="Start from UK limited-company evidence and a clear current-risk summary." />
+          <ProofItem title="Spot risk earlier" body="Review filings, charges, score reasons, manual data labels and score movement." />
+          <ProofItem title="Protect cash flow" body="Use advisory limits and review factors to guide practical trading terms." />
+          <ProofItem title="Record decisions" body="Keep commercial decisions and report exports linked to the latest check." />
         </div>
       </section>
 
       <section className="page-shell public-section public-section--tight">
         <div className="section-intro">
-          <p className="eyebrow">Built for trade-risk review</p>
-          <h2>Clear evidence before a commercial decision</h2>
+          <p className="eyebrow">Practical SME workflow</p>
+          <h2>From company search to recorded decision</h2>
         </div>
         <div className="benefit-grid">
           <BenefitCard
-            title="Check company risk before you trade"
-            body="Search by company name or number and start from public UK limited-company evidence."
+            title="Search company"
+            body="Find a UK limited company by name or Companies House number."
           />
           <BenefitCard
-            title="See the reasons behind the score"
-            body="Review positive, negative and missing-data drivers before extending material credit."
+            title="Review risk signals"
+            body="See the advisory score, key reasons, missing data and source freshness."
           />
           <BenefitCard
-            title="Export an advisory report"
-            body="Create a print-ready report with timestamps, limitations, model version and audit context."
+            title="Record and monitor"
+            body="Record a commercial decision, export a report and add the company to your watchlist."
           />
         </div>
       </section>
     </>
-  );
-}
-
-function PreviewReason({ label, meta, tone }: { label: string; meta: string; tone: "positive" | "manual" }) {
-  return (
-    <div className={`preview-reason preview-reason--${tone}`}>
-      <span>{label}</span>
-      <small>{meta}</small>
-    </div>
   );
 }
 

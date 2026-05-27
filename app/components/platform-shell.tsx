@@ -1,5 +1,6 @@
 import type { Route } from "next";
 import Link from "next/link";
+import { Badge, Notice } from "./ui";
 
 type PlatformNavKey = "dashboard" | "search" | "watchlist";
 
@@ -22,8 +23,9 @@ export function PlatformShell({
     <div className="platform-shell">
       <aside className="platform-sidebar" aria-label="Platform navigation">
         <div className="platform-sidebar__brand">
-          <span className="eyebrow">Platform</span>
+          <Badge variant="info">Platform</Badge>
           <strong>Trade Risk. Calmly Managed.</strong>
+          <small>Clear trade-risk work for UK SMEs.</small>
         </div>
         <nav className="platform-nav">
           {NAV_ITEMS.map((item) => (
@@ -38,7 +40,7 @@ export function PlatformShell({
             </Link>
           ))}
         </nav>
-        <div className="platform-sidebar__note">{note}</div>
+        <Notice className="platform-sidebar__note" variant="info">{note}</Notice>
       </aside>
       <div className="platform-content">{children}</div>
     </div>

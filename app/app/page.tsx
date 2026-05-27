@@ -11,7 +11,19 @@ import {
   type DashboardReportExport,
   type DashboardScoreMovement
 } from "../../src/lib/dashboard/dashboard-service";
-import { Card, MetricCard, RiskBadge } from "../components/ui";
+import {
+  Badge,
+  Button,
+  ButtonLink,
+  Card,
+  DetailList,
+  Field,
+  MetricCard,
+  Notice,
+  RiskBadge,
+  SectionHeader,
+  TextInput
+} from "../components/ui";
 
 export const metadata: Metadata = {
   title: "Dashboard"
@@ -34,33 +46,24 @@ export default async function DashboardPage() {
               Search companies, review recent checks, monitor your watchlist and continue trade-risk decisions.
             </p>
           </div>
-          <Link className="button-secondary" href="/watchlist">
+          <ButtonLink variant="secondary" href="/watchlist">
             View watchlist
-          </Link>
+          </ButtonLink>
         </div>
 
-        <section className="card dashboard-search-card" aria-label="Company search">
+        <Card className="dashboard-search-card" aria-label="Company search">
           <div>
             <p className="eyebrow">Company search</p>
             <h2>Check who you are trading with</h2>
             <p className="note">Search by company name or Companies House number.</p>
           </div>
           <form action="/search" className="dashboard-search-form" method="get">
-            <label className="sr-only" htmlFor="dashboard-company-search">
-              Company name or Companies House number
-            </label>
-            <input
-              className="search-input"
-              id="dashboard-company-search"
-              name="query"
-              placeholder="Company name or Companies House number"
-              type="search"
-            />
-            <button className="button-primary" type="submit">
-              Search company
-            </button>
+            <Field className="dashboard-search-field" label="Company name or Companies House number">
+              <TextInput id="dashboard-company-search" name="query" placeholder="Company name or Companies House number" type="search" />
+            </Field>
+            <Button type="submit">Search company</Button>
           </form>
-        </section>
+        </Card>
 
         {!result.ok ? <DashboardConfigurationState message={result.error.message} /> : <DashboardOverviewView data={result.data} />}
       </section>
@@ -130,35 +133,31 @@ function DashboardOverviewView({ data }: { data: DashboardOverview }) {
         </DashboardPanel>
       </div>
 
-      <section className="card monitoring-note-card">
+      <Card className="monitoring-note-card">
         <div>
-          <div className="section-heading">
-            <h2>Monitoring note</h2>
-            <span className="badge">Later phase</span>
-          </div>
+          <SectionHeader title="Monitoring note" action={<Badge>Later phase</Badge>} />
           <p className="note">Automated monitoring and alerts are planned for a later phase.</p>
         </div>
-        <dl className="detail-grid detail-grid--compact">
-          <Detail label="Monitoring events" value={String(data.monitoringSummary.totalEvents)} />
-          <Detail label="Review events" value={String(data.monitoringSummary.reviewEvents)} />
-          <Detail label="Material events" value={String(data.monitoringSummary.materialEvents)} />
-          <Detail label="Latest event" value={formatDateTime(data.monitoringSummary.latestDetectedAt)} />
-        </dl>
-      </section>
+        <DetailList compact items={[
+          { label: "Monitoring events", value: String(data.monitoringSummary.totalEvents) },
+          { label: "Review events", value: String(data.monitoringSummary.reviewEvents) },
+          { label: "Material events", value: String(data.monitoringSummary.materialEvents) },
+          { label: "Latest event", value: formatDateTime(data.monitoringSummary.latestDetectedAt) }
+        ]} />
+      </Card>
     </>
   );
 }
 
 function DashboardConfigurationState({ message }: { message: string }) {
   return (
-    <div className="empty-state dashboard-empty-state">
-      <strong>Dashboard data is not configured yet.</strong>
+    <Notice className="dashboard-empty-state" variant="info" title="Dashboard data is not configured yet.">
       <div>{message}</div>
       <div>Company search remains available. Recent checks, watchlist, decisions and reports will appear when the database is available.</div>
-      <Link className="button-primary" href="/search">
+      <ButtonLink href="/search">
         Search companies
-      </Link>
-    </div>
+      </ButtonLink>
+    </Notice>
   );
 }
 
@@ -169,10 +168,7 @@ function SummaryCard({ label, value }: { label: string; value: number }) {
 function DashboardPanel({ title, badge, children }: { title: string; badge: string; children: React.ReactNode }) {
   return (
     <Card className="dashboard-panel">
-      <div className="section-heading">
-        <h2>{title}</h2>
-        <span className="badge">{badge}</span>
-      </div>
+      <SectionHeader title={title} action={<Badge>{badge}</Badge>} />
       {children}
     </Card>
   );

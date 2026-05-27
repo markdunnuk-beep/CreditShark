@@ -12,14 +12,14 @@ const variantClasses: Record<CardVariant, string> = {
 export function Card({
   variant = "default",
   className,
-  children
-}: {
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLElement> & {
   variant?: CardVariant;
-  className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className={cx("rounded-creditshark border p-6", variantClasses[variant], className)}>
+    <section className={cx("rounded-creditshark border p-6", variantClasses[variant], className)} {...props}>
       {children}
     </section>
   );
