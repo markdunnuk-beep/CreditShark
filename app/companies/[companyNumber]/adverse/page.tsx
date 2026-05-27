@@ -46,10 +46,19 @@ export default async function ManualAdversePage({
     <section className="company-tab-page">
       <Notice notices={notices} />
 
-      <div className="manual-data-warning">
-        <strong>{MANUAL_DATA_INCLUDED_LABEL}.</strong>
-        <span>Manual entries are shown separately from Companies House evidence and included in the next advisory score run.</span>
-      </div>
+      <section className="card tab-section tab-section--primary">
+        <div className="tab-intro">
+          <div>
+            <p className="eyebrow">Adverse events</p>
+            <h2>Charges and manual records</h2>
+            <p className="note">Companies House charges and user-entered manual records are shown separately.</p>
+          </div>
+          <div className="compact-score-strip">
+            <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
+            <span className="badge manual-badge">{MANUAL_DATA_INCLUDED_LABEL}: {result.data.activeEvents.length}</span>
+          </div>
+        </div>
+      </section>
 
       <div className="adverse-grid">
         <section className="card evidence-card evidence-card--companies-house">
@@ -68,22 +77,20 @@ export default async function ManualAdversePage({
           </p>
         </section>
 
-        <section className="card ocean-card evidence-card evidence-card--manual">
+        <section className="card evidence-card evidence-card--manual">
           <div className="section-heading">
-            <h2>Manual data</h2>
+            <h2>Manual records</h2>
             <span className="badge manual-badge">{USER_ENTERED_RECORD_LABEL}</span>
           </div>
-          <p className="note">
-            Manual entries are shown separately from Companies House evidence and should be reviewed with the source note.
-          </p>
+          <p className="note">Manual records are user-entered and should be reviewed with their source notes.</p>
           <form action={rerunAction} className="stacked-form">
-            <button className="button-primary" type="submit">Re-run advisory score</button>
+            <button className="button-secondary" type="submit">Re-run advisory score</button>
             <p className="form-help">Uses the latest persisted snapshot and active manual events. It does not fetch a new Companies House snapshot.</p>
           </form>
         </section>
       </div>
 
-      <section className="card score-section">
+      <section className="card tab-section">
         <div className="section-heading">
           <h2>Active manual adverse events</h2>
           <span className="badge manual-badge">{result.data.activeEvents.length} active</span>
@@ -99,19 +106,17 @@ export default async function ManualAdversePage({
         )}
       </section>
 
-      <section className="card score-section">
-        <div className="section-heading">
-          <h2>Add manual adverse event</h2>
+      <details className="card tab-section collapsed-history">
+        <summary>
+          <span>Add manual adverse event</span>
           <span className="badge manual-badge">Manual data</span>
-        </div>
+        </summary>
         <ManualEventForm action={createAction} submitLabel="Add manual event" />
-        <p className="form-help">
-          Manual data affects the next advisory score run. Re-run scoring after adding or changing manual adverse data.
-        </p>
-      </section>
+        <p className="form-help">Manual data affects the next advisory score run. Re-run scoring after adding or changing manual adverse data.</p>
+      </details>
 
       {result.data.inactiveEvents.length > 0 ? (
-        <details className="card score-section inactive-history">
+        <details className="card tab-section inactive-history collapsed-history">
           <summary>
             <span>Superseded and inactive history</span>
             <span className="badge">{result.data.inactiveEvents.length} records</span>

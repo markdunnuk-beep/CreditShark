@@ -43,43 +43,41 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
     <section className="company-tab-page">
       <Notice notices={notices} />
 
+      <div className="in-tab-switch" aria-label="Reports and decisions">
+        <Link href={`/companies/${data.company.company_number}/report`}>Report preview</Link>
+        <Link aria-current="page" href={`/companies/${data.company.company_number}/decision`}>Record decision</Link>
+      </div>
+
       <div className="decision-record-grid">
-        <section className="card score-summary-card decision-summary-panel">
+        <section className="card tab-section">
           <div className="section-heading">
             <h2>Current advisory recommendation</h2>
             <span className={`risk-badge risk-badge--${data.scoreRun.risk_band}`}>{formatRiskBand(data.scoreRun.risk_band)}</span>
           </div>
           <dl className="detail-grid">
-            <Detail label="Company number" value={data.company.company_number} />
             <Detail label={ADVISORY_SCORE_LABEL} value={data.scoreRun.score == null ? "Not scored" : String(data.scoreRun.score)} />
             <Detail label="Confidence" value={formatValue(data.scoreRun.confidence_level)} />
             <Detail label="Recommended limit" value={formatDecisionMoney(recommendationLimit, data.scoreRun.currency)} />
             <Detail label="Model version" value={data.modelVersion.version} />
             <Detail label="Score run" value={formatDateTime(data.scoreRun.run_at)} />
           </dl>
-          <p className="note">
-            Decision linked to advisory score run <span className="secondary-id">{data.scoreRun.id}</span> and snapshot <span className="secondary-id">{data.snapshot.id}</span>.
-          </p>
-          <div className="action-bar">
-            <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
-              Review score evidence
-            </Link>
-            <Link className="button-secondary" href={`/companies/${data.company.company_number}/report`}>
-              View report
-            </Link>
-          </div>
+          <details className="secondary-audit-details secondary-audit-details--plain">
+            <summary>Linked audit details</summary>
+            <dl className="detail-grid detail-grid--compact">
+              <Detail label="Score run id" value={data.scoreRun.id} />
+              <Detail label="Snapshot id" value={data.snapshot.id} />
+            </dl>
+          </details>
         </section>
 
         <aside className="card ocean-card">
           <p className="eyebrow">{USER_RECORDED_DECISION_LABEL}</p>
-          <p className="note">
-            The user records any commercial decision. CreditShark provides advisory support only and preserves the evidence link.
-          </p>
+          <p className="note">The user records any commercial decision. CreditShark provides advisory support only.</p>
           {data.latestDecision ? <LatestDecisionCompact decision={data.latestDecision} /> : <p className="empty-state">No decision has been recorded for this company yet.</p>}
         </aside>
       </div>
 
-      <section className="card score-section">
+      <section className="card tab-section">
         <div className="section-heading">
           <h2>Record commercial decision</h2>
           <span className="badge">Audit logged</span>
@@ -87,7 +85,7 @@ function DecisionWorkflow({ data, notices }: { data: DecisionWorkflowData; notic
         <DecisionForm action={createAction} />
       </section>
 
-      <section className="card score-section">
+      <section className="card tab-section">
         <div className="section-heading">
           <h2>Decision history</h2>
           <span className="badge">{data.decisionHistory.length} records</span>

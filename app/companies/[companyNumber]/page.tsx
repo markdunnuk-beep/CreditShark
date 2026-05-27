@@ -3,12 +3,8 @@ import Link from "next/link";
 import { createCompanySnapshotFromCompaniesHouse } from "../../../src/lib/companies/company-snapshot-service";
 import type { CompanySnapshotStage, CreatedCompanySnapshot } from "../../../src/lib/companies/company-snapshot-service";
 import {
-  ADVISORY_SCORE_LABEL,
   COMPANIES_HOUSE_EVIDENCE_LABEL,
-  LATEST_CHECK_LABEL,
-  MANUAL_DATA_INCLUDED_LABEL,
-  SCORE_HISTORY_LABEL,
-  USER_RECORDED_DECISION_LABEL
+  MANUAL_DATA_INCLUDED_LABEL
 } from "../../../src/lib/guardrails";
 import { getManualAdverseEventsForCompany } from "../../../src/lib/adverse/manual-adverse-event-service";
 import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../src/lib/decisions/decision-service";
@@ -16,7 +12,6 @@ import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../src
 import { runAndPersistScoreForLatestSnapshot, type ScoreRunResult } from "../../../src/lib/scoring/scoring-service";
 import { getWatchlistItemForCompany, type WatchlistItem } from "../../../src/lib/watchlist/watchlist-service";
 import type { ScoreReasonCode } from "../../../src/types/creditshark";
-import { addCompanyToWatchlistAction, removeCompanyFromWatchlistAction } from "../../watchlist/actions";
 
 export const metadata: Metadata = {
   title: "Company profile"
@@ -78,36 +73,25 @@ function CompanyProfile({
 
   return (
     <section className="company-tab-page">
-      <div className="status-note status-note--compact">
-        Latest check captured {formatDateTime(data.sourceFetchedAt)}. This is the current advisory risk view; previous checks remain available in score history.
-      </div>
+      <section className="card tab-section tab-section--primary">
+        <div className="tab-intro">
+          <div>
+            <p className="eyebrow">Current risk summary</p>
+            <h2>Latest CreditShark check</h2>
+            <p className="note">Captured {formatDateTime(data.sourceFetchedAt)}. This is the current advisory risk view; previous checks remain in score history.</p>
+          </div>
+          {scoreResult ? (
+            <div className="compact-score-strip" aria-label="Current advisory score summary">
+              <span className={`risk-badge risk-badge--${scoreResult.scoreRun.riskBand}`}>{formatRiskBand(scoreResult.scoreRun.riskBand)}</span>
+              <strong>{scoreResult.scoreRun.score ?? "NS"}</strong>
+              <span>{formatMoney(scoreResult.scoreRun.recommendedLimit, scoreResult.scoreRun.currency)}</span>
+              <span>Confidence: {formatValue(scoreResult.scoreRun.confidenceLevel)}</span>
+            </div>
+          ) : null}
+        </div>
 
-      <div className="decision-layout">
-        <section className="card ocean-card decision-summary-panel">
-          <p className="eyebrow">Decision summary</p>
           {scoreResult ? (
             <>
-              <div className="decision-summary-grid">
-                <div>
-                  <span className={`risk-badge risk-badge--${scoreResult.scoreRun.riskBand}`}>
-                    {formatRiskBand(scoreResult.scoreRun.riskBand)}
-                  </span>
-                  <h2>{ADVISORY_SCORE_LABEL}</h2>
-                  <div className="score-value score-value--large">{scoreResult.scoreRun.score ?? "NS"}</div>
-                </div>
-                <div className="limit-card">
-                  <span className="preview-label">Recommended limit</span>
-                  <strong>{formatMoney(scoreResult.scoreRun.recommendedLimit, scoreResult.scoreRun.currency)}</strong>
-                  <p>
-                    Based on the current advisory score, model version {scoreResult.modelVersion.version}, available Companies House evidence
-                    and active manual data.
-                  </p>
-                </div>
-              </div>
-              <div className="confidence-strip">
-                <strong>Confidence: {formatValue(scoreResult.scoreRun.confidenceLevel)}</strong>
-                <span>{confidenceExplanation(scoreResult.scoreRun.confidenceLevel, hasMissingData)}</span>
-              </div>
               <div className="driver-columns" aria-label="Top score reasons">
                 <ReasonDriverGroup title="What helps" reasons={topPositiveReasons} emptyText="No positive drivers were emitted for this score." />
                 <ReasonDriverGroup title="What needs review" reasons={topNegativeReasons} emptyText="No review factors were emitted for this score." />
@@ -120,7 +104,14 @@ function CompanyProfile({
               <div className="error-note" role="alert">{scoreError ?? "A scoring configuration error occurred."}</div>
             </>
           )}
-          <div className="action-bar">
+      </section>
+
+      <section className="card tab-section">
+        <div className="section-heading">
+          <h2>Next best actions</h2>
+          <span className="badge">Workspace actions</span>
+        </div>
+        <div className="compact-action-group">
             {scoreResult ? (
               <Link className="button-primary" href={`/companies/${company.company_number}/score`}>
                 Review evidence
@@ -141,30 +132,24 @@ function CompanyProfile({
             <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
               Record decision
             </Link>
-          </div>
-          {scoreResult ? (
-            <details className="audit-details">
-              <summary>Audit metadata</summary>
-              <dl className="detail-grid detail-grid--compact">
-                <Detail label="Snapshot id" value={snapshot.id} />
-                <Detail label="Score run" value={formatDateTime(scoreResult.scoreRun.runAt)} />
-                <Detail label="Model version" value={scoreResult.modelVersion.version} />
-                <Detail label="Snapshot status" value={formatValue(snapshot.snapshot_status)} />
-              </dl>
-            </details>
-          ) : null}
-        </section>
-      </div>
+        </div>
+      </section>
 
       <div className="profile-grid profile-grid--evidence">
-        <section className="card profile-summary-card">
+        <section className="card profile-summary-card tab-section">
           <div className="section-heading">
-            <h2>Company identity</h2>
+            <h2>Key evidence snapshot</h2>
             <span className="source-chip source-chip--companies-house">{COMPANIES_HOUSE_EVIDENCE_LABEL}</span>
           </div>
+          <div className="evidence-summary-grid" aria-label="Snapshot captured records">
+            <SummaryCard label="Filings" value={data.filingsSummary.count} />
+            <SummaryCard label="Active charges" value={data.chargesSummary.active} />
+            <SummaryCard label="Satisfied charges" value={data.chargesSummary.satisfied} />
+            <SummaryCard label="Officers" value={data.officersSummary.current} />
+            <SummaryCard label="PSC records" value={data.pscSummary.count} />
+            <SummaryCard label="Manual events" value={activeManualEventCount} />
+          </div>
           <dl className="detail-grid">
-            <Detail label="Company number" value={company.company_number} />
-            <Detail label="Status" value={formatValue(company.company_status)} />
             <Detail label="Type" value={formatValue(company.company_type)} />
             <Detail label="Jurisdiction" value={formatValue(company.jurisdiction)} />
             <Detail label="Registered office postcode" value={formatValue(company.registered_office_postcode)} />
@@ -176,113 +161,36 @@ function CompanyProfile({
           </dl>
         </section>
 
-        <aside className="card workflow-side-card">
+        <aside className="card workflow-side-card tab-section">
           <div className="section-heading">
-            <h2>Current review context</h2>
-            <span className="badge">Advisory review</span>
+            <h2>Trade context</h2>
+            <span className="badge">{watchlistItem ? "Watching" : "Not watching"}</span>
           </div>
-          <p className="note">Actions for decisions, reports, manual data and history are available in the workspace header and tabs.</p>
-          <p className="note">Manual data is labelled separately from Companies House evidence.</p>
+          {latestDecision ? (
+            <p className="note">Latest decision: <strong>{formatDecisionLabel(latestDecision.decision_value)}</strong>. Final limit: {formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)}.</p>
+          ) : (
+            <p className="note">No user-recorded commercial decision has been attached yet.</p>
+          )}
+          {scoreHistory?.latest ? (
+            <p className="note">History: latest {scoreHistory.latest.score ?? "NS"}, previous {scoreHistory.previous?.score ?? "not available"}. {scoreHistory.movement.message}</p>
+          ) : null}
+          <p className="note">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
         </aside>
       </div>
 
-      <section className="summary-cards" aria-label="Snapshot captured records">
-        <SummaryCard label="Filing records captured" value={data.filingsSummary.count} />
-        <SummaryCard label="Active charges" value={data.chargesSummary.active} />
-        <SummaryCard label="Satisfied charges" value={data.chargesSummary.satisfied} />
-        <SummaryCard label="Current officers" value={data.officersSummary.current} />
-        <SummaryCard label="PSC records" value={data.pscSummary.count} />
-        <SummaryCard label="Missing/failed sections" value={data.missingSections.length} />
-      </section>
-
-      <section className="card score-section watchlist-control-card">
-        <div>
-          <div className="section-heading">
-            <h2>Watchlist</h2>
-            <span className="badge">{watchlistItem ? "Watching" : "Not watching"}</span>
-          </div>
-          <p className="note">
-            Track this company in your CreditShark watchlist. Automated alerts are planned for a later phase.
-          </p>
-          {watchlistItem?.watch_reason ? <p className="secondary-id">Reason: {watchlistItem.watch_reason}</p> : null}
-        </div>
-        {watchlistItem ? (
-          <form action={removeCompanyFromWatchlistAction.bind(null, company.company_number, "profile")} className="inline-action-form">
-            <button className="button-secondary" type="submit">Remove from watchlist</button>
-            <Link className="button-primary" href={"/watchlist" as Route}>View watchlist</Link>
-          </form>
-        ) : (
-          <form action={addCompanyToWatchlistAction.bind(null, company.company_number)} className="watchlist-add-form">
-            <label htmlFor="watch-reason">Watch reason</label>
-            <input id="watch-reason" name="watch_reason" placeholder="Optional review note" />
-            <button className="button-primary" type="submit">Add to watchlist</button>
-          </form>
-        )}
-      </section>
-
-      <section className="card score-section manual-profile-card">
-        <div>
-          <div className="section-heading">
-            <h2>Manual adverse events</h2>
-            <span className="badge manual-badge">{activeManualEventCount} active</span>
-          </div>
-          <p className="note">{MANUAL_DATA_INCLUDED_LABEL}: manual entries are shown separately from Companies House evidence.</p>
-        </div>
-        <Link className="button-secondary" href={`/companies/${company.company_number}/adverse`}>
-          Review manual data
-        </Link>
-      </section>
-
-      <section className="card score-section manual-profile-card">
-        <div>
-          <div className="section-heading">
-            <h2>{SCORE_HISTORY_LABEL}</h2>
-            <span className="badge">{LATEST_CHECK_LABEL}</span>
-          </div>
-          {scoreHistory?.latest ? (
-            <p className="note">
-              Latest check: <strong>{scoreHistory.latest.score ?? "NS"}</strong>. Previous check: <strong>{scoreHistory.previous?.score ?? "Not available"}</strong>. {scoreHistory.movement.message}
-            </p>
-          ) : (
-            <p className="note">No score history is available yet beyond the current page load.</p>
-          )}
-        </div>
-        <Link className="button-secondary" href={historyRoute(company.company_number)}>
-          View score history
-        </Link>
-      </section>
-
-      <section className="card score-section manual-profile-card">
-        <div>
-          <div className="section-heading">
-            <h2>Advisory report</h2>
-            <span className="badge">Latest snapshot and score</span>
-          </div>
-          <p className="note">Preview a print-friendly trade-risk report using the latest persisted snapshot, score run, source timestamps and data limitations.</p>
-        </div>
-        <Link className="button-primary" href={`/companies/${company.company_number}/report`}>
-          Preview report
-        </Link>
-      </section>
-
-      <section className="card score-section manual-profile-card">
-        <div>
-          <div className="section-heading">
-            <h2>Recorded decision</h2>
-            <span className="badge">{USER_RECORDED_DECISION_LABEL}</span>
-          </div>
-          {latestDecision ? (
-            <p className="note">
-              Latest decision: <strong>{formatDecisionLabel(latestDecision.decision_value)}</strong>. Final limit: {formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)}.
-            </p>
-          ) : (
-            <p className="note">No user-recorded commercial decision has been attached yet. The user records any commercial decision.</p>
-          )}
-        </div>
-        <Link className="button-secondary" href={`/companies/${company.company_number}/decision`}>
-          Record decision
-        </Link>
-      </section>
+      {scoreResult ? (
+        <details className="card secondary-audit-details">
+          <summary>Audit details</summary>
+          <dl className="detail-grid detail-grid--compact">
+            <Detail label="Snapshot id" value={snapshot.id} />
+            <Detail label="Score run id" value={scoreResult.scoreRun.id ?? "Not recorded"} />
+            <Detail label="Model version" value={scoreResult.modelVersion.version} />
+            <Detail label="Score run" value={formatDateTime(scoreResult.scoreRun.runAt)} />
+            <Detail label="Snapshot status" value={formatValue(snapshot.snapshot_status)} />
+            <Detail label="Missing/failed sections" value={String(data.missingSections.length)} />
+          </dl>
+        </details>
+      ) : null}
 
       {data.missingSections.length > 0 ? (
         <div className="error-note">

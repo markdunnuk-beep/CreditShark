@@ -1,15 +1,11 @@
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 import {
-  ADVISORY_SCORE_LABEL,
   MANUAL_DATA_INCLUDED_LABEL,
-  SOURCE_LINKED_EVIDENCE_LABEL,
-  USER_RECORDED_DECISION_LABEL
+  SOURCE_LINKED_EVIDENCE_LABEL
 } from "../../../../src/lib/guardrails";
-import { formatDecisionLabel, formatDecisionMoney, getLatestDecisionForCompany, type DecisionRecord } from "../../../../src/lib/decisions/decision-service";
 import { getScoreHistorySummary, type ScoreHistoryViewModel } from "../../../../src/lib/history/score-history-service";
 import { getLatestScoreRunForCompany, type ScoreRunResult } from "../../../../src/lib/scoring/scoring-service";
-import { getWatchlistItemForCompany, type WatchlistItem } from "../../../../src/lib/watchlist/watchlist-service";
 import type { ScoreReasonCode } from "../../../../src/types/creditshark";
 
 export const metadata: Metadata = {
@@ -26,20 +22,16 @@ export default async function CompanyScorePage({ params }: { params: Promise<{ c
     return <ScoreEmptyState companyNumber={companyNumber} message={result.error.message} />;
   }
 
-  const decisionResult = await getLatestDecisionForCompany(result.data.company.company_number);
   const historyResult = await getScoreHistorySummary(result.data.company.company_number);
-  const watchlistResult = await getWatchlistItemForCompany(result.data.company.company_number);
   return (
     <ScoreExplanation
       data={result.data}
-      latestDecision={decisionResult.ok ? decisionResult.data.decision : null}
       scoreHistory={historyResult.ok ? historyResult.data : null}
-      watchlistItem={watchlistResult.ok ? watchlistResult.data.watchlist : null}
     />
   );
 }
 
-function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }: { data: ScoreRunResult; latestDecision: DecisionRecord | null; scoreHistory: ScoreHistoryViewModel | null; watchlistItem: WatchlistItem | null }) {
+function ScoreExplanation({ data, scoreHistory }: { data: ScoreRunResult; scoreHistory: ScoreHistoryViewModel | null }) {
   const groupedReasons = groupReasonsByGroup(data.reasonCodes);
   const manualReasons = data.reasonCodes.filter((reason) => reason.group === "manual_adverse_events");
   const positiveReasons = data.reasonCodes.filter((reason) => reason.direction === "positive");
@@ -49,90 +41,35 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
 
   return (
     <section className="company-tab-page">
-      <div className="score-explanation-grid">
-        <section className="card score-summary-card decision-summary-panel">
-          <div className="score-hero">
-            <div>
-              <span className={`risk-badge risk-badge--${data.scoreRun.riskBand}`}>{formatRiskBand(data.scoreRun.riskBand)}</span>
-              <h2>{ADVISORY_SCORE_LABEL}</h2>
-            </div>
-            <div className="score-value">{data.scoreRun.score ?? "NS"}</div>
-          </div>
-          <dl className="detail-grid">
-            <Detail label="Confidence" value={formatValue(data.scoreRun.confidenceLevel)} />
-            <Detail label="Recommended limit" value={formatMoney(data.scoreRun.recommendedLimit, data.scoreRun.currency)} />
-            <Detail label="Model version" value={data.modelVersion.version} />
-            <Detail label="Source fetched" value={formatDateTime(data.snapshot.source_fetched_at)} />
-            <Detail label="Score run" value={formatDateTime(data.scoreRun.runAt)} />
-          </dl>
-          <div className="confidence-strip">
-            <strong>Confidence explanation</strong>
-            <span>{confidenceExplanation(data.scoreRun.confidenceLevel, hasMissingData)}</span>
-          </div>
-        </section>
-
-        <aside className="card ocean-card">
+      <section className="card tab-section tab-section--primary">
+        <div className="tab-intro">
+          <div>
           <p className="eyebrow">{SOURCE_LINKED_EVIDENCE_LABEL}</p>
-          <p className="note">Score and limit are advisory indicators. Review the reasons, confidence and missing data before recording a decision.</p>
-          <div className="disabled-actions">
-            <Link className="button-secondary" href={`/companies/${data.company.company_number}`}>
-              Refresh snapshot and rerun score
-            </Link>
-            <Link className="button-secondary" href={`/companies/${data.company.company_number}/adverse`}>
-              Review manual adverse events
-            </Link>
-            <Link className="button-primary" href={`/companies/${data.company.company_number}/report`}>
-              Preview report
-            </Link>
-            <Link className="button-secondary" href={`/companies/${data.company.company_number}/decision`}>
-              Record decision
-            </Link>
-            <Link className="button-secondary" href={historyRoute(data.company.company_number)}>
-              View score history
-            </Link>
-            <Link className="button-secondary" href={"/watchlist" as Route}>
-              {watchlistItem ? "Watching" : "Watchlist"}
-            </Link>
+            <h2>Score drivers and reasons</h2>
+            <p className="note">
+              Reason codes explain the latest advisory score using source-linked evidence, confidence and missing-data context.
+            </p>
           </div>
-        </aside>
-      </div>
-
-      {scoreHistory?.previous ? (
-        <div className="status-note status-note--compact">
-          Previous check: {scoreHistory.previous.score ?? "NS"}. {scoreHistory.movement.message}
-        </div>
-      ) : (
-        <div className="status-note status-note--compact">This is the latest score explanation. Historical score runs are available as checks accumulate.</div>
-      )}
-
-      {latestDecision ? (
-        <section className="card score-section">
-          <div className="section-heading">
-            <h2>Latest recorded decision</h2>
-            <span className="badge">{USER_RECORDED_DECISION_LABEL}</span>
+          <div className="compact-score-strip">
+            <span className={`risk-badge risk-badge--${data.scoreRun.riskBand}`}>{formatRiskBand(data.scoreRun.riskBand)}</span>
+            <span>Run: {formatDateTime(data.scoreRun.runAt)}</span>
+            <Link href={historyRoute(data.company.company_number)}>Score history</Link>
           </div>
-          <dl className="detail-grid">
-            <Detail label="Decision" value={formatDecisionLabel(latestDecision.decision_value)} />
-            <Detail label="Final approved limit" value={formatDecisionMoney(latestDecision.approved_limit, latestDecision.currency)} />
-            <Detail label="Recorded" value={formatDateTime(latestDecision.decided_at)} />
-            <Detail label="Linked score run" value={latestDecision.score_run_id} />
-          </dl>
-          <p className="note">This block records the user's commercial outcome. The score explanation remains advisory evidence.</p>
-        </section>
-      ) : (
-        <div className="status-note status-note--compact">
-          No user-recorded decision is attached yet. <Link href={`/companies/${data.company.company_number}/decision`}>Record decision</Link>.
         </div>
-      )}
+        {scoreHistory?.previous ? (
+          <p className="note">Previous check: {scoreHistory.previous.score ?? "NS"}. {scoreHistory.movement.message}</p>
+        ) : null}
+        <p className="note">{confidenceExplanation(data.scoreRun.confidenceLevel, hasMissingData)}</p>
+      </section>
 
       {manualReasons.length > 0 ? (
         <div className="manual-data-warning">
           <strong>{MANUAL_DATA_INCLUDED_LABEL}.</strong>
-          <span>Manual entries are shown separately from Companies House evidence. Review the source note before extending material credit.</span>
+          <span>Manual entries are shown separately from Companies House evidence.</span>
         </div>
       ) : null}
 
-      <section className="card score-section">
+      <section className="card tab-section">
         <div className="section-heading">
           <h2>Top score drivers</h2>
           <span className="badge">Source-linked</span>
@@ -144,7 +81,7 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
         </div>
       </section>
 
-      <section className="card score-section">
+      <section className="card tab-section reason-group-compact">
         <div className="section-heading">
           <h2>Full reason-code detail</h2>
           <span className="badge">{data.reasonCodes.length} reason codes</span>
@@ -161,7 +98,7 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
         </div>
       </section>
 
-      <section className="card score-section">
+      <section className="card tab-section">
         <div className="section-heading">
           <h2>Missing data</h2>
           <span className="badge">Confidence: {formatValue(data.scoreRun.confidenceLevel)}</span>
@@ -174,8 +111,8 @@ function ScoreExplanation({ data, latestDecision, scoreHistory, watchlistItem }:
           <p className="note">No missing-data flags were emitted for this score run.</p>
         )}
         <p className="note">Missing data is shown because it limits what the scoring model can inspect. It can reduce confidence even when the advisory score can still be calculated.</p>
-        <details className="audit-details">
-          <summary>Audit metadata</summary>
+        <details className="secondary-audit-details">
+          <summary>Audit details</summary>
           <dl className="detail-grid detail-grid--compact">
             <Detail label="Snapshot id" value={data.snapshot.id} />
             <Detail label="Score run id" value={data.scoreRun.id} />
@@ -283,10 +220,6 @@ function formatDate(value: string | null | undefined): string {
 
 function formatDateTime(value: string): string {
   return new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-}
-
-function formatMoney(value: number, currency: string): string {
-  return new Intl.NumberFormat("en-GB", { style: "currency", currency, maximumFractionDigits: 0 }).format(value);
 }
 
 function formatRiskBand(value: string): string {

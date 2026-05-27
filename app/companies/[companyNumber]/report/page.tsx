@@ -1,4 +1,4 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ADVISORY_SCORE_LABEL,
@@ -53,21 +53,26 @@ function ReportPreview({ data, notice }: { data: ReportViewModel; notice: Record
       <div className="report-controls">
         <div>
           <p className="eyebrow">Reports & decisions</p>
-          <h1 className="page-title">Trade-risk report preview</h1>
-          <p className="lede">Print-optimised advisory report based on the latest persisted snapshot and score run.</p>
+          <h1 className="page-title">Report preview</h1>
+          <p className="lede">Preview the standalone advisory report before recording an export and printing.</p>
         </div>
         <div className="profile-actions">
-          <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
-            Score explanation
+          <Link className="button-secondary" href={`/companies/${data.company.company_number}/decision`}>
+            Record decision
           </Link>
-          <Link className="button-secondary" href={"/watchlist" as Route}>
-            Watchlist
+          <Link className="button-secondary" href={`/companies/${data.company.company_number}/score`}>
+            Score evidence
           </Link>
           <form action={createAction}>
             <button className="button-primary" type="submit">Record export and print report</button>
           </form>
           <PrintButton />
         </div>
+      </div>
+
+      <div className="in-tab-switch" aria-label="Reports and decisions">
+        <Link aria-current="page" href={`/companies/${data.company.company_number}/report`}>Report preview</Link>
+        <Link href={`/companies/${data.company.company_number}/decision`}>Record decision</Link>
       </div>
 
       <Notice notice={notice} exportId={data.exportRecord?.id ?? null} />
